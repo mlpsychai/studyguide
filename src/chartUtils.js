@@ -157,15 +157,15 @@ function renderNormalDistribution(canvas, config = {}) {
               type: 'line',
               xMin: mean - 3*sd,
               xMax: mean - 3*sd,
-              borderColor: 'rgba(255, 255, 255, 0.4)',
+              borderColor: 'rgba(100, 100, 100, 0.6)',
               borderWidth: 1,
-              borderDash: [3, 3],
+              borderDash: [5, 3],
               label: {
                 display: true,
                 content: '-3σ',
                 position: 'end',
                 yAdjust: -10,
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 color: chartConfig.colors.white,
                 font: { size: 11 }
               }
@@ -174,7 +174,7 @@ function renderNormalDistribution(canvas, config = {}) {
               type: 'line',
               xMin: mean - 2*sd,
               xMax: mean - 2*sd,
-              borderColor: 'rgba(255, 255, 255, 0.6)',
+              borderColor: 'rgba(80, 80, 80, 0.7)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
@@ -182,7 +182,7 @@ function renderNormalDistribution(canvas, config = {}) {
                 content: '-2σ',
                 position: 'end',
                 yAdjust: -10,
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 color: chartConfig.colors.white,
                 font: { size: 11 }
               }
@@ -191,14 +191,15 @@ function renderNormalDistribution(canvas, config = {}) {
               type: 'line',
               xMin: mean - sd,
               xMax: mean - sd,
-              borderColor: 'rgba(255, 255, 255, 0.8)',
+              borderColor: 'rgba(60, 60, 60, 0.8)',
               borderWidth: 2,
+              borderDash: [5, 3],
               label: {
                 display: true,
                 content: '-1σ',
                 position: 'end',
                 yAdjust: -10,
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 color: chartConfig.colors.white,
                 font: { size: 11, weight: 'bold' }
               }
@@ -207,8 +208,9 @@ function renderNormalDistribution(canvas, config = {}) {
               type: 'line',
               xMin: mean,
               xMax: mean,
-              borderColor: chartConfig.colors.primary,
+              borderColor: 'rgba(0, 0, 0, 0.9)',
               borderWidth: 3,
+              borderDash: [8, 4],
               label: {
                 display: true,
                 content: 'μ (Mean)',
@@ -223,14 +225,15 @@ function renderNormalDistribution(canvas, config = {}) {
               type: 'line',
               xMin: mean + sd,
               xMax: mean + sd,
-              borderColor: 'rgba(255, 255, 255, 0.8)',
+              borderColor: 'rgba(60, 60, 60, 0.8)',
               borderWidth: 2,
+              borderDash: [5, 3],
               label: {
                 display: true,
                 content: '+1σ',
                 position: 'end',
                 yAdjust: -10,
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 color: chartConfig.colors.white,
                 font: { size: 11, weight: 'bold' }
               }
@@ -239,7 +242,7 @@ function renderNormalDistribution(canvas, config = {}) {
               type: 'line',
               xMin: mean + 2*sd,
               xMax: mean + 2*sd,
-              borderColor: 'rgba(255, 255, 255, 0.6)',
+              borderColor: 'rgba(80, 80, 80, 0.7)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
@@ -247,7 +250,7 @@ function renderNormalDistribution(canvas, config = {}) {
                 content: '+2σ',
                 position: 'end',
                 yAdjust: -10,
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 color: chartConfig.colors.white,
                 font: { size: 11 }
               }
@@ -256,15 +259,15 @@ function renderNormalDistribution(canvas, config = {}) {
               type: 'line',
               xMin: mean + 3*sd,
               xMax: mean + 3*sd,
-              borderColor: 'rgba(255, 255, 255, 0.4)',
+              borderColor: 'rgba(100, 100, 100, 0.6)',
               borderWidth: 1,
-              borderDash: [3, 3],
+              borderDash: [5, 3],
               label: {
                 display: true,
                 content: '+3σ',
                 position: 'end',
                 yAdjust: -10,
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 color: chartConfig.colors.white,
                 font: { size: 11 }
               }
