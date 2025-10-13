@@ -20,7 +20,7 @@ function ChartVisualizer({ type, config, sectionId }) {
   }, []);
 
   React.useEffect(() => {
-    if (!chartReady || !containerRef.current) return;
+    if (!chartReady) return;
 
     const chartId = `chart-${sectionId}`;
     
@@ -28,6 +28,8 @@ function ChartVisualizer({ type, config, sectionId }) {
     const timeoutId = setTimeout(() => {
       // Handle correlation grid (multiple charts)
       if (type === 'correlation' && Array.isArray(config)) {
+        if (!containerRef.current) return;
+        
         const container = containerRef.current;
         container.innerHTML = '';
         
