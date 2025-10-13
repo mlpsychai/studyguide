@@ -455,3 +455,17 @@ function renderChart(canvasId, type, config = {}) {
       return null;
   }
 }
+
+// Export to window for browser use
+window.chartUtils = { 
+  renderChart,
+  generateBellCurveData,
+  generateSkewedData,
+  generateCorrelatedData,
+  generateTrendLine,
+  renderNormalDistribution,
+  renderSkewedDistributions,
+  renderCorrelationScatterplot,
+  renderStandardizedScores
+};
+
