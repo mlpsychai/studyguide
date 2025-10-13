@@ -33,8 +33,8 @@ function App() {
 
   const renderContent = () => {
     const section = sections.find(s => s.id === activeSection);
-  if (!section) return <div>Content not found</div>;
-  const content = section.content;
+    if (!section) return <div>Content not found</div>;
+    const content = section.content;
     if (!content) return <div>Content not found</div>;
 
     return (
@@ -488,7 +488,7 @@ function App() {
           </div>
         )}
             
-   {/* ADD THIS: Visualizations */}
+        {/* Visualizations */}
         {section.visualization && (
           <ChartVisualizer 
             type={section.visualization.type}
@@ -496,7 +496,7 @@ function App() {
             sectionId={section.id}
           />
         )}
-      </div> 
+      </div>
     );
   };
         
