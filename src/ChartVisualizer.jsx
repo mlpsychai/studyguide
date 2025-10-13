@@ -73,4 +73,6 @@ function CorrelationGrid({ plots = [] }) {
   );
 }
 
-export { ChartVisualizer, CorrelationGrid };
+// Export to window
+window.ChartVisualizer = ChartVisualizer;
+window.CorrelationGrid = CorrelationGrid;
