@@ -133,7 +133,7 @@ window.studyGuideData = {
         keyPoint: 'In skewed distributions, the mean is "pulled" toward the tail!'
       },
       visualization: {
-        type: 'skewed-distributions',
+        type: 'skewed',
         config: {}
       }
     },
@@ -153,7 +153,7 @@ window.studyGuideData = {
         keyPoint: 'Remember: Correlation does NOT equal causation! Just because two things are related doesn\'t mean one causes the other.'
       },
       visualization: {
-        type: 'correlation-scatterplots',
+        type: 'correlation',
         config: [
           { r: -0.9, label: 'Strong Negative (r = -0.9)' },
           { r: -0.5, label: 'Moderate Negative (r = -0.5)' },
@@ -183,7 +183,7 @@ window.studyGuideData = {
         keyPoint: 'All standardized scores (except percentiles and stanines) are INTERVAL scales with equal units!'
       },
       visualization: {
-        type: 'standardized-scores',
+        type: 'standardized',
         config: {}
       }
     },
