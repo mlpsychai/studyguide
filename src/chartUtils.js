@@ -178,7 +178,7 @@ function renderNormalDistribution(canvas, config = {}) {
   return chart;
 }
 
-function renderSkewedDistributions(canvas, config = {}) {
+function renderSkewedDistribution(canvas, config = {}) {
   const normalData = generateBellCurveData(0, 1, -3, 3, 100);
   
   const leftData = [];
@@ -271,7 +271,7 @@ function renderSkewedDistributions(canvas, config = {}) {
   return chart;
 }
 
-function renderCorrelationScatterplot(canvas, config = {}) {
+function renderCorrelationChart(canvas, config = {}) {
   const r = config.r || 0;
   const label = config.label || `r = ${r}`;
   
@@ -444,11 +444,11 @@ function renderChart(canvasId, type, config = {}) {
   switch (type) {
     case 'normal-distribution':
       return renderNormalDistribution(canvas, config);
-    case 'skewed-distributions':
-      return renderSkewedDistributions(canvas, config);
-    case 'correlation-scatterplot':
-      return renderCorrelationScatterplot(canvas, config);
-    case 'standardized-scores':
+    case 'skewed':
+      return renderSkewedDistribution(canvas, config);
+    case 'correlation':
+      return renderCorrelationChart(canvas, config);
+    case 'standardized':
       return renderStandardizedScores(canvas, config);
     default:
       console.warn(`Unknown chart type: ${type}`);
@@ -464,8 +464,9 @@ window.chartUtils = {
   generateCorrelatedData,
   generateTrendLine,
   renderNormalDistribution,
-  renderSkewedDistributions,
-  renderCorrelationScatterplot,
+  renderSkewedDistribution,
+  renderCorrelationChart,
   renderStandardizedScores
 };
 
+console.log('✅ Chart utilities loaded');
