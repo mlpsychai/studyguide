@@ -485,12 +485,7 @@ function App() {
         {content.keyPoint && (
           <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500 mt-6">
             <p className="text-gray-800"><strong>🔑 Key Point:</strong> {content.keyPoint}</p>
-          </div>
-        )}
-      </div>
-    );
-  };
-
+         
    {/* ADD THIS: Visualizations */}
         {section.visualization && (
           <ChartVisualizer 
