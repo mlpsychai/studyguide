@@ -1,6 +1,3 @@
-import React, { useEffect, useRef } from 'react';
-import { renderChart } from './chartUtils.js';
-
 /**
  * ChartVisualizer Component
  * 
