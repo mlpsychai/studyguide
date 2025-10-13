@@ -167,7 +167,8 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '-3σ\n(55)',
-        position: 'start',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -183,7 +184,8 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '-2σ\n(70)',
-        position: 'start',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -199,7 +201,8 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '-1σ\n(85)',
-        position: 'start',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11, weight: 'bold' }
@@ -214,7 +217,8 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: 'μ = 100',
-        position: 'start',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(255, 215, 0, 0.95)',
         color: '#000',
         font: { size: 12, weight: 'bold' }
@@ -230,7 +234,8 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '+1σ\n(115)',
-        position: 'start',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11, weight: 'bold' }
@@ -246,7 +251,8 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '+2σ\n(130)',
-        position: 'start',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -262,7 +268,8 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '+3σ\n(145)',
-        position: 'start',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
