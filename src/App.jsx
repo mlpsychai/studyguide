@@ -489,22 +489,25 @@ function App() {
         )}
             
         {/* Visualizations */}
-{section.visualization && (
-  <>
-    {section.visualization.type === 'correlation' && Array.isArray(section.visualization.config) ? (
-      <CorrelationGrid 
-        correlations={section.visualization.config}
-        sectionId={section.id}
-      />
-    ) : (
-      <ChartVisualizer 
-        type={section.visualization.type}
-        config={section.visualization.config}
-        sectionId={section.id}
-      />
-    )}
-  </>
-)}
+        {section.visualization && (
+          <>
+            {section.visualization.type === 'correlation' && Array.isArray(section.visualization.config) ? (
+              <CorrelationGrid 
+                correlations={section.visualization.config}
+                sectionId={section.id}
+              />
+            ) : (
+              <ChartVisualizer 
+                type={section.visualization.type}
+                config={section.visualization.config}
+                sectionId={section.id}
+              />
+            )}
+          </>
+        )}
+      </div>
+    );
+  };
         
   const renderQuiz = () => {
     if (showResults) {
