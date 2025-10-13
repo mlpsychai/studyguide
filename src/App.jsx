@@ -1,7 +1,7 @@
 const { useState } = React;
 
 function App() {
-  const [activeSection, setActiveSection] = useState('intro');
+  const [activeSection, setActiveSection] = useState('scales');
   const [quizMode, setQuizMode] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
