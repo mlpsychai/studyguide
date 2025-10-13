@@ -156,121 +156,120 @@ function renderNormalDistribution(canvasId, config = {}) {
           font: { size: 14 }
         },
         annotation: {
-          annotations: {
-            line1: {
-              type: 'line',
-              scaleID: 'x',
-              value: mean - 3*sd,
-              borderColor: 'rgba(255, 255, 255, 0.3)',
-              borderWidth: 1,
-              borderDash: [5, 3],
-              label: {
-                display: true,
-                content: '-3σ',
-                position: 'start',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: '#fff',
-                font: { size: 11 }
-              }
-            },
-            line2: {
-              type: 'line',
-              scaleID: 'x',
-              value: mean - 2*sd,
-              borderColor: 'rgba(255, 255, 255, 0.4)',
-              borderWidth: 2,
-              borderDash: [5, 3],
-              label: {
-                display: true,
-                content: '-2σ',
-                position: 'start',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: '#fff',
-                font: { size: 11 }
-              }
-            },
-            line3: {
-              type: 'line',
-              scaleID: 'x',
-              value: mean - sd,
-              borderColor: 'rgba(255, 255, 255, 0.5)',
-              borderWidth: 2,
-              borderDash: [5, 3],
-              label: {
-                display: true,
-                content: '-1σ',
-                position: 'start',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: '#fff',
-                font: { size: 11, weight: 'bold' }
-              }
-            },
-            line4: {
-              type: 'line',
-              scaleID: 'x',
-              value: mean,
-              borderColor: '#fff',
-              borderWidth: 3,
-              borderDash: [8, 4],
-              label: {
-                display: true,
-                content: 'μ (Mean)',
-                position: 'start',
-                backgroundColor: 'rgba(255, 215, 0, 0.95)',
-                color: '#000',
-                font: { size: 12, weight: 'bold' }
-              }
-            },
-            line5: {
-              type: 'line',
-              scaleID: 'x',
-              value: mean + sd,
-              borderColor: 'rgba(255, 255, 255, 0.5)',
-              borderWidth: 2,
-              borderDash: [5, 3],
-              label: {
-                display: true,
-                content: '+1σ',
-                position: 'start',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: '#fff',
-                font: { size: 11, weight: 'bold' }
-              }
-            },
-            line6: {
-              type: 'line',
-              scaleID: 'x',
-              value: mean + 2*sd,
-              borderColor: 'rgba(255, 255, 255, 0.4)',
-              borderWidth: 2,
-              borderDash: [5, 3],
-              label: {
-                display: true,
-                content: '+2σ',
-                position: 'start',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: '#fff',
-                font: { size: 11 }
-              }
-            },
-            line7: {
-              type: 'line',
-              scaleID: 'x',
-              value: mean + 3*sd,
-              borderColor: 'rgba(255, 255, 255, 0.3)',
-              borderWidth: 1,
-              borderDash: [5, 3],
-              label: {
-                display: true,
-                content: '+3σ',
-                position: 'start',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: '#fff',
-                font: { size: 11 }
-              }
-            }
-          }
-        }
+  annotations: {
+    line1: {
+      type: 'line',
+      scaleID: 'x',
+      value: mean - 3*sd,
+      borderColor: 'rgba(255, 255, 255, 0.3)',
+      borderWidth: 1,
+      borderDash: [5, 3],
+      label: {
+        display: true,
+        content: '-3σ\n(55)',
+        position: 'start',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: '#fff',
+        font: { size: 11 }
+      }
+    },
+    line2: {
+      type: 'line',
+      scaleID: 'x',
+      value: mean - 2*sd,
+      borderColor: 'rgba(255, 255, 255, 0.4)',
+      borderWidth: 2,
+      borderDash: [5, 3],
+      label: {
+        display: true,
+        content: '-2σ\n(70)',
+        position: 'start',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: '#fff',
+        font: { size: 11 }
+      }
+    },
+    line3: {
+      type: 'line',
+      scaleID: 'x',
+      value: mean - sd,
+      borderColor: 'rgba(255, 255, 255, 0.5)',
+      borderWidth: 2,
+      borderDash: [5, 3],
+      label: {
+        display: true,
+        content: '-1σ\n(85)',
+        position: 'start',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: '#fff',
+        font: { size: 11, weight: 'bold' }
+      }
+    },
+    line4: {
+      type: 'line',
+      scaleID: 'x',
+      value: mean,
+      borderColor: '#FFD700',
+      borderWidth: 3,
+      label: {
+        display: true,
+        content: 'μ = 100',
+        position: 'start',
+        backgroundColor: 'rgba(255, 215, 0, 0.95)',
+        color: '#000',
+        font: { size: 12, weight: 'bold' }
+      }
+    },
+    line5: {
+      type: 'line',
+      scaleID: 'x',
+      value: mean + sd,
+      borderColor: 'rgba(255, 255, 255, 0.5)',
+      borderWidth: 2,
+      borderDash: [5, 3],
+      label: {
+        display: true,
+        content: '+1σ\n(115)',
+        position: 'start',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: '#fff',
+        font: { size: 11, weight: 'bold' }
+      }
+    },
+    line6: {
+      type: 'line',
+      scaleID: 'x',
+      value: mean + 2*sd,
+      borderColor: 'rgba(255, 255, 255, 0.4)',
+      borderWidth: 2,
+      borderDash: [5, 3],
+      label: {
+        display: true,
+        content: '+2σ\n(130)',
+        position: 'start',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: '#fff',
+        font: { size: 11 }
+      }
+    },
+    line7: {
+      type: 'line',
+      scaleID: 'x',
+      value: mean + 3*sd,
+      borderColor: 'rgba(255, 255, 255, 0.3)',
+      borderWidth: 1,
+      borderDash: [5, 3],
+      label: {
+        display: true,
+        content: '+3σ\n(145)',
+        position: 'start',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: '#fff',
+        font: { size: 11 }
+      }
+    }
+  }
+}
       },
       scales: {
         y: {
