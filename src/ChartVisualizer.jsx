@@ -1,146 +1,671 @@
-// Chart Visualizer React Component - FIXED
-function ChartVisualizer({ type, config, sectionId }) {
-  const containerRef = React.useRef(null);
-  const [chartReady, setChartReady] = React.useState(false);
+/**
+ * CHART UTILITIES FOR REACT
+ * Fixed version with proper canvas handling
+ */
 
-  React.useEffect(() => {
-    // Wait for Chart.js and chartUtils to be ready
-    if (!window.Chart || !window.chartUtils) {
-      console.warn('Waiting for Chart.js and chartUtils...');
-      const checkInterval = setInterval(() => {
-        if (window.Chart && window.chartUtils) {
-          setChartReady(true);
-          clearInterval(checkInterval);
-        }
-      }, 100);
-      return () => clearInterval(checkInterval);
-    } else {
-      setChartReady(true);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    if (!chartReady) return;
-
-    const chartId = `chart-${sectionId}`;
-    
-    // Small delay to ensure DOM is ready
-    const timeoutId = setTimeout(() => {
-      // Handle correlation grid (multiple charts)
-      if (type === 'correlation' && Array.isArray(config)) {
-        if (!containerRef.current) return;
-        
-        const container = containerRef.current;
-        container.innerHTML = '';
-        
-        const grid = document.createElement('div');
-        grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
-        
-        config.forEach((corr, idx) => {
-          const chartDiv = document.createElement('div');
-          chartDiv.className = 'bg-gray-50 p-4 rounded-lg border border-gray-200';
-          chartDiv.style.height = '300px';
-          
-          const canvas = document.createElement('canvas');
-          canvas.id = `${chartId}-${idx}`;
-          chartDiv.appendChild(canvas);
-          grid.appendChild(chartDiv);
-          
-          // Render individual correlation chart
-          setTimeout(() => {
-            window.chartUtils.renderCorrelationChart(canvas.id, corr);
-          }, 50);
-        });
-        
-        container.appendChild(grid);
-      } 
-      // Handle single chart
-      else {
-        const canvas = document.getElementById(chartId);
-        if (!canvas) return;
-
-        // Destroy existing chart
-        const existingChart = window.Chart.getChart(canvas);
-        if (existingChart) {
-          existingChart.destroy();
-        }
-
-        // Render appropriate chart type
-        switch(type) {
-          case 'normal-distribution':
-            window.chartUtils.renderNormalDistribution(chartId, config);
-            break;
-          case 'skewed':
-            window.chartUtils.renderSkewedDistribution(chartId, config);
-            break;
-          case 'correlation':
-            window.chartUtils.renderCorrelationChart(chartId, config);
-            break;
-          case 'standardized':
-            window.chartUtils.renderStandardizedScores(chartId, config);
-            break;
-          default:
-            console.warn('Unknown chart type:', type);
-        }
-      }
-    }, 100);
-
-    // Cleanup function
-    return () => {
-      clearTimeout(timeoutId);
-      
-      if (type === 'correlation' && Array.isArray(config)) {
-        config.forEach((_, idx) => {
-          const canvasId = `chart-${sectionId}-${idx}`;
-          const canvas = document.getElementById(canvasId);
-          if (canvas) {
-            const chart = window.Chart.getChart(canvas);
-            if (chart) chart.destroy();
-          }
-        });
-      } else {
-        const chartId = `chart-${sectionId}`;
-        const canvas = document.getElementById(chartId);
-        if (canvas) {
-          const chart = window.Chart.getChart(canvas);
-          if (chart) chart.destroy();
-        }
-      }
-    };
-  }, [type, config, sectionId, chartReady]);
-
-  if (!chartReady) {
-    return (
-      <div className="mt-6 bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Visualization</h3>
-        <div className="flex items-center justify-center h-96">
-          <div className="text-gray-500">Loading chart...</div>
-        </div>
-      </div>
-    );
+// Configuration
+const chartConfig = {
+  colors: {
+    primary: '#FFD700',
+    success: '#4CAF50',
+    danger: '#f44336',
+    info: '#3b82f6',
+    warning: '#f59e0b',
+    white: '#ffffff',
+    gray: '#808080',
+    lightGray: '#b0b0b0',
+  },
+  fonts: {
+    family: "'Courier New', monospace",
+    title: { size: 18, weight: 'bold' },
+    subtitle: { size: 14, weight: 'normal' },
+    label: { size: 12, weight: 'normal' },
+    body: { size: 11, weight: 'normal' },
   }
+};
 
-  // For correlation grid, use a container
-  if (type === 'correlation' && Array.isArray(config)) {
-    return (
-      <div className="mt-6 bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Correlation Visualizations</h3>
-        <div ref={containerRef} />
-      </div>
-    );
+// ========================================
+// DATA GENERATION HELPERS
+// ========================================
+
+function generateBellCurveData(mean, sd, min, max, points) {
+  const data = [];
+  const step = (max - min) / points;
+  
+  for (let x = min; x <= max; x += step) {
+    const normalized = (x - mean) / sd;
+    const y = (1 / (sd * Math.sqrt(2 * Math.PI))) * 
+             Math.exp(-0.5 * normalized * normalized);
+    data.push({ x, y });
   }
-
-  // For single charts, use canvas
-  return (
-    <div className="mt-6 bg-white p-6 rounded-lg shadow">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Visualization</h3>
-      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200" style={{ height: '400px' }}>
-        <canvas id={`chart-${sectionId}`}></canvas>
-      </div>
-    </div>
-  );
+  
+  return data;
 }
 
-// Export to window for browser compatibility
-window.ChartVisualizer = ChartVisualizer;
-console.log('✅ ChartVisualizer component loaded');
+function gamma(n) {
+  if (n === 2) return 1;
+  if (n === 3) return 2;
+  return Math.sqrt(2 * Math.PI / n) * Math.pow(n / Math.E, n);
+}
+
+function generateSkewedData(direction, min, max, points) {
+  const data = [];
+  const step = (max - min) / points;
+  
+  for (let x = min; x <= max; x += step) {
+    let y;
+    if (direction === 'right') {
+      const shape = 2;
+      const scale = 0.8;
+      const normalized = x / scale;
+      y = (Math.pow(normalized, shape - 1) * Math.exp(-normalized)) / (scale * gamma(shape));
+      y = y * 0.35;
+    } else {
+      const mirrored = (max - x);
+      const shape = 2;
+      const scale = 0.8;
+      const normalized = mirrored / scale;
+      y = (Math.pow(normalized, shape - 1) * Math.exp(-normalized)) / (scale * gamma(shape));
+      y = y * 0.35;
+    }
+    data.push({ x, y });
+  }
+  
+  return data;
+}
+
+function generateCorrelatedData(correlation, numPoints = 100) {
+  const data = [];
+  
+  for (let i = 0; i < numPoints; i++) {
+    const x = (Math.random() - 0.5) * 6;
+    const randomNoise = (Math.random() - 0.5) * 2;
+    const correlatedComponent = x * correlation;
+    const noiseComponent = randomNoise * Math.sqrt(1 - Math.abs(correlation));
+    const y = correlatedComponent + noiseComponent;
+    
+    data.push({ x, y });
+  }
+  
+  return data;
+}
+
+function generateTrendLine(data) {
+  const n = data.length;
+  const sumX = data.reduce((sum, d) => sum + d.x, 0);
+  const sumY = data.reduce((sum, d) => sum + d.y, 0);
+  const sumXY = data.reduce((sum, d) => sum + d.x * d.y, 0);
+  const sumXX = data.reduce((sum, d) => sum + d.x * d.x, 0);
+  
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+  
+  const minX = Math.min(...data.map(d => d.x));
+  const maxX = Math.max(...data.map(d => d.x));
+  
+  return [
+    { x: minX, y: slope * minX + intercept },
+    { x: maxX, y: slope * maxX + intercept }
+  ];
+}
+
+// ========================================
+// CHART RENDERING FUNCTIONS
+// ========================================
+
+function renderNormalDistribution(canvasId, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
+  const mean = config.mean || 100;
+  const sd = config.sd || 15;
+
+  const data = generateBellCurveData(mean, sd, mean - 3*sd, mean + 3*sd, 100);
+
+  const chart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: data.map(d => Math.round(d.x)),
+      datasets: [{
+        label: 'Normal Distribution',
+        data: data.map(d => d.y),
+        borderColor: chartConfig.colors.primary,
+        backgroundColor: 'rgba(255, 215, 0, 0.2)',
+        fill: true,
+        borderWidth: 3,
+        tension: 0.4,
+        pointRadius: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: `Normal Distribution (μ=${mean}, σ=${sd})`,
+          color: chartConfig.colors.primary,
+          font: { size: 18, weight: 'bold' }
+        },
+        subtitle: {
+          display: config.showPercentages,
+          text: '68% within ±1σ | 95% within ±2σ | 99.7% within ±3σ',
+          color: '#666',
+          font: { size: 14 }
+        },
+        annotation: {
+          annotations: {
+            line1: {
+              type: 'line',
+              scaleID: 'x',
+              value: mean - 3*sd,
+              borderColor: 'rgba(100, 100, 100, 0.5)',
+              borderWidth: 1,
+              borderDash: [5, 3],
+              label: {
+                display: true,
+                content: '-3σ',
+                position: 'start',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                color: '#fff',
+                font: { size: 11 }
+              }
+            },
+            line2: {
+              type: 'line',
+              scaleID: 'x',
+              value: mean - 2*sd,
+              borderColor: 'rgba(80, 80, 80, 0.6)',
+              borderWidth: 2,
+              borderDash: [5, 3],
+              label: {
+                display: true,
+                content: '-2σ',
+                position: 'start',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                color: '#fff',
+                font: { size: 11 }
+              }
+            },
+            line3: {
+              type: 'line',
+              scaleID: 'x',
+              value: mean - sd,
+              borderColor: 'rgba(60, 60, 60, 0.7)',
+              borderWidth: 2,
+              borderDash: [5, 3],
+              label: {
+                display: true,
+                content: '-1σ',
+                position: 'start',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                color: '#fff',
+                font: { size: 11, weight: 'bold' }
+              }
+            },
+            line4: {
+              type: 'line',
+              scaleID: 'x',
+              value: mean,
+              borderColor: '#000',
+              borderWidth: 3,
+              borderDash: [8, 4],
+              label: {
+                display: true,
+                content: 'μ (Mean)',
+                position: 'start',
+                backgroundColor: 'rgba(255, 215, 0, 0.95)',
+                color: '#000',
+                font: { size: 12, weight: 'bold' }
+              }
+            },
+            line5: {
+              type: 'line',
+              scaleID: 'x',
+              value: mean + sd,
+              borderColor: 'rgba(60, 60, 60, 0.7)',
+              borderWidth: 2,
+              borderDash: [5, 3],
+              label: {
+                display: true,
+                content: '+1σ',
+                position: 'start',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                color: '#fff',
+                font: { size: 11, weight: 'bold' }
+              }
+            },
+            line6: {
+              type: 'line',
+              scaleID: 'x',
+              value: mean + 2*sd,
+              borderColor: 'rgba(80, 80, 80, 0.6)',
+              borderWidth: 2,
+              borderDash: [5, 3],
+              label: {
+                display: true,
+                content: '+2σ',
+                position: 'start',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                color: '#fff',
+                font: { size: 11 }
+              }
+            },
+            line7: {
+              type: 'line',
+              scaleID: 'x',
+              value: mean + 3*sd,
+              borderColor: 'rgba(100, 100, 100, 0.5)',
+              borderWidth: 1,
+              borderDash: [5, 3],
+              label: {
+                display: true,
+                content: '+3σ',
+                position: 'start',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                color: '#fff',
+                font: { size: 11 }
+              }
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          title: {
+            display: true,
+            text: 'Probability Density',
+            color: '#333',
+            font: { size: 13, weight: 'bold' }
+          }
+        },
+        x: {
+          ticks: { 
+            color: '#333',
+            font: { size: 11 },
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 10
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          title: {
+            display: true,
+            text: 'Score',
+            color: '#333',
+            font: { size: 13, weight: 'bold' }
+          }
+        }
+      }
+    }
+  });
+
+  return chart;
+}
+
+function renderSkewedDistribution(canvasId, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
+  const normalData = generateBellCurveData(0, 1, -3, 3, 100);
+  
+  const leftData = [];
+  const rightData = [];
+  const step = 6 / 100;
+  
+  for (let i = 0; i < 100; i++) {
+    const x = -3 + i * step;
+    
+    const leftX = -x;
+    const leftNorm = (leftX + 1.5);
+    const leftY = Math.pow(leftNorm, 2) * Math.exp(-leftNorm) * 0.15;
+    leftData.push({ x, y: Math.max(0, leftY) });
+    
+    const rightNorm = (x + 3) / 1.5;
+    const rightY = Math.pow(rightNorm, 1.5) * Math.exp(-rightNorm * 1.2) * 0.3;
+    rightData.push({ x, y: Math.max(0, rightY) });
+  }
+
+  const chart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: normalData.map(d => d.x.toFixed(1)),
+      datasets: [
+        {
+          label: 'Left Skew (Negative)',
+          data: leftData.map(d => d.y),
+          borderColor: chartConfig.colors.info,
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          fill: true,
+          borderWidth: 3,
+          tension: 0.4,
+          pointRadius: 0
+        },
+        {
+          label: 'Normal',
+          data: normalData.map(d => d.y),
+          borderColor: chartConfig.colors.warning,
+          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          fill: true,
+          borderWidth: 3,
+          tension: 0.4,
+          pointRadius: 0
+        },
+        {
+          label: 'Right Skew (Positive)',
+          data: rightData.map(d => d.y),
+          borderColor: chartConfig.colors.danger,
+          backgroundColor: 'rgba(220, 38, 38, 0.1)',
+          fill: true,
+          borderWidth: 3,
+          tension: 0.4,
+          pointRadius: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            color: '#333',
+            font: { size: 12 }
+          }
+        },
+        title: {
+          display: true,
+          text: 'Skewed Distributions',
+          color: chartConfig.colors.primary,
+          font: { size: 18, weight: 'bold' }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' }
+        },
+        x: {
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' }
+        }
+      }
+    }
+  });
+
+  return chart;
+}
+
+function renderCorrelationChart(canvasId, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
+  const r = config.r || 0;
+  const label = config.label || `r = ${r}`;
+  
+  const scatterData = generateCorrelatedData(r, 100);
+  const trendData = generateTrendLine(scatterData);
+
+  const chart = new Chart(canvas, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        {
+          label: 'Data Points',
+          data: scatterData,
+          backgroundColor: chartConfig.colors.gray,
+          borderColor: chartConfig.colors.gray,
+          pointRadius: 3,
+          pointHoverRadius: 4
+        },
+        {
+          label: 'Trend Line',
+          data: trendData,
+          type: 'line',
+          borderColor: chartConfig.colors.warning,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          borderDash: [5, 5]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: label,
+          color: chartConfig.colors.primary,
+          font: { size: 16, weight: 'bold' }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: chartConfig.colors.white,
+          bodyColor: chartConfig.colors.white
+        }
+      },
+      scales: {
+        x: {
+          type: 'linear',
+          title: {
+            display: true,
+            text: 'Variable X',
+            color: '#333',
+            font: { size: 12, weight: 'bold' }
+          },
+          ticks: {
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          min: -3,
+          max: 3
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Variable Y',
+            color: '#333',
+            font: { size: 12, weight: 'bold' }
+          },
+          ticks: {
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          min: -3,
+          max: 3
+        }
+      }
+    }
+  });
+
+  return chart;
+}
+
+function renderStandardizedScores(canvasId, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
+  const data = generateBellCurveData(0, 1, -3, 3, 100);
+
+  const chart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: data.map(d => d.x.toFixed(1)),
+      datasets: [{
+        label: 'Standard Normal Distribution',
+        data: data.map(d => d.y),
+        borderColor: chartConfig.colors.primary,
+        backgroundColor: 'rgba(255, 215, 0, 0.2)',
+        fill: true,
+        borderWidth: 3,
+        tension: 0.4,
+        pointRadius: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'Standardized Score Equivalents',
+          color: chartConfig.colors.primary,
+          font: { size: 18, weight: 'bold' }
+        },
+        subtitle: {
+          display: true,
+          text: [
+            'Z-scores: -3, -2, -1, 0, +1, +2, +3',
+            'Standard: 55, 70, 85, 100, 115, 130, 145',
+            'Scaled: 1, 4, 7, 10, 13, 16, 19',
+            'T-scores: 20, 30, 40, 50, 60, 70, 80'
+          ],
+          color: '#666',
+          font: { size: 12 },
+          padding: { bottom: 10 }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' }
+        },
+        x: {
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          title: {
+            display: true,
+            text: 'Standard Deviations from Mean',
+            color: '#333',
+            font: { size: 13, weight: 'bold' }
+          }
+        }
+      }
+    }
+  });
+
+  return chart;
+}
+
+// Correlation grid for multiple correlations
+function renderCorrelationGrid(containerId, correlations) {
+  const container = document.getElementById(containerId);
+  if (!container) {
+    console.error(`Container not found: ${containerId}`);
+    return;
+  }
+
+  // Clear existing content
+  container.innerHTML = '';
+  
+  // Create grid
+  const grid = document.createElement('div');
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(300px, 1fr))';
+  grid.style.gap = '20px';
+  
+  correlations.forEach((corr, idx) => {
+    const chartDiv = document.createElement('div');
+    chartDiv.style.height = '300px';
+    const canvas = document.createElement('canvas');
+    canvas.id = `${containerId}-${idx}`;
+    chartDiv.appendChild(canvas);
+    grid.appendChild(chartDiv);
+    
+    // Render chart after DOM update
+    setTimeout(() => {
+      renderCorrelationChart(canvas.id, corr);
+    }, 10);
+  });
+  
+  container.appendChild(grid);
+}
+
+// ========================================
+// MAIN RENDER FUNCTION
+// ========================================
+
+function renderChart(canvasId, type, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
+  // Destroy existing chart if it exists
+  const existingChart = Chart.getChart(canvas);
+  if (existingChart) {
+    existingChart.destroy();
+  }
+
+  switch (type) {
+    case 'normal-distribution':
+      return renderNormalDistribution(canvasId, config);
+    case 'skewed':
+      return renderSkewedDistribution(canvasId, config);
+    case 'correlation':
+      return renderCorrelationChart(canvasId, config);
+    case 'standardized':
+      return renderStandardizedScores(canvasId, config);
+    default:
+      console.warn(`Unknown chart type: ${type}`);
+      return null;
+  }
+}
+
+// Export to window for browser use
+window.chartUtils = { 
+  renderChart,
+  generateBellCurveData,
+  generateSkewedData,
+  generateCorrelatedData,
+  generateTrendLine,
+  renderNormalDistribution,
+  renderSkewedDistribution,
+  renderCorrelationChart,
+  renderStandardizedScores,
+  renderCorrelationGrid
+};
+
+console.log('✅ Chart utilities loaded');
