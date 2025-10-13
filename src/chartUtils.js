@@ -328,20 +328,19 @@ function renderSkewedDistribution(canvasId, config = {}) {
   const step = (6 * sd) / 100;
   
   for (let i = 0; i < 100; i++) {
-    const x = (mean - 3*sd) + i * step;
-    const normalized = (x - mean) / sd;
-    
-    // Left skew (negative)
-    const leftX = -normalized;
-    const leftNorm = (leftX + 1.5);
-    const leftY = Math.pow(leftNorm, 2) * Math.exp(-leftNorm) * 0.015;
-    leftData.push({ x, y: Math.max(0, leftY) });
-    
-    // Right skew (positive)
-    const rightNorm = (normalized + 3) / 1.5;
-    const rightY = Math.pow(rightNorm, 1.5) * Math.exp(-rightNorm * 1.2) * 0.03;
-    rightData.push({ x, y: Math.max(0, rightY) });
-  }
+  const x = (mean - 3*sd) + i * step;
+  const normalized = (x - mean) / sd;
+  
+  // Left skew (negative) - tail to the left
+  const leftShift = -normalized - 1.5;
+  const leftY = Math.pow(Math.max(0, leftShift), 2) * Math.exp(-leftShift) * 0.015;
+  leftData.push({ x, y: Math.max(0, leftY) });
+  
+  // Right skew (positive) - tail to the right (mirror of left)
+  const rightShift = normalized - 1.5;
+  const rightY = Math.pow(Math.max(0, rightShift), 2) * Math.exp(-rightShift) * 0.015;
+  rightData.push({ x, y: Math.max(0, rightY) });
+}
 
   const chart = new Chart(canvas, {
     type: 'line',
