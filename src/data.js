@@ -91,6 +91,12 @@ window.studyGuideData = {
             content: 'Variance is the square of the standard deviation (SD²). It\'s used in many statistical calculations.',
             formula: 'Variance (s²) = Σ(x - mean)² ÷ (n - 1)',
             relationship: 'Standard Deviation = √Variance. If SD = 10, then Variance = 100'
+          },
+          {
+            title: 'Sum of Squares',
+            content: 'The sum of squared deviations from the mean. It\'s the numerator in the variance formula.',
+            formula: 'Sum of Squares = Σ(x - mean)²',
+            relationship: 'Variance = Sum of Squares ÷ (n - 1)'
           }
         ],
         keyPoint: 'Lower SD = scores are close together. Higher SD = scores are more spread out!'
@@ -132,6 +138,13 @@ window.studyGuideData = {
             whereScoresAre: 'Most scores are high',
             meanVsMedian: 'Mode > Median > Mean',
             example: 'Easy test (most students score high, few score low)'
+          },
+          {
+            name: 'Multimodal Distribution',
+            tailDirection: 'Multiple peaks',
+            whereScoresAre: 'Scores cluster around multiple values',
+            meanVsMedian: 'Varies depending on the shape',
+            example: 'Test scores from two different ability groups, ages in a population with baby boom generations'
           }
         ],
         keyPoint: 'In skewed distributions, the mean is "pulled" toward the tail!'
