@@ -168,6 +168,15 @@ window.studyGuideData = {
           { value: '-0.30 to -0.69', strength: 'Moderate Negative', meaning: 'Some inverse relationship' },
           { value: '-0.70 to -1.00', strength: 'Strong Negative', meaning: 'As one goes up, the other goes down' }
         ],
+        visualization: {
+          name: 'Scatterplot',
+          description: 'A graph showing individual data points for two variables to display their relationship',
+          interpretation: 'Points sloping upward = positive correlation; Points sloping downward = negative correlation'
+        },
+        significance: {
+          level: '.05 (5%)',
+          meaning: 'A difference or correlation is significant at the .05 level if there is only a 5% probability it occurred due to chance/error'
+        },
         keyPoint: 'Remember: Correlation does NOT equal causation! Just because two things are related doesn\'t mean one causes the other.'
       },
       visualization: {
@@ -197,6 +206,8 @@ window.studyGuideData = {
         ],
         ordinalScores: [
           { name: 'Percentile Rank', mean: 50, sd: 'N/A', scale: '1-99', note: 'Ordinal scale - unequal intervals!' },
+          { name: 'Quartiles', mean: 'Q2', sd: 'N/A', scale: 'Q1, Q2, Q3, Q4', note: 'Divide distribution into 4 equal parts (25% each)' },
+          { name: 'Deciles', mean: 'D5', sd: 'N/A', scale: 'D1-D10', note: 'Divide distribution into 10 equal parts (10% each)' },
           { name: 'Stanine', mean: 5, sd: 'N/A', scale: '1-9', note: 'Band of 9 - ordinal scale' }
         ],
         keyPoint: 'All standardized scores (except percentiles and stanines) are INTERVAL scales with equal units!'
@@ -217,14 +228,21 @@ window.studyGuideData = {
           {
             name: 'Internal Consistency',
             description: 'Do items within the test measure the same construct?',
-            methods: ['Split-half', 'Cronbach\'s alpha', 'KR-20'],
+            methods: ['Split-half', 'Cronbach\'s alpha (for items with varying point values)', 'KR-20 (for dichotomous right/wrong items)'],
             relationship: 'Higher reliability = less measurement error'
           },
           {
             name: 'Test-Retest',
             description: 'Does the test give similar results when administered twice?',
             method: 'Administer same test at two time points',
-            uses: 'Best for stable traits (not for rapidly changing skills)'
+            uses: 'Best for stable traits (not for rapidly changing skills)',
+            limitation: 'Practice effects can occur - students may improve due to familiarity with test content'
+          },
+          {
+            name: 'Alternate Forms Reliability',
+            description: 'Do two different versions of the same test yield similar scores?',
+            method: 'Administer two parallel test forms within a short time period',
+            uses: 'Avoids practice effects from taking identical test twice'
           },
           {
             name: 'Inter-Rater',
@@ -309,7 +327,8 @@ window.studyGuideData = {
           {
             name: 'Achievement Tests',
             description: 'Measure what has been learned',
-            examples: ['KTEA-3', 'Woodcock-Johnson IV Tests of Achievement', 'Wechsler Individual Achievement Test-III (WIAT-III)']
+            examples: ['KTEA-3', 'Woodcock-Johnson IV Tests of Achievement', 'Wechsler Individual Achievement Test-III (WIAT-III)'],
+            theoreticalBasis: 'Woodcock-Johnson IV is based on Cattell-Horn-Carroll (CHC) theory of cognitive abilities'
           },
           {
             name: 'Aptitude/Cognitive Tests',
@@ -392,7 +411,29 @@ window.studyGuideData = {
             name: 'Age Equivalency',
             description: 'The age at which a raw score is average',
             format: 'Years-Months (e.g., 6-4 means 6 years, 4 months)',
+            rounding: 'When days are 15 or more, round up to the next month (e.g., 8 years, 7 months, 18 days = 8-8)',
             note: 'Use with caution - can be misleading!'
+          },
+          {
+            name: 'Grade Equivalency',
+            description: 'The grade level at which a raw score is average',
+            format: 'Grade-Month (e.g., 7-3 means 7th grade, 3rd month)',
+            note: 'Use with caution - same limitations as age equivalents'
+          },
+          {
+            name: 'Protocol',
+            description: 'The standardized form used during test administration for recording responses and scoring',
+            purpose: 'Ensures consistent administration and accurate scoring'
+          },
+          {
+            name: 'Basal',
+            description: 'The starting point in testing, typically established by a certain number of consecutive correct responses',
+            purpose: 'Determines the floor of items assumed to be correct'
+          },
+          {
+            name: 'Ceiling',
+            description: 'The stopping point in testing, typically defined by a certain number of consecutive incorrect responses',
+            purpose: 'Determines when to discontinue testing'
           },
           {
             name: 'Composite Scores',
@@ -420,6 +461,16 @@ window.studyGuideData = {
             name: 'Standardization Sample',
             description: 'Large group tested under standard conditions',
             purpose: 'Creates the reference group for comparison'
+          },
+          {
+            name: 'Pilot Test (Field Test)',
+            description: 'Preliminary version of a test used during development',
+            purpose: 'Gather data to refine items and establish norms before final release'
+          },
+          {
+            name: 'Interpolation',
+            description: 'Statistical process of estimating scores between known data points when creating norm tables',
+            purpose: 'Fill in gaps to create more complete developmental score tables'
           },
           {
             name: 'Variables Affecting Performance',
