@@ -496,7 +496,7 @@ function App() {
             sectionId={section.id}
           />
         )}
-      </div>  {/* This closing div was already here */}
+      </div> 
     );
   };
         
