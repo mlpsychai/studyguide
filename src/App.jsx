@@ -129,6 +129,24 @@ function App() {
           </div>
         )}
 
+        {/* Scatterplot Visualization */}
+        {content.visualization && activeSection === 'correlation' && (
+          <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 mt-4">
+            <h3 className="text-lg font-bold text-blue-800 mb-2">{content.visualization.name}</h3>
+            <p className="text-gray-700 mb-2">{content.visualization.description}</p>
+            <p className="text-gray-600"><strong>Interpretation:</strong> {content.visualization.interpretation}</p>
+          </div>
+        )}
+
+        {/* Statistical Significance */}
+        {content.significance && activeSection === 'correlation' && (
+          <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500 mt-4">
+            <h3 className="text-lg font-bold text-purple-800 mb-2">Statistical Significance</h3>
+            <p className="text-gray-700"><strong>Level:</strong> {content.significance.level}</p>
+            <p className="text-gray-600 mt-2">{content.significance.meaning}</p>
+          </div>
+        )}
+
         {/* Standardized Scores */}
         {content.types && activeSection === 'standardized-scores' && (
           <div className="space-y-4">
@@ -180,6 +198,7 @@ function App() {
                 )}
                 {type.method && <p className="text-gray-600 mb-2"><strong>Method:</strong> {type.method}</p>}
                 {type.uses && <p className="text-gray-600 mb-2"><strong>Uses:</strong> {type.uses}</p>}
+                {type.limitation && <p className="text-red-600 mb-2"><strong>⚠️ Limitation:</strong> {type.limitation}</p>}
                 {type.relationship && <p className="text-gray-600 mt-2">{type.relationship}</p>}
               </div>
             ))}
@@ -253,6 +272,7 @@ function App() {
                     <p className="text-gray-600 mb-2"><strong>Examples:</strong> {type.examples}</p>
                   )
                 )}
+                {type.theoreticalBasis && <p className="text-blue-600 mt-2 italic"><strong>Theoretical Basis:</strong> {type.theoreticalBasis}</p>}
               </div>
             ))}
           </div>
@@ -299,6 +319,8 @@ function App() {
                   </div>
                 )}
                 {concept.format && <p className="text-gray-600 mt-2"><strong>Format:</strong> {concept.format}</p>}
+                {concept.rounding && <p className="text-gray-600 mt-2"><strong>Rounding:</strong> {concept.rounding}</p>}
+                {concept.example && <p className="text-gray-600 mt-2 italic"><strong>Example:</strong> {concept.example}</p>}
                 {concept.note && <p className="text-red-600 mt-2">⚠️ {concept.note}</p>}
               </div>
             ))}
