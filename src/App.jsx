@@ -31,7 +31,9 @@ function App() {
   };
 
   const renderContent = () => {
-    const content = contentData[activeSection];
+    const section = sections.find(s => s.id === activeSection);
+  if (!section) return <div>Content not found</div>;
+  const content = section.content;
     if (!content) return <div>Content not found</div>;
 
     return (
