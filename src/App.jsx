@@ -200,6 +200,14 @@ function App() {
           </div>
         )}
 
+        {/* Validity Evidence Sources */}
+        {content.evidenceSources && activeSection === 'validity' && (
+          <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+            <h3 className="text-lg font-bold text-blue-800 mb-2">Five Sources of Validity Evidence</h3>
+            <p className="text-gray-700">{content.evidenceSources}</p>
+          </div>
+        )}
+
         {/* Validity */}
         {content.types && activeSection === 'validity' && (
           <div className="space-y-4">
