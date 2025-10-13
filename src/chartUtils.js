@@ -143,155 +143,160 @@ function renderNormalDistribution(canvas, config = {}) {
           display: true,
           text: `Normal Distribution (μ=${mean}, σ=${sd})`,
           color: chartConfig.colors.primary,
-          font: chartConfig.fonts.title
+          font: { size: 18, weight: 'bold' }
         },
         subtitle: {
           display: config.showPercentages,
           text: '68% within ±1σ | 95% within ±2σ | 99.7% within ±3σ',
-          color: chartConfig.colors.white,
-          font: chartConfig.fonts.subtitle
+          color: '#666',
+          font: { size: 14 }
         },
         annotation: {
-          annotations: {
-            line1: {
+          annotations: [
+            {
               type: 'line',
               xMin: mean - 3*sd,
               xMax: mean - 3*sd,
-              borderColor: 'rgba(100, 100, 100, 0.6)',
+              borderColor: 'rgba(100, 100, 100, 0.5)',
               borderWidth: 1,
               borderDash: [5, 3],
               label: {
                 display: true,
                 content: '-3σ',
-                position: 'end',
-                yAdjust: -10,
+                position: 'start',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: chartConfig.colors.white,
+                color: '#fff',
                 font: { size: 11 }
               }
             },
-            line2: {
+            {
               type: 'line',
               xMin: mean - 2*sd,
               xMax: mean - 2*sd,
-              borderColor: 'rgba(80, 80, 80, 0.7)',
+              borderColor: 'rgba(80, 80, 80, 0.6)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
                 display: true,
                 content: '-2σ',
-                position: 'end',
-                yAdjust: -10,
+                position: 'start',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: chartConfig.colors.white,
+                color: '#fff',
                 font: { size: 11 }
               }
             },
-            line3: {
+            {
               type: 'line',
               xMin: mean - sd,
               xMax: mean - sd,
-              borderColor: 'rgba(60, 60, 60, 0.8)',
+              borderColor: 'rgba(60, 60, 60, 0.7)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
                 display: true,
                 content: '-1σ',
-                position: 'end',
-                yAdjust: -10,
+                position: 'start',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: chartConfig.colors.white,
+                color: '#fff',
                 font: { size: 11, weight: 'bold' }
               }
             },
-            line4: {
+            {
               type: 'line',
               xMin: mean,
               xMax: mean,
-              borderColor: 'rgba(0, 0, 0, 0.9)',
+              borderColor: '#000',
               borderWidth: 3,
               borderDash: [8, 4],
               label: {
                 display: true,
                 content: 'μ (Mean)',
-                position: 'end',
-                yAdjust: -10,
-                backgroundColor: 'rgba(255, 215, 0, 0.9)',
+                position: 'start',
+                backgroundColor: 'rgba(255, 215, 0, 0.95)',
                 color: '#000',
                 font: { size: 12, weight: 'bold' }
               }
             },
-            line5: {
+            {
               type: 'line',
               xMin: mean + sd,
               xMax: mean + sd,
-              borderColor: 'rgba(60, 60, 60, 0.8)',
+              borderColor: 'rgba(60, 60, 60, 0.7)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
                 display: true,
                 content: '+1σ',
-                position: 'end',
-                yAdjust: -10,
+                position: 'start',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: chartConfig.colors.white,
+                color: '#fff',
                 font: { size: 11, weight: 'bold' }
               }
             },
-            line6: {
+            {
               type: 'line',
               xMin: mean + 2*sd,
               xMax: mean + 2*sd,
-              borderColor: 'rgba(80, 80, 80, 0.7)',
+              borderColor: 'rgba(80, 80, 80, 0.6)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
                 display: true,
                 content: '+2σ',
-                position: 'end',
-                yAdjust: -10,
+                position: 'start',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: chartConfig.colors.white,
+                color: '#fff',
                 font: { size: 11 }
               }
             },
-            line7: {
+            {
               type: 'line',
               xMin: mean + 3*sd,
               xMax: mean + 3*sd,
-              borderColor: 'rgba(100, 100, 100, 0.6)',
+              borderColor: 'rgba(100, 100, 100, 0.5)',
               borderWidth: 1,
               borderDash: [5, 3],
               label: {
                 display: true,
                 content: '+3σ',
-                position: 'end',
-                yAdjust: -10,
+                position: 'start',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: chartConfig.colors.white,
+                color: '#fff',
                 font: { size: 11 }
               }
             }
-          }
+          ]
         }
       },
       scales: {
         y: {
-          ticks: { color: chartConfig.colors.white },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          beginAtZero: true,
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
           title: {
             display: true,
             text: 'Probability Density',
-            color: chartConfig.colors.white
+            color: '#333',
+            font: { size: 13, weight: 'bold' }
           }
         },
         x: {
-          ticks: { color: chartConfig.colors.white },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          ticks: { 
+            color: '#333',
+            font: { size: 11 },
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 10
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
           title: {
             display: true,
             text: 'Score',
-            color: chartConfig.colors.white
+            color: '#333',
+            font: { size: 13, weight: 'bold' }
           }
         }
       }
