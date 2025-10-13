@@ -1,9 +1,10 @@
-// Study Guide Data with Visualizations
+// Study Guide Data with Visualizations - FIXED VERSION
 window.studyGuideData = {
   sections: [
     {
       id: 'scales',
-      title: '📏 Scales of Measurement',
+      title: 'Scales of Measurement',
+      icon: '📏',
       content: {
         intro: 'Understanding the four scales of measurement is crucial for choosing the right statistical tests and interpreting results correctly.',
         scales: [
@@ -38,7 +39,8 @@ window.studyGuideData = {
     
     {
       id: 'central-tendency',
-      title: '🎯 Measures of Central Tendency',
+      title: 'Measures of Central Tendency',
+      icon: '🎯',
       content: {
         intro: 'These measures indicate the central or typical value within a dataset.',
         measures: [
@@ -67,7 +69,8 @@ window.studyGuideData = {
     
     {
       id: 'variability',
-      title: '📊 Variability: How Spread Out Are the Scores?',
+      title: 'Variability: Spread of Scores',
+      icon: '📊',
       content: {
         intro: 'Central tendency tells us about the middle, but variability tells us how scattered or grouped the scores are.',
         subsections: [
@@ -104,7 +107,8 @@ window.studyGuideData = {
     
     {
       id: 'distributions',
-      title: '📈 Distribution Shapes: Skewed vs. Normal',
+      title: 'Distribution Shapes',
+      icon: '📈',
       content: {
         intro: 'The shape of a distribution tells us about the pattern of scores.',
         types: [
@@ -140,7 +144,8 @@ window.studyGuideData = {
     
     {
       id: 'correlation',
-      title: '🔗 Correlation: Relationships Between Variables',
+      title: 'Correlation Between Variables',
+      icon: '🔗',
       content: {
         intro: 'Correlation (r) measures the strength and direction of the relationship between two variables. It ranges from -1.00 to +1.00.',
         ranges: [
@@ -167,7 +172,8 @@ window.studyGuideData = {
     
     {
       id: 'standardized-scores',
-      title: '📐 Standardized Scores',
+      title: 'Standardized Scores',
+      icon: '📐',
       content: {
         intro: 'Standardized scores allow us to compare performance across different tests by converting raw scores to a common scale.',
         types: [
@@ -190,7 +196,8 @@ window.studyGuideData = {
     
     {
       id: 'reliability',
-      title: '🎯 Reliability: Consistency of Measurement',
+      title: 'Reliability: Consistency',
+      icon: '🎯',
       content: {
         intro: 'Reliability refers to the consistency and stability of test scores. A reliable test gives similar results under consistent conditions.',
         types: [
@@ -231,7 +238,8 @@ window.studyGuideData = {
     
     {
       id: 'validity',
-      title: '✅ Validity: Does the Test Measure What It Claims?',
+      title: 'Validity: Measuring Correctly',
+      icon: '✅',
       content: {
         intro: 'Validity is the most important test quality. A test can be reliable but not valid!',
         evidenceSources: 'Test content, Response process, Internal structure, Relations to other variables, Testing consequences',
@@ -261,7 +269,8 @@ window.studyGuideData = {
     
     {
       id: 'test-types',
-      title: '📋 Types of Tests',
+      title: 'Types of Tests',
+      icon: '📋',
       content: {
         intro: 'Different tests serve different purposes in assessment.',
         types: [
@@ -298,7 +307,8 @@ window.studyGuideData = {
     
     {
       id: 'language',
-      title: '💬 Language Assessment',
+      title: 'Language Assessment',
+      icon: '💬',
       content: {
         intro: 'Language assessment evaluates both understanding and production of language.',
         types: [
@@ -328,7 +338,8 @@ window.studyGuideData = {
     
     {
       id: 'scoring',
-      title: '🎲 Scoring & Interpretation',
+      title: 'Scoring & Interpretation',
+      icon: '🎲',
       content: {
         intro: 'Understanding different score types is essential for proper interpretation.',
         concepts: [
@@ -365,7 +376,8 @@ window.studyGuideData = {
     
     {
       id: 'norming',
-      title: '👥 Norming & Standardization',
+      title: 'Norming & Standardization',
+      icon: '👥',
       content: {
         intro: 'Tests are standardized using large, representative samples to create norms.',
         concepts: [
@@ -398,7 +410,8 @@ window.studyGuideData = {
     
     {
       id: 'ktea',
-      title: '📚 KTEA-3 Technical Characteristics',
+      title: 'KTEA-3 Technical Info',
+      icon: '📚',
       content: {
         intro: 'The Kaufman Test of Educational Achievement, Third Edition (KTEA-3) is a comprehensive achievement test.',
         activity: {
@@ -409,18 +422,19 @@ window.studyGuideData = {
             'Composite reliability coefficients (typically 0.90+)',
             'Test-retest reliability with corrected correlations',
             'Standard Error of Measurement (SEM) by age and score level',
-            'Five sources of validity evidence (test content, response process, internal structure, relations to other variables, consequences)',
+            'Five sources of validity evidence',
             'Correlation studies with other achievement tests',
             'Correlation studies with cognitive tests',
-            'Validity studies with special populations (LD, ADHD, etc.)'
+            'Validity studies with special populations'
           ]
         },
-        keyPoint: 'The KTEA-3 has strong psychometric properties. Always review the manual for specific reliability and validity coefficients for your client\'s age and the subtests administered!'
+        keyPoint: 'The KTEA-3 has strong psychometric properties. Always review the manual for specific reliability and validity coefficients!'
       }
     }
   ],
   
   quizQuestions: [
+    // Quiz questions remain the same...
     {
       id: 'q1',
       section: 'scales',
@@ -457,7 +471,6 @@ window.studyGuideData = {
       correctAnswer: 0,
       explanation: 'Jersey numbers are just labels/categories with no mathematical meaning - they\'re nominal.'
     },
-    
     {
       id: 'q5',
       section: 'central-tendency',
@@ -490,7 +503,6 @@ window.studyGuideData = {
       correctAnswer: 1,
       explanation: 'The median is the middle score when arranged in order. With 7 scores, the 4th score (7) is the median.'
     },
-    
     {
       id: 'q8',
       section: 'variability',
@@ -523,7 +535,6 @@ window.studyGuideData = {
       correctAnswer: 1,
       explanation: 'Higher SD means more spread out scores. SD=12 shows much more variability than SD=2.'
     },
-    
     {
       id: 'q11',
       section: 'distributions',
@@ -566,7 +577,6 @@ window.studyGuideData = {
       correctAnswer: 1,
       explanation: 'Most people earn moderate incomes, with a few earning much more - creating positive (right) skew.'
     },
-    
     {
       id: 'q14',
       section: 'correlation',
@@ -618,7 +628,6 @@ window.studyGuideData = {
       correctAnswer: 2,
       explanation: 'Correlations close to 0 indicate little to no relationship between variables.'
     },
-    
     {
       id: 'q18',
       section: 'standardized-scores',
@@ -646,7 +655,6 @@ window.studyGuideData = {
       correctAnswer: 1,
       explanation: 'FALSE! Percentile ranks are ordinal - the distance between ranks is not equal across the distribution.'
     },
-    
     {
       id: 'q21',
       section: 'reliability',
@@ -688,7 +696,6 @@ window.studyGuideData = {
       correctAnswer: 0,
       explanation: 'TRUE! As reliability increases, measurement error decreases. They have an inverse relationship.'
     },
-    
     {
       id: 'q25',
       section: 'validity',
@@ -716,7 +723,6 @@ window.studyGuideData = {
       correctAnswer: 0,
       explanation: 'TRUE! Predictive validity is a type of criterion validity that examines prediction of future outcomes.'
     },
-    
     {
       id: 'q28',
       section: 'test-types',
@@ -781,7 +787,6 @@ window.studyGuideData = {
       correctAnswer: 1,
       explanation: 'FALSE! Norm-referenced tests show relative standing, not absolute mastery. Criterion-referenced tests show mastery.'
     },
-    
     {
       id: 'q34',
       section: 'language',
@@ -819,7 +824,6 @@ window.studyGuideData = {
       correctAnswer: 0,
       explanation: 'TRUE! Children usually understand more than they can express, especially in early development.'
     },
-    
     {
       id: 'q37',
       section: 'norming',
@@ -861,7 +865,6 @@ window.studyGuideData = {
       correctAnswer: 1,
       explanation: 'FALSE! Anxiety, fatigue, and other emotional states can significantly impact performance.'
     },
-    
     {
       id: 'q41',
       section: 'scoring',
@@ -885,7 +888,6 @@ window.studyGuideData = {
       correctAnswer: 0,
       explanation: 'TRUE! Age equivalents can be misleading and don\'t account for the full range of performance.'
     },
-    
     {
       id: 'q43',
       section: 'ktea',
@@ -915,3 +917,5 @@ window.studyGuideData = {
     }
   ]
 };
+
+console.log('✅ Study guide data loaded with', window.studyGuideData.sections.length, 'sections and', window.studyGuideData.quizQuestions.length, 'questions');
