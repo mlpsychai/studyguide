@@ -254,13 +254,13 @@ window.studyGuideData = {
         concepts: [
           {
             name: 'Standard Error of Measurement (SEM)',
-            description: 'The average amount of error in test scores',
-            relationship: 'High SEM = Low Reliability',
+            description: 'The average amount of error in test scores. Higher SEM indicates lower reliability.',
             use: 'Creating confidence intervals around obtained scores'
           },
           {
             name: 'Confidence Interval',
             description: 'A range within which the true score likely falls',
+            use: 'Acknowledges measurement error in test interpretation',
             format: 'Obtained Score ± (SEM × 1.96) for 95% confidence'
           }
         ],
@@ -280,11 +280,12 @@ window.studyGuideData = {
             name: 'Content Validity',
             description: 'Does the test content represent the domain being measured?',
             purpose: 'Ensure test items cover all important aspects of what you\'re measuring',
-            biasNote: 'Presentation format and response mode can introduce bias'
+            note: 'Presentation format and response mode can introduce bias'
           },
           {
             name: 'Criterion Validity',
             description: 'Does the test correlate with other measures of the same construct?',
+            purpose: 'Establish the test\'s relationship to external measures or outcomes',
             types: [
               'Concurrent validity: Correlation with current measure',
               'Predictive validity: Predicts future performance'
@@ -298,6 +299,7 @@ window.studyGuideData = {
           {
             name: 'Face Validity',
             description: 'Does the test appear to measure what it claims to measure?',
+            purpose: 'Ensure the test appears relevant and appropriate to test-takers and stakeholders',
             note: 'Least important type of validity - just about appearances'
           }
         ],
@@ -327,17 +329,20 @@ window.studyGuideData = {
           {
             name: 'Achievement Tests',
             description: 'Measure what has been learned',
+            purpose: 'Assess acquired knowledge and skills in specific academic areas',
             examples: ['KTEA-3', 'Woodcock-Johnson IV Tests of Achievement', 'Wechsler Individual Achievement Test-III (WIAT-III)'],
             theoreticalBasis: 'Woodcock-Johnson IV is based on Cattell-Horn-Carroll (CHC) theory of cognitive abilities'
           },
           {
             name: 'Aptitude/Cognitive Tests',
             description: 'Measure potential or ability to learn',
+            purpose: 'Assess cognitive abilities and learning capacity',
             examples: ['IQ tests', 'WISC-V', 'Stanford-Binet']
           },
           {
             name: 'Diagnostic Tests',
             description: 'Identify specific strengths and weaknesses',
+            purpose: 'Provide detailed analysis of skill areas to guide intervention',
             examples: ['Reading diagnostic', 'Math diagnostic', 'Phonological awareness']
           },
           {
@@ -348,6 +353,7 @@ window.studyGuideData = {
           {
             name: 'Adaptive Behavior Scales',
             description: 'Measure how well students adapt to different environments',
+            purpose: 'Assess practical life skills and social functioning',
             examples: ['Daily living skills', 'Social skills', 'Communication']
           }
         ]
@@ -400,6 +406,7 @@ window.studyGuideData = {
           {
             name: 'Derived Scores',
             description: 'Raw scores converted to standardized or norm-referenced scores',
+            purpose: 'Allow meaningful comparison to normative groups',
             types: [
               'Standard scores',
               'Percentile ranks',
@@ -443,6 +450,7 @@ window.studyGuideData = {
           {
             name: 'Subtest vs Domain',
             description: 'Subtests are individual components; Domains are broader areas that may include multiple subtests',
+            purpose: 'Organize assessment results hierarchically',
             example: 'Reading domain might include subtests for phonics, fluency, and comprehension'
           }
         ],
@@ -474,6 +482,8 @@ window.studyGuideData = {
           },
           {
             name: 'Variables Affecting Performance',
+            description: 'Multiple factors can influence test scores beyond the construct being measured',
+            purpose: 'Consider these factors when interpreting test results',
             factors: [
               'Socioeconomic status (SES)',
               'Race and ethnicity',
