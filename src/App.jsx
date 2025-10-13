@@ -238,7 +238,7 @@ function App() {
               <div key={idx} className="bg-white p-6 rounded-lg shadow border-l-4 border-indigo-500">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{type.name}</h3>
                 <p className="text-gray-700 mb-2">{type.description}</p>
-                <p className="text-gray-700 mb-2"><strong>Purpose:</strong> {type.purpose}</p>
+                {type.purpose && <p className="text-gray-700 mb-2"><strong>Purpose:</strong> {type.purpose}</p>}
                 {type.examples && (
                   Array.isArray(type.examples) ? (
                     <div className="mb-2">
