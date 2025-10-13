@@ -316,29 +316,37 @@ function renderSkewedDistribution(canvasId, config = {}) {
     return null;
   }
 
-  const normalData = generateBellCurveData(0, 1, -3, 3, 100);
+  const mean = 100;
+  const sd = 15;
   
+  // Normal distribution centered at 100
+  const normalData = generateBellCurveData(mean, sd, mean - 3*sd, mean + 3*sd, 100);
+  
+  // Generate skewed distributions on same scale
   const leftData = [];
   const rightData = [];
-  const step = 6 / 100;
+  const step = (6 * sd) / 100;
   
   for (let i = 0; i < 100; i++) {
-    const x = -3 + i * step;
+    const x = (mean - 3*sd) + i * step;
+    const normalized = (x - mean) / sd;
     
-    const leftX = -x;
+    // Left skew (negative)
+    const leftX = -normalized;
     const leftNorm = (leftX + 1.5);
-    const leftY = Math.pow(leftNorm, 2) * Math.exp(-leftNorm) * 0.15;
+    const leftY = Math.pow(leftNorm, 2) * Math.exp(-leftNorm) * 0.015;
     leftData.push({ x, y: Math.max(0, leftY) });
     
-    const rightNorm = (x + 3) / 1.5;
-    const rightY = Math.pow(rightNorm, 1.5) * Math.exp(-rightNorm * 1.2) * 0.3;
+    // Right skew (positive)
+    const rightNorm = (normalized + 3) / 1.5;
+    const rightY = Math.pow(rightNorm, 1.5) * Math.exp(-rightNorm * 1.2) * 0.03;
     rightData.push({ x, y: Math.max(0, rightY) });
   }
 
   const chart = new Chart(canvas, {
     type: 'line',
     data: {
-      labels: normalData.map(d => d.x.toFixed(1)),
+      labels: normalData.map(d => Math.round(d.x)),
       datasets: [
         {
           label: 'Left Skew (Negative)',
@@ -398,14 +406,29 @@ function renderSkewedDistribution(canvasId, config = {}) {
             color: chartConfig.colors.white,
             font: { size: 11 }
           },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' }
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          title: {
+            display: true,
+            text: 'Probability Density',
+            color: chartConfig.colors.white,
+            font: { size: 13, weight: 'bold' }
+          }
         },
         x: {
           ticks: { 
             color: chartConfig.colors.white,
-            font: { size: 11 }
+            font: { size: 11 },
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 10
           },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' }
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          title: {
+            display: true,
+            text: 'Score',
+            color: chartConfig.colors.white,
+            font: { size: 13, weight: 'bold' }
+          }
         }
       }
     }
