@@ -150,6 +150,108 @@ function renderNormalDistribution(canvas, config = {}) {
           text: '68% within ±1σ | 95% within ±2σ | 99.7% within ±3σ',
           color: chartConfig.colors.white,
           font: chartConfig.fonts.subtitle
+        },
+        annotation: {
+          annotations: {
+            line1: {
+              type: 'line',
+              xMin: mean - 3*sd,
+              xMax: mean - 3*sd,
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              borderWidth: 1,
+              label: {
+                display: true,
+                content: '-3σ',
+                position: 'start',
+                color: chartConfig.colors.white,
+                font: { size: 10 }
+              }
+            },
+            line2: {
+              type: 'line',
+              xMin: mean - 2*sd,
+              xMax: mean - 2*sd,
+              borderColor: 'rgba(255, 255, 255, 0.5)',
+              borderWidth: 2,
+              label: {
+                display: true,
+                content: '-2σ',
+                position: 'start',
+                color: chartConfig.colors.white,
+                font: { size: 10 }
+              }
+            },
+            line3: {
+              type: 'line',
+              xMin: mean - sd,
+              xMax: mean - sd,
+              borderColor: 'rgba(255, 255, 255, 0.7)',
+              borderWidth: 2,
+              label: {
+                display: true,
+                content: '-1σ',
+                position: 'start',
+                color: chartConfig.colors.white,
+                font: { size: 10 }
+              }
+            },
+            line4: {
+              type: 'line',
+              xMin: mean,
+              xMax: mean,
+              borderColor: chartConfig.colors.primary,
+              borderWidth: 3,
+              label: {
+                display: true,
+                content: 'μ',
+                position: 'start',
+                color: chartConfig.colors.primary,
+                font: { size: 12, weight: 'bold' }
+              }
+            },
+            line5: {
+              type: 'line',
+              xMin: mean + sd,
+              xMax: mean + sd,
+              borderColor: 'rgba(255, 255, 255, 0.7)',
+              borderWidth: 2,
+              label: {
+                display: true,
+                content: '+1σ',
+                position: 'start',
+                color: chartConfig.colors.white,
+                font: { size: 10 }
+              }
+            },
+            line6: {
+              type: 'line',
+              xMin: mean + 2*sd,
+              xMax: mean + 2*sd,
+              borderColor: 'rgba(255, 255, 255, 0.5)',
+              borderWidth: 2,
+              label: {
+                display: true,
+                content: '+2σ',
+                position: 'start',
+                color: chartConfig.colors.white,
+                font: { size: 10 }
+              }
+            },
+            line7: {
+              type: 'line',
+              xMin: mean + 3*sd,
+              xMax: mean + 3*sd,
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              borderWidth: 1,
+              label: {
+                display: true,
+                content: '+3σ',
+                position: 'start',
+                color: chartConfig.colors.white,
+                font: { size: 10 }
+              }
+            }
+          }
         }
       },
       scales: {
