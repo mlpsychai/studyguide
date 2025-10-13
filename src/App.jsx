@@ -1,36 +1,72 @@
 const { useState } = React;
-const { BookOpen, Award, TrendingUp, Target, FileText, Menu, X, CheckCircle, XCircle, Brain } = lucide;
-const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
 
 function StatisticsStudyGuide() {
   const [activeSection, setActiveSection] = useState('intro');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const sections = [
-    { id: 'intro', title: 'Introduction', icon: BookOpen },
-    { id: 'scales', title: 'Measurement Scales', icon: TrendingUp },
+    { id: 'intro', title: '📚 Introduction' },
+    { id: 'scales', title: '📊 Measurement Scales' },
+    { id: 'central', title: '🎯 Central Tendency' },
+    { id: 'variability', title: '📈 Variability' },
+    { id: 'correlation', title: '🔗 Correlation' },
+    { id: 'reliability', title: '🏆 Reliability' },
+    { id: 'validity', title: '✓ Validity' },
+    { id: 'scores', title: '💯 Score Types' },
   ];
+
+  const content = {
+    intro: {
+      title: 'Welcome to Statistics & Assessment',
+      body: 'This interactive study guide covers essential concepts in educational statistics and psychological assessment.'
+    },
+    scales: {
+      title: 'Scales of Measurement',
+      body: 'Nominal, Ordinal, Interval, and Ratio scales each have unique properties for measuring variables.'
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <BookOpen className="w-8 h-8 text-indigo-600" />
-            <h1 className="text-2xl font-bold text-gray-800">Statistics Study Guide</h1>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <h1 className="text-2xl font-bold text-indigo-600">📊 Statistics Study Guide</h1>
         </div>
       </header>
-      <main className="p-8">
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-3xl font-bold mb-4">Welcome!</h2>
-          <p className="text-gray-700">Your study guide is loading...</p>
-        </div>
-      </main>
+
+      <div className="flex max-w-7xl mx-auto">
+        <aside className="w-64 bg-white shadow-lg min-h-screen p-4">
+          <nav className="space-y-2">
+            {sections.map(section => (
+              <button
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                className={`w-full text-left px-4 py-3 rounded-lg transition ${
+                  activeSection === section.id
+                    ? 'bg-indigo-100 text-indigo-700 font-semibold'
+                    : 'hover:bg-gray-100 text-gray-700'
+                }`}
+              >
+                {section.title}
+              </button>
+            ))}
+          </nav>
+        </aside>
+
+        <main className="flex-1 p-8">
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <h2 className="text-3xl font-bold mb-4 text-gray-800">
+              {content[activeSection]?.title || sections.find(s => s.id === activeSection)?.title}
+            </h2>
+            <p className="text-gray-700 text-lg">
+              {content[activeSection]?.body || 'Content coming soon...'}
+            </p>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
 
-// Mount the app
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<StatisticsStudyGuide />);
