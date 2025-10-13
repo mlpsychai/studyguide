@@ -1,4 +1,5 @@
 const { useState } = React;
+const { ChartVisualizer, CorrelationGrid } = window;
 
 function App() {
   const [activeSection, setActiveSection] = useState('scales');
@@ -490,6 +491,18 @@ function App() {
     );
   };
 
+   {/* ADD THIS: Visualizations */}
+        {section.visualization && (
+          <ChartVisualizer 
+            type={section.visualization.type}
+            config={section.visualization.config}
+            sectionId={section.id}
+          />
+        )}
+      </div>  {/* This closing div was already here */}
+    );
+  };
+        
   const renderQuiz = () => {
     if (showResults) {
       const score = calculateScore();
