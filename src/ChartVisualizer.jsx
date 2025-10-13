@@ -1,75 +1,63 @@
-/**
- * ChartVisualizer Component
- * 
- * Usage examples:
- * <ChartVisualizer type="normal-distribution" config={{ mean: 100, sd: 15, showPercentages: true }} />
- * <ChartVisualizer type="skewed-distributions" />
- * <ChartVisualizer type="correlation-scatterplot" config={{ r: 0.8, label: "Strong Positive" }} />
- * <ChartVisualizer type="standardized-scores" />
- */
+// Chart Visualizer React Component
+function ChartVisualizer({ type, config, sectionId }) {
+  const canvasRef = React.useRef(null);
+  const chartId = `chart-${sectionId}`;
 
-function ChartVisualizer({ type, config = {}, sectionId }) {
-  const canvasRef = useRef(null);
-  const chartRef = useRef(null);
+  React.useEffect(() => {
+    if (!canvasRef.current || !window.Chart || !window.chartUtils) return;
 
-  useEffect(() => {
-    // Only render chart when canvas is mounted
-    if (canvasRef.current && typeof Chart !== 'undefined') {
-      // Destroy previous chart if it exists
-      if (chartRef.current) {
-        chartRef.current.destroy();
+    // Small delay to ensure canvas is in DOM
+    const timeoutId = setTimeout(() => {
+      const canvas = document.getElementById(chartId);
+      if (!canvas) return;
+
+      // Destroy existing chart if present
+      const existingChart = window.Chart.getChart(canvas);
+      if (existingChart) {
+        existingChart.destroy();
       }
 
-      // Render new chart
-      chartRef.current = renderChart(canvasRef.current.id, type, config);
-    }
+      // Render appropriate chart type
+      switch(type) {
+        case 'normal-distribution':
+          window.chartUtils.renderNormalDistribution(chartId, config);
+          break;
+        case 'skewed':
+          window.chartUtils.renderSkewedDistribution(chartId, config);
+          break;
+        case 'correlation':
+          window.chartUtils.renderCorrelationChart(chartId, config);
+          break;
+        case 'standardized':
+          window.chartUtils.renderStandardizedScores(chartId, config);
+          break;
+        default:
+          console.warn('Unknown chart type:', type);
+      }
+    }, 100);
 
-    // Cleanup on unmount
+    // Cleanup function
     return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
+      clearTimeout(timeoutId);
+      const canvas = document.getElementById(chartId);
+      if (canvas) {
+        const chart = window.Chart.getChart(canvas);
+        if (chart) chart.destroy();
       }
     };
-  }, [type, config]);
-
-  const canvasId = `chart-${sectionId || type}-${Math.random().toString(36).substr(2, 9)}`;
+  }, [type, config, sectionId, chartId]);
 
   return (
-    <div className="visual-example">
-      <h3>📊 Visual Example</h3>
-      <canvas 
-        ref={canvasRef}
-        id={canvasId}
-        className="viz-canvas"
-      />
-    </div>
-  );
-}
-
-// Export for multiple correlation plots
-function CorrelationGrid({ plots = [] }) {
-  return (
-    <div className="visual-example">
-      <h3>📊 Visual Example: Correlation Strengths</h3>
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(3, 1fr)', 
-        gap: '20px',
-        margin: '20px 0'
-      }}>
-        {plots.map((plot, index) => (
-          <ChartVisualizer 
-            key={index}
-            type="correlation-scatterplot"
-            config={{ r: plot.r, label: plot.label }}
-            sectionId={`correlation-${index}`}
-          />
-        ))}
+    <div className="mt-6 bg-white p-6 rounded-lg shadow">
+      <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Visualization</h3>
+      <div style={{ position: 'relative', height: '400px' }}>
+        <canvas ref={canvasRef} id={chartId}></canvas>
       </div>
     </div>
   );
 }
 
-// Export to window
+// Export to window for browser compatibility
 window.ChartVisualizer = ChartVisualizer;
-window.CorrelationGrid = CorrelationGrid;
+window.CorrelationGrid = function() { return null; }; // Placeholder for future use
+console.log('✅ ChartVisualizer component loaded');
