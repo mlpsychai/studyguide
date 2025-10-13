@@ -158,8 +158,8 @@ function renderNormalDistribution(canvasId, config = {}) {
           font: { size: 14 }
         },
         annotation: {
-          annotations: [
-            {
+          annotations: {
+            line1: {
               type: 'line',
               xMin: mean - 3*sd,
               xMax: mean - 3*sd,
@@ -175,7 +175,7 @@ function renderNormalDistribution(canvasId, config = {}) {
                 font: { size: 11 }
               }
             },
-            {
+            line2: {
               type: 'line',
               xMin: mean - 2*sd,
               xMax: mean - 2*sd,
@@ -191,7 +191,7 @@ function renderNormalDistribution(canvasId, config = {}) {
                 font: { size: 11 }
               }
             },
-            {
+            line3: {
               type: 'line',
               xMin: mean - sd,
               xMax: mean - sd,
@@ -207,7 +207,7 @@ function renderNormalDistribution(canvasId, config = {}) {
                 font: { size: 11, weight: 'bold' }
               }
             },
-            {
+            line4: {
               type: 'line',
               xMin: mean,
               xMax: mean,
@@ -223,7 +223,7 @@ function renderNormalDistribution(canvasId, config = {}) {
                 font: { size: 12, weight: 'bold' }
               }
             },
-            {
+            line5: {
               type: 'line',
               xMin: mean + sd,
               xMax: mean + sd,
@@ -239,7 +239,7 @@ function renderNormalDistribution(canvasId, config = {}) {
                 font: { size: 11, weight: 'bold' }
               }
             },
-            {
+            line6: {
               type: 'line',
               xMin: mean + 2*sd,
               xMax: mean + 2*sd,
@@ -255,7 +255,7 @@ function renderNormalDistribution(canvasId, config = {}) {
                 font: { size: 11 }
               }
             },
-            {
+            line7: {
               type: 'line',
               xMin: mean + 3*sd,
               xMax: mean + 3*sd,
@@ -271,7 +271,7 @@ function renderNormalDistribution(canvasId, config = {}) {
                 font: { size: 11 }
               }
             }
-          ]
+          }
         }
       },
       scales: {
