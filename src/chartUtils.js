@@ -1,9 +1,7 @@
 /**
- * CHART UTILITIES FOR REACT
- * Fixed version with proper canvas handling
+ * CHART UTILITIES FOR REACT - WHITE TEXT VERSION
  */
 
-// Configuration
 const chartConfig = {
   colors: {
     primary: '#FFD700',
@@ -148,13 +146,13 @@ function renderNormalDistribution(canvasId, config = {}) {
         title: {
           display: true,
           text: `Normal Distribution (μ=${mean}, σ=${sd})`,
-          color: chartConfig.colors.primary,
+          color: chartConfig.colors.white,
           font: { size: 18, weight: 'bold' }
         },
         subtitle: {
           display: config.showPercentages,
           text: '68% within ±1σ | 95% within ±2σ | 99.7% within ±3σ',
-          color: '#666',
+          color: chartConfig.colors.white,
           font: { size: 14 }
         },
         annotation: {
@@ -163,7 +161,7 @@ function renderNormalDistribution(canvasId, config = {}) {
               type: 'line',
               scaleID: 'x',
               value: mean - 3*sd,
-              borderColor: 'rgba(100, 100, 100, 0.5)',
+              borderColor: 'rgba(255, 255, 255, 0.3)',
               borderWidth: 1,
               borderDash: [5, 3],
               label: {
@@ -179,7 +177,7 @@ function renderNormalDistribution(canvasId, config = {}) {
               type: 'line',
               scaleID: 'x',
               value: mean - 2*sd,
-              borderColor: 'rgba(80, 80, 80, 0.6)',
+              borderColor: 'rgba(255, 255, 255, 0.4)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
@@ -195,7 +193,7 @@ function renderNormalDistribution(canvasId, config = {}) {
               type: 'line',
               scaleID: 'x',
               value: mean - sd,
-              borderColor: 'rgba(60, 60, 60, 0.7)',
+              borderColor: 'rgba(255, 255, 255, 0.5)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
@@ -211,7 +209,7 @@ function renderNormalDistribution(canvasId, config = {}) {
               type: 'line',
               scaleID: 'x',
               value: mean,
-              borderColor: '#000',
+              borderColor: '#fff',
               borderWidth: 3,
               borderDash: [8, 4],
               label: {
@@ -227,7 +225,7 @@ function renderNormalDistribution(canvasId, config = {}) {
               type: 'line',
               scaleID: 'x',
               value: mean + sd,
-              borderColor: 'rgba(60, 60, 60, 0.7)',
+              borderColor: 'rgba(255, 255, 255, 0.5)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
@@ -243,7 +241,7 @@ function renderNormalDistribution(canvasId, config = {}) {
               type: 'line',
               scaleID: 'x',
               value: mean + 2*sd,
-              borderColor: 'rgba(80, 80, 80, 0.6)',
+              borderColor: 'rgba(255, 255, 255, 0.4)',
               borderWidth: 2,
               borderDash: [5, 3],
               label: {
@@ -259,7 +257,7 @@ function renderNormalDistribution(canvasId, config = {}) {
               type: 'line',
               scaleID: 'x',
               value: mean + 3*sd,
-              borderColor: 'rgba(100, 100, 100, 0.5)',
+              borderColor: 'rgba(255, 255, 255, 0.3)',
               borderWidth: 1,
               borderDash: [5, 3],
               label: {
@@ -278,30 +276,30 @@ function renderNormalDistribution(canvasId, config = {}) {
         y: {
           beginAtZero: true,
           ticks: { 
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 11 }
           },
-          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
           title: {
             display: true,
             text: 'Probability Density',
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 13, weight: 'bold' }
           }
         },
         x: {
           ticks: { 
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 11 },
             maxRotation: 0,
             autoSkip: true,
             maxTicksLimit: 10
           },
-          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
           title: {
             display: true,
             text: 'Score',
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 13, weight: 'bold' }
           }
         }
@@ -383,14 +381,14 @@ function renderSkewedDistribution(canvasId, config = {}) {
           display: true,
           position: 'bottom',
           labels: {
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 12 }
           }
         },
         title: {
           display: true,
           text: 'Skewed Distributions',
-          color: chartConfig.colors.primary,
+          color: chartConfig.colors.white,
           font: { size: 18, weight: 'bold' }
         }
       },
@@ -398,17 +396,17 @@ function renderSkewedDistribution(canvasId, config = {}) {
         y: {
           beginAtZero: true,
           ticks: { 
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 11 }
           },
-          grid: { color: 'rgba(0, 0, 0, 0.1)' }
+          grid: { color: 'rgba(255, 255, 255, 0.1)' }
         },
         x: {
           ticks: { 
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 11 }
           },
-          grid: { color: 'rgba(0, 0, 0, 0.1)' }
+          grid: { color: 'rgba(255, 255, 255, 0.1)' }
         }
       }
     }
@@ -463,7 +461,7 @@ function renderCorrelationChart(canvasId, config = {}) {
         title: {
           display: true,
           text: label,
-          color: chartConfig.colors.primary,
+          color: chartConfig.colors.white,
           font: { size: 16, weight: 'bold' }
         },
         tooltip: {
@@ -478,14 +476,14 @@ function renderCorrelationChart(canvasId, config = {}) {
           title: {
             display: true,
             text: 'Variable X',
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 12, weight: 'bold' }
           },
           ticks: {
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 11 }
           },
-          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
           min: -3,
           max: 3
         },
@@ -493,14 +491,14 @@ function renderCorrelationChart(canvasId, config = {}) {
           title: {
             display: true,
             text: 'Variable Y',
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 12, weight: 'bold' }
           },
           ticks: {
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 11 }
           },
-          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
           min: -3,
           max: 3
         }
@@ -543,7 +541,7 @@ function renderStandardizedScores(canvasId, config = {}) {
         title: {
           display: true,
           text: 'Standardized Score Equivalents',
-          color: chartConfig.colors.primary,
+          color: chartConfig.colors.white,
           font: { size: 18, weight: 'bold' }
         },
         subtitle: {
@@ -554,7 +552,7 @@ function renderStandardizedScores(canvasId, config = {}) {
             'Scaled: 1, 4, 7, 10, 13, 16, 19',
             'T-scores: 20, 30, 40, 50, 60, 70, 80'
           ],
-          color: '#666',
+          color: chartConfig.colors.white,
           font: { size: 12 },
           padding: { bottom: 10 }
         }
@@ -562,21 +560,21 @@ function renderStandardizedScores(canvasId, config = {}) {
       scales: {
         y: {
           ticks: { 
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 11 }
           },
-          grid: { color: 'rgba(0, 0, 0, 0.1)' }
+          grid: { color: 'rgba(255, 255, 255, 0.1)' }
         },
         x: {
           ticks: { 
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 11 }
           },
-          grid: { color: 'rgba(0, 0, 0, 0.1)' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
           title: {
             display: true,
             text: 'Standard Deviations from Mean',
-            color: '#333',
+            color: chartConfig.colors.white,
             font: { size: 13, weight: 'bold' }
           }
         }
@@ -595,10 +593,8 @@ function renderCorrelationGrid(containerId, correlations) {
     return;
   }
 
-  // Clear existing content
   container.innerHTML = '';
   
-  // Create grid
   const grid = document.createElement('div');
   grid.style.display = 'grid';
   grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(300px, 1fr))';
@@ -612,7 +608,6 @@ function renderCorrelationGrid(containerId, correlations) {
     chartDiv.appendChild(canvas);
     grid.appendChild(chartDiv);
     
-    // Render chart after DOM update
     setTimeout(() => {
       renderCorrelationChart(canvas.id, corr);
     }, 10);
@@ -633,7 +628,6 @@ function renderChart(canvasId, type, config = {}) {
     return null;
   }
 
-  // Destroy existing chart if it exists
   const existingChart = Chart.getChart(canvas);
   if (existingChart) {
     existingChart.destroy();
@@ -668,4 +662,4 @@ window.chartUtils = {
   renderCorrelationGrid
 };
 
-console.log('✅ Chart utilities loaded');
+console.log('✅ Chart utilities loaded (white text version)');
