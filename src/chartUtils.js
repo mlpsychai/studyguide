@@ -1,6 +1,6 @@
 /**
  * CHART UTILITIES FOR REACT
- * Extracted from ContentRenderer.js and adapted for React components
+ * Fixed version with proper canvas handling
  */
 
 // Configuration
@@ -113,7 +113,13 @@ function generateTrendLine(data) {
 // CHART RENDERING FUNCTIONS
 // ========================================
 
-function renderNormalDistribution(canvas, config = {}) {
+function renderNormalDistribution(canvasId, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
   const mean = config.mean || 100;
   const sd = config.sd || 15;
 
@@ -136,7 +142,7 @@ function renderNormalDistribution(canvas, config = {}) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         title: {
@@ -306,7 +312,13 @@ function renderNormalDistribution(canvas, config = {}) {
   return chart;
 }
 
-function renderSkewedDistribution(canvas, config = {}) {
+function renderSkewedDistribution(canvasId, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
   const normalData = generateBellCurveData(0, 1, -3, 3, 100);
   
   const leftData = [];
@@ -365,32 +377,38 @@ function renderSkewedDistribution(canvas, config = {}) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           display: true,
           position: 'bottom',
           labels: {
-            color: chartConfig.colors.white,
-            font: chartConfig.fonts.body
+            color: '#333',
+            font: { size: 12 }
           }
         },
         title: {
           display: true,
           text: 'Skewed Distributions',
           color: chartConfig.colors.primary,
-          font: chartConfig.fonts.title
+          font: { size: 18, weight: 'bold' }
         }
       },
       scales: {
         y: {
           beginAtZero: true,
-          ticks: { color: chartConfig.colors.white },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' }
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' }
         },
         x: {
-          ticks: { color: chartConfig.colors.white },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' }
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' }
         }
       }
     }
@@ -399,7 +417,13 @@ function renderSkewedDistribution(canvas, config = {}) {
   return chart;
 }
 
-function renderCorrelationChart(canvas, config = {}) {
+function renderCorrelationChart(canvasId, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
   const r = config.r || 0;
   const label = config.label || `r = ${r}`;
   
@@ -433,15 +457,14 @@ function renderCorrelationChart(canvas, config = {}) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: 1,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         title: {
           display: true,
           text: label,
           color: chartConfig.colors.primary,
-          font: chartConfig.fonts.subtitle
+          font: { size: 16, weight: 'bold' }
         },
         tooltip: {
           backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -455,14 +478,14 @@ function renderCorrelationChart(canvas, config = {}) {
           title: {
             display: true,
             text: 'Variable X',
-            color: chartConfig.colors.white,
-            font: chartConfig.fonts.label
+            color: '#333',
+            font: { size: 12, weight: 'bold' }
           },
           ticks: {
-            color: chartConfig.colors.white,
-            font: chartConfig.fonts.body
+            color: '#333',
+            font: { size: 11 }
           },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
           min: -3,
           max: 3
         },
@@ -470,14 +493,14 @@ function renderCorrelationChart(canvas, config = {}) {
           title: {
             display: true,
             text: 'Variable Y',
-            color: chartConfig.colors.white,
-            font: chartConfig.fonts.label
+            color: '#333',
+            font: { size: 12, weight: 'bold' }
           },
           ticks: {
-            color: chartConfig.colors.white,
-            font: chartConfig.fonts.body
+            color: '#333',
+            font: { size: 11 }
           },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
           min: -3,
           max: 3
         }
@@ -488,7 +511,13 @@ function renderCorrelationChart(canvas, config = {}) {
   return chart;
 }
 
-function renderStandardizedScores(canvas, config = {}) {
+function renderStandardizedScores(canvasId, config = {}) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas not found: ${canvasId}`);
+    return null;
+  }
+
   const data = generateBellCurveData(0, 1, -3, 3, 100);
 
   const chart = new Chart(canvas, {
@@ -508,14 +537,14 @@ function renderStandardizedScores(canvas, config = {}) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         title: {
           display: true,
           text: 'Standardized Score Equivalents',
           color: chartConfig.colors.primary,
-          font: chartConfig.fonts.title
+          font: { size: 18, weight: 'bold' }
         },
         subtitle: {
           display: true,
@@ -525,23 +554,30 @@ function renderStandardizedScores(canvas, config = {}) {
             'Scaled: 1, 4, 7, 10, 13, 16, 19',
             'T-scores: 20, 30, 40, 50, 60, 70, 80'
           ],
-          color: chartConfig.colors.white,
-          font: chartConfig.fonts.body,
+          color: '#666',
+          font: { size: 12 },
           padding: { bottom: 10 }
         }
       },
       scales: {
         y: {
-          ticks: { color: chartConfig.colors.white },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' }
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' }
         },
         x: {
-          ticks: { color: chartConfig.colors.white },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          ticks: { 
+            color: '#333',
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.1)' },
           title: {
             display: true,
             text: 'Standard Deviations from Mean',
-            color: chartConfig.colors.white
+            color: '#333',
+            font: { size: 13, weight: 'bold' }
           }
         }
       }
@@ -549,6 +585,40 @@ function renderStandardizedScores(canvas, config = {}) {
   });
 
   return chart;
+}
+
+// Correlation grid for multiple correlations
+function renderCorrelationGrid(containerId, correlations) {
+  const container = document.getElementById(containerId);
+  if (!container) {
+    console.error(`Container not found: ${containerId}`);
+    return;
+  }
+
+  // Clear existing content
+  container.innerHTML = '';
+  
+  // Create grid
+  const grid = document.createElement('div');
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(300px, 1fr))';
+  grid.style.gap = '20px';
+  
+  correlations.forEach((corr, idx) => {
+    const chartDiv = document.createElement('div');
+    chartDiv.style.height = '300px';
+    const canvas = document.createElement('canvas');
+    canvas.id = `${containerId}-${idx}`;
+    chartDiv.appendChild(canvas);
+    grid.appendChild(chartDiv);
+    
+    // Render chart after DOM update
+    setTimeout(() => {
+      renderCorrelationChart(canvas.id, corr);
+    }, 10);
+  });
+  
+  container.appendChild(grid);
 }
 
 // ========================================
@@ -571,13 +641,13 @@ function renderChart(canvasId, type, config = {}) {
 
   switch (type) {
     case 'normal-distribution':
-      return renderNormalDistribution(canvas, config);
+      return renderNormalDistribution(canvasId, config);
     case 'skewed':
-      return renderSkewedDistribution(canvas, config);
+      return renderSkewedDistribution(canvasId, config);
     case 'correlation':
-      return renderCorrelationChart(canvas, config);
+      return renderCorrelationChart(canvasId, config);
     case 'standardized':
-      return renderStandardizedScores(canvas, config);
+      return renderStandardizedScores(canvasId, config);
     default:
       console.warn(`Unknown chart type: ${type}`);
       return null;
@@ -594,7 +664,8 @@ window.chartUtils = {
   renderNormalDistribution,
   renderSkewedDistribution,
   renderCorrelationChart,
-  renderStandardizedScores
+  renderStandardizedScores,
+  renderCorrelationGrid
 };
 
 console.log('✅ Chart utilities loaded');
