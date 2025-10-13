@@ -1,4 +1,4 @@
-// Study Guide Data with Visualizations - FIXED VERSION
+// Study Guide Data with Visualizations - UPDATED VERSION
 window.studyGuideData = {
   sections: [
     {
@@ -89,8 +89,8 @@ window.studyGuideData = {
           {
             title: 'Variance',
             content: 'Variance is the square of the standard deviation (SD²). It\'s used in many statistical calculations.',
-            formula: 'Variance = SD²',
-            relationship: 'If SD = 10, then Variance = 100'
+            formula: 'Variance (s²) = Σ(x - mean)² ÷ (n - 1)',
+            relationship: 'Standard Deviation = √Variance. If SD = 10, then Variance = 100'
           }
         ],
         keyPoint: 'Lower SD = scores are close together. Higher SD = scores are more spread out!'
@@ -224,6 +224,7 @@ window.studyGuideData = {
           {
             name: 'Standard Error of Measurement (SEM)',
             description: 'The average amount of error in test scores',
+            relationship: 'High SEM = Low Reliability',
             use: 'Creating confidence intervals around obtained scores'
           },
           {
@@ -247,7 +248,8 @@ window.studyGuideData = {
           {
             name: 'Content Validity',
             description: 'Does the test content represent the domain being measured?',
-            purpose: 'Ensure test items cover all important aspects of what you\'re measuring'
+            purpose: 'Ensure test items cover all important aspects of what you\'re measuring',
+            biasNote: 'Presentation format and response mode can introduce bias'
           },
           {
             name: 'Criterion Validity',
@@ -261,6 +263,11 @@ window.studyGuideData = {
             name: 'Construct Validity',
             description: 'Does the test measure the theoretical construct it claims to?',
             purpose: 'The overarching validity - includes all other types'
+          },
+          {
+            name: 'Face Validity',
+            description: 'Does the test appear to measure what it claims to measure?',
+            note: 'Least important type of validity - just about appearances'
           }
         ],
         keyPoint: 'Think of it this way: A bathroom scale could be very reliable (consistent), but if you\'re trying to measure height, it\'s not valid!'
@@ -289,7 +296,7 @@ window.studyGuideData = {
           {
             name: 'Achievement Tests',
             description: 'Measure what has been learned',
-            examples: ['Reading tests', 'Math tests', 'KTEA-3', 'Woodcock-Johnson']
+            examples: ['KTEA-3', 'Woodcock-Johnson IV Tests of Achievement', 'Wechsler Individual Achievement Test-III (WIAT-III)']
           },
           {
             name: 'Aptitude/Cognitive Tests',
@@ -300,6 +307,16 @@ window.studyGuideData = {
             name: 'Diagnostic Tests',
             description: 'Identify specific strengths and weaknesses',
             examples: ['Reading diagnostic', 'Math diagnostic', 'Phonological awareness']
+          },
+          {
+            name: 'Screening Tests',
+            description: 'Brief survey of skills across multiple areas',
+            purpose: 'Determine areas that need further assessment'
+          },
+          {
+            name: 'Adaptive Behavior Scales',
+            description: 'Measure how well students adapt to different environments',
+            examples: ['Daily living skills', 'Social skills', 'Communication']
           }
         ]
       }
@@ -368,6 +385,11 @@ window.studyGuideData = {
             name: 'Composite Scores',
             description: 'Combinations of multiple subtest scores',
             purpose: 'More reliable than individual subtests'
+          },
+          {
+            name: 'Subtest vs Domain',
+            description: 'Subtests are individual components; Domains are broader areas that may include multiple subtests',
+            example: 'Reading domain might include subtests for phonics, fluency, and comprehension'
           }
         ],
         keyPoint: 'Always use multiple score types and consider confidence intervals when interpreting!'
@@ -401,7 +423,8 @@ window.studyGuideData = {
           {
             name: 'Standardized Administration',
             description: 'Following exact procedures for all examinees',
-            purpose: 'Ensures fair comparison to norms'
+            purpose: 'Ensures fair comparison to norms',
+            note: 'Not all subtests must be administered - examiners can select relevant subtests based on referral questions'
           }
         ],
         keyPoint: 'A representative norm sample is crucial for fair interpretation. Consider whether the norms are appropriate for the individual being tested!'
@@ -434,7 +457,6 @@ window.studyGuideData = {
   ],
   
   quizQuestions: [
-    // Quiz questions remain the same...
     {
       id: 'q1',
       section: 'scales',
