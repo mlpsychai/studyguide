@@ -161,8 +161,8 @@ function renderNormalDistribution(canvasId, config = {}) {
           annotations: {
             line1: {
               type: 'line',
-              xMin: mean - 3*sd,
-              xMax: mean - 3*sd,
+              scaleID: 'x',
+              value: mean - 3*sd,
               borderColor: 'rgba(100, 100, 100, 0.5)',
               borderWidth: 1,
               borderDash: [5, 3],
@@ -177,8 +177,8 @@ function renderNormalDistribution(canvasId, config = {}) {
             },
             line2: {
               type: 'line',
-              xMin: mean - 2*sd,
-              xMax: mean - 2*sd,
+              scaleID: 'x',
+              value: mean - 2*sd,
               borderColor: 'rgba(80, 80, 80, 0.6)',
               borderWidth: 2,
               borderDash: [5, 3],
@@ -193,8 +193,8 @@ function renderNormalDistribution(canvasId, config = {}) {
             },
             line3: {
               type: 'line',
-              xMin: mean - sd,
-              xMax: mean - sd,
+              scaleID: 'x',
+              value: mean - sd,
               borderColor: 'rgba(60, 60, 60, 0.7)',
               borderWidth: 2,
               borderDash: [5, 3],
@@ -209,8 +209,8 @@ function renderNormalDistribution(canvasId, config = {}) {
             },
             line4: {
               type: 'line',
-              xMin: mean,
-              xMax: mean,
+              scaleID: 'x',
+              value: mean,
               borderColor: '#000',
               borderWidth: 3,
               borderDash: [8, 4],
@@ -225,8 +225,8 @@ function renderNormalDistribution(canvasId, config = {}) {
             },
             line5: {
               type: 'line',
-              xMin: mean + sd,
-              xMax: mean + sd,
+              scaleID: 'x',
+              value: mean + sd,
               borderColor: 'rgba(60, 60, 60, 0.7)',
               borderWidth: 2,
               borderDash: [5, 3],
@@ -241,8 +241,8 @@ function renderNormalDistribution(canvasId, config = {}) {
             },
             line6: {
               type: 'line',
-              xMin: mean + 2*sd,
-              xMax: mean + 2*sd,
+              scaleID: 'x',
+              value: mean + 2*sd,
               borderColor: 'rgba(80, 80, 80, 0.6)',
               borderWidth: 2,
               borderDash: [5, 3],
@@ -257,8 +257,8 @@ function renderNormalDistribution(canvasId, config = {}) {
             },
             line7: {
               type: 'line',
-              xMin: mean + 3*sd,
-              xMax: mean + 3*sd,
+              scaleID: 'x',
+              value: mean + 3*sd,
               borderColor: 'rgba(100, 100, 100, 0.5)',
               borderWidth: 1,
               borderDash: [5, 3],
