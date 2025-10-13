@@ -28,7 +28,7 @@ const chartConfig = {
 // DATA GENERATION HELPERS
 // ========================================
 
-export function generateBellCurveData(mean, sd, min, max, points) {
+function generateBellCurveData(mean, sd, min, max, points) {
   const data = [];
   const step = (max - min) / points;
   
@@ -48,7 +48,7 @@ function gamma(n) {
   return Math.sqrt(2 * Math.PI / n) * Math.pow(n / Math.E, n);
 }
 
-export function generateSkewedData(direction, min, max, points) {
+function generateSkewedData(direction, min, max, points) {
   const data = [];
   const step = (max - min) / points;
   
@@ -74,7 +74,7 @@ export function generateSkewedData(direction, min, max, points) {
   return data;
 }
 
-export function generateCorrelatedData(correlation, numPoints = 100) {
+function generateCorrelatedData(correlation, numPoints = 100) {
   const data = [];
   
   for (let i = 0; i < numPoints; i++) {
@@ -90,7 +90,7 @@ export function generateCorrelatedData(correlation, numPoints = 100) {
   return data;
 }
 
-export function generateTrendLine(data) {
+function generateTrendLine(data) {
   const n = data.length;
   const sumX = data.reduce((sum, d) => sum + d.x, 0);
   const sumY = data.reduce((sum, d) => sum + d.y, 0);
@@ -113,7 +113,7 @@ export function generateTrendLine(data) {
 // CHART RENDERING FUNCTIONS
 // ========================================
 
-export function renderNormalDistribution(canvas, config = {}) {
+function renderNormalDistribution(canvas, config = {}) {
   const mean = config.mean || 100;
   const sd = config.sd || 15;
 
@@ -178,7 +178,7 @@ export function renderNormalDistribution(canvas, config = {}) {
   return chart;
 }
 
-export function renderSkewedDistributions(canvas, config = {}) {
+function renderSkewedDistributions(canvas, config = {}) {
   const normalData = generateBellCurveData(0, 1, -3, 3, 100);
   
   const leftData = [];
@@ -271,7 +271,7 @@ export function renderSkewedDistributions(canvas, config = {}) {
   return chart;
 }
 
-export function renderCorrelationScatterplot(canvas, config = {}) {
+function renderCorrelationScatterplot(canvas, config = {}) {
   const r = config.r || 0;
   const label = config.label || `r = ${r}`;
   
@@ -360,7 +360,7 @@ export function renderCorrelationScatterplot(canvas, config = {}) {
   return chart;
 }
 
-export function renderStandardizedScores(canvas, config = {}) {
+function renderStandardizedScores(canvas, config = {}) {
   const data = generateBellCurveData(0, 1, -3, 3, 100);
 
   const chart = new Chart(canvas, {
@@ -427,7 +427,7 @@ export function renderStandardizedScores(canvas, config = {}) {
 // MAIN RENDER FUNCTION
 // ========================================
 
-export function renderChart(canvasId, type, config = {}) {
+function renderChart(canvasId, type, config = {}) {
   const canvas = document.getElementById(canvasId);
   
   if (!canvas) {
