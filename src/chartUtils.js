@@ -121,7 +121,7 @@ function renderNormalDistribution(canvasId, config = {}) {
   const mean = config.mean || 100;
   const sd = config.sd || 15;
 
-  const data = generateBellCurveData(mean, sd, mean - 3*sd, mean + 3*sd, 7);
+  const data = generateBellCurveData(mean, sd, mean - 3*sd, mean + 3*sd, 100);
 
   const chart = new Chart(canvas, {
     type: 'line',
