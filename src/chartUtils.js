@@ -280,7 +280,7 @@ function renderNormalDistribution(canvasId, config = {}) {
           },
           grid: { color: 'rgba(255, 255, 255, 0.1)' },
           title: {
-            display: true,
+            display: false,
             text: 'Probability Density',
             color: chartConfig.colors.white,
             font: { size: 13, weight: 'bold' }
