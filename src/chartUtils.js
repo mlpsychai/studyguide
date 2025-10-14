@@ -215,7 +215,7 @@ function renderNormalDistribution(canvasId, config = {}) {
         display: true,
         content: 'μ = 100',
         position: 'end',
-        backgroundColor: 'rgba(255, 215, 0, 0.95)',
+        backgroundColor: 'rgba(255, 100, 0, 0.95)',
         color: '#000',
         font: { size: 12, weight: 'bold' }
       }
@@ -224,7 +224,7 @@ function renderNormalDistribution(canvasId, config = {}) {
       type: 'line',
       scaleID: 'x',
       value: mean + sd,
-      borderColor: 'rgba(255, 255, 255, 0.5)',
+      borderColor: 'rgba(255, 255, 100, 0.5)',
       borderWidth: 2,
       borderDash: [5, 3],
       label: {
@@ -240,7 +240,7 @@ function renderNormalDistribution(canvasId, config = {}) {
       type: 'line',
       scaleID: 'x',
       value: mean + 2*sd,
-      borderColor: 'rgba(255, 255, 255, 0.4)',
+      borderColor: 'rgba(255, 100, 255, 0.4)',
       borderWidth: 2,
       borderDash: [5, 3],
       label: {
