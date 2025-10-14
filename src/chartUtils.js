@@ -298,7 +298,7 @@ function renderNormalDistribution(canvasId, config = {}) {
             color: chartConfig.colors.white,
             font: { size: 11 },
             maxRotation: 0,
-            autoSkip: false,
+            autoSkip: true,
             maxTicksLimit: 15
           },
           grid: { color: 'rgba(255, 255, 255, 0.1)' },
