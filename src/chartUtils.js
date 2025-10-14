@@ -166,9 +166,9 @@ function renderNormalDistribution(canvasId, config = {}) {
       borderDash: [5, 3],
       label: {
         display: true,
-        content: '-3σ\n(55)',
+        content: '-3σ',
         position: 'end',
-        yAdjust: -10,
+        yAdjust: .5,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -183,9 +183,9 @@ function renderNormalDistribution(canvasId, config = {}) {
       borderDash: [5, 3],
       label: {
         display: true,
-        content: '-2σ\n(70)',
+        content: '-2σ',
         position: 'end',
-        yAdjust: -10,
+        yAdjust: .5,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -200,9 +200,9 @@ function renderNormalDistribution(canvasId, config = {}) {
       borderDash: [5, 3],
       label: {
         display: true,
-        content: '-1σ\n(85)',
+        content: '-1σ',
         position: 'end',
-        yAdjust: -10,
+        yAdjust: .5,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11, weight: 'bold' }
