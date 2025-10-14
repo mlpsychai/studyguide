@@ -126,12 +126,12 @@ function renderNormalDistribution(canvasId, config = {}) {
   const chart = new Chart(canvas, {
     type: 'line',
     data: {
-      labels: [55, 70, 85, 100, 115, 130, 145],
+      labels: data.map(d => Math.round(d.x)),
       datasets: [{
         label: 'Normal Distribution',
-        data: bellData.map(d => d.y),
+        data: data.map(d => d.y),
         borderColor: chartConfig.colors.primary,
-        backgroundColor: 'rgba(255, 215, 0, 0.8)',
+        backgroundColor: 'rgba(255, 215, 0, 0.2)',
         fill: true,
         borderWidth: 3,
         tension: 0.4,
@@ -161,12 +161,14 @@ function renderNormalDistribution(canvasId, config = {}) {
       type: 'line',
       scaleID: 'x',
       value: mean - 3*sd,
-      borderColor: 'rgba(255, 255, 255, 0.5)',
+      borderColor: 'rgba(255, 255, 255, 0.3)',
       borderWidth: 1,
       borderDash: [5, 3],
       label: {
         display: true,
         content: '-3σ\n(55)',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -176,12 +178,14 @@ function renderNormalDistribution(canvasId, config = {}) {
       type: 'line',
       scaleID: 'x',
       value: mean - 2*sd,
-      borderColor: 'rgba(255, 255, 255, 0.5)',
+      borderColor: 'rgba(255, 255, 255, 0.4)',
       borderWidth: 2,
       borderDash: [5, 3],
       label: {
         display: true,
         content: '-2σ\n(70)',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -197,6 +201,8 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '-1σ\n(85)',
+        position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11, weight: 'bold' }
@@ -212,7 +218,8 @@ function renderNormalDistribution(canvasId, config = {}) {
         display: true,
         content: 'μ = 100',
         position: 'end',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        yAdjust: -10,
+        backgroundColor: 'rgba(255, 215, 0, 0.95)',
         color: '#000',
         font: { size: 12, weight: 'bold' }
       }
@@ -221,13 +228,14 @@ function renderNormalDistribution(canvasId, config = {}) {
       type: 'line',
       scaleID: 'x',
       value: mean + sd,
-      borderColor: 'rgba(255, 255, 100, 0.5)',
+      borderColor: 'rgba(255, 255, 255, 0.5)',
       borderWidth: 2,
       borderDash: [5, 3],
       label: {
         display: true,
         content: '+1σ\n(115)',
         position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11, weight: 'bold' }
@@ -237,13 +245,14 @@ function renderNormalDistribution(canvasId, config = {}) {
       type: 'line',
       scaleID: 'x',
       value: mean + 2*sd,
-      borderColor: 'rgba(255, 100, 255, 0.4)',
+      borderColor: 'rgba(255, 255, 255, 0.4)',
       borderWidth: 2,
       borderDash: [5, 3],
       label: {
         display: true,
         content: '+2σ\n(130)',
         position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -260,6 +269,7 @@ function renderNormalDistribution(canvasId, config = {}) {
         display: true,
         content: '+3σ\n(145)',
         position: 'end',
+        yAdjust: -10,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -277,14 +287,14 @@ function renderNormalDistribution(canvasId, config = {}) {
           },
           grid: { color: 'rgba(255, 255, 255, 0.1)' },
           title: {
-            display: false,
+            display: true,
             text: 'Probability Density',
             color: chartConfig.colors.white,
             font: { size: 13, weight: 'bold' }
           }
         },
         x: {
-          ticks: {
+          ticks: { 
             color: chartConfig.colors.white,
             font: { size: 11 },
             maxRotation: 0,
