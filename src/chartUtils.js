@@ -298,8 +298,8 @@ function renderNormalDistribution(canvasId, config = {}) {
             color: chartConfig.colors.white,
             font: { size: 11 },
             maxRotation: 0,
-            autoSkip: true,
-            maxTicksLimit: 10
+            autoSkip: false,
+            maxTicksLimit: 15
           },
           grid: { color: 'rgba(255, 255, 255, 0.1)' },
           title: {
