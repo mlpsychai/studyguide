@@ -129,7 +129,7 @@ function renderNormalDistribution(canvasId, config = {}) {
       labels: [55, 70, 85, 100, 115, 130, 145],
       datasets: [{
         label: 'Normal Distribution',
-        data:
+        data: [55, 70, 85, 100, 115, 130, 145],
         borderColor: chartConfig.colors.primary,
         backgroundColor: 'rgba(255, 215, 0, 0.8)',
         fill: true,
@@ -167,7 +167,6 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '-3σ\n(55)',
-        position: 'end',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -183,7 +182,6 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '-2σ\n(70)',
-        position: 'end',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11 }
@@ -199,7 +197,6 @@ function renderNormalDistribution(canvasId, config = {}) {
       label: {
         display: true,
         content: '-1σ\n(85)',
-        position: 'end',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: '#fff',
         font: { size: 11, weight: 'bold' }
