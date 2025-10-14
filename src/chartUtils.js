@@ -131,7 +131,7 @@ function renderNormalDistribution(canvasId, config = {}) {
         label: 'Normal Distribution',
         data: data.map(d => d.y),
         borderColor: chartConfig.colors.primary,
-        backgroundColor: 'rgba(255, 215, 0, 0.2)',
+        backgroundColor: 'rgba(255, 215, 0, 0.8)',
         fill: true,
         borderWidth: 3,
         tension: 0.4,
