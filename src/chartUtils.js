@@ -129,7 +129,7 @@ function renderNormalDistribution(canvasId, config = {}) {
       labels: [55, 70, 85, 100, 115, 130, 145],
       datasets: [{
         label: 'Normal Distribution',
-        data: [55, 70, 85, 100, 115, 130, 145],
+        data: bellData.map(d => d.y),
         borderColor: chartConfig.colors.primary,
         backgroundColor: 'rgba(255, 215, 0, 0.8)',
         fill: true,
