@@ -70,4 +70,25 @@ console.table(
     title: s.title,
     extra: !!s.isExtraChart
   }))
-);
+
+// List any sections whose chart type isn't registered (helps catch typos)
+setTimeout(() => {
+  const registered = Object.keys(window.chartRegistry || {});
+  const withViz = allSections.filter(s => s.visualization && s.visualization.type);
+  const mismatches = withViz.filter(s => !registered.includes(s.visualization.type));
+  if (mismatches.length) {
+    console.warn('[studyGuideData] Unregistered chart types detected:');
+    console.table(mismatches.map(s => ({
+      id: s.id,
+      title: s.title,
+      type: s.visualization.type,
+      registeredTypesSample: registered.slice(0, 8).join(', ')
+    })));
+  }
+}, 0);
+
+// (Optional) Alphabetize extras for nicer sidebar ordering
+// const allSections = dedupeById([
+//   ...normalizedMain,
+//   ...normalizedExtras.sort((a, b) => a.title.localeCompare(b.title))
+// ]);
