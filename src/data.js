@@ -218,45 +218,442 @@ window.studyGuideData = {
       }
     },
 
+    // ========================================
+    // NEW CHART SECTIONS START HERE
+    // ========================================
+
     {
-    id: 'bubble-example',
-    title: 'Bubble Chart: 3-Variable Analysis',
-    icon: '🫧',
-    content: {
-      intro: 'Bubble charts display three dimensions of data: X-axis, Y-axis, and bubble size. This example shows the relationship between study time, test scores, and confidence levels.',
-      explanation: [
-        {
-          title: 'Reading a Bubble Chart',
-          points: [
-            'X-axis: Represents the first variable (e.g., hours studied)',
-            'Y-axis: Represents the second variable (e.g., test score)',
-            'Bubble Size: Represents the third variable (e.g., confidence level)',
-            'Color: Can represent different groups or categories'
-          ]
-        },
-        {
-          title: 'When to Use Bubble Charts',
-          points: [
-            'Comparing three variables simultaneously',
-            'Identifying patterns across multiple dimensions',
-            'Showing relationships between groups',
-            'Visualizing complex multivariate data'
-          ]
+      id: 'bubble-example',
+      title: 'Bubble Chart: 3-Variable Analysis',
+      icon: '🫧',
+      content: {
+        intro: 'Bubble charts display three dimensions of data: X-axis, Y-axis, and bubble size. This example shows the relationship between study time, test scores, and confidence levels.',
+        explanation: [
+          {
+            title: 'Reading a Bubble Chart',
+            points: [
+              'X-axis: Represents the first variable (e.g., hours studied)',
+              'Y-axis: Represents the second variable (e.g., test score)',
+              'Bubble Size: Represents the third variable (e.g., confidence level)',
+              'Color: Can represent different groups or categories'
+            ]
+          },
+          {
+            title: 'When to Use Bubble Charts',
+            points: [
+              'Comparing three variables simultaneously',
+              'Identifying patterns across multiple dimensions',
+              'Showing relationships between groups',
+              'Visualizing complex multivariate data'
+            ]
+          }
+        ],
+        keyPoint: 'Bubble charts are useful for multivariate analysis but can become cluttered with too many data points. Use them when you need to show relationships between three continuous variables.'
+      },
+      visualization: {
+        type: 'bubble',
+        config: {
+          count: 12,
+          title: 'Study Time vs Test Scores',
+          xLabel: 'Study Hours',
+          yLabel: 'Test Score (%)',
+          bubbleLabel: 'Confidence Level'
         }
-      ],
-      keyPoint: 'Bubble charts are useful for multivariate analysis but can become cluttered with too many data points. Use them when you need to show relationships between three continuous variables.'
-    },
-    visualization: {
-      type: 'bubble',
-      config: {
-        count: 12,
-        title: 'Study Time vs Test Scores',
-        xLabel: 'Study Hours',
-        yLabel: 'Test Score (%)',
-        bubbleLabel: 'Confidence Level'
       }
-    }
-  },
+    },
+
+    {
+      id: 'linear-gradient-example',
+      title: 'Linear Gradient: Visualizing Continuous Change',
+      icon: '🌈',
+      content: {
+        intro: 'Linear gradient charts use color gradients to emphasize continuous change and help viewers quickly identify patterns in data trends.',
+        explanation: [
+          {
+            title: 'Understanding Gradient Visualization',
+            points: [
+              'Color gradients show data intensity or temperature changes',
+              'Smooth transitions help identify patterns and outliers',
+              'Useful for time-series data with continuous values',
+              'The gradient dynamically adjusts to chart size'
+            ]
+          },
+          {
+            title: 'When to Use Gradient Lines',
+            points: [
+              'Showing temperature or weather data over time',
+              'Visualizing performance metrics with clear ranges',
+              'Emphasizing upward or downward trends',
+              'Making data more visually engaging'
+            ]
+          }
+        ],
+        keyPoint: 'Gradient colors can make trends more intuitive but should be used thoughtfully to avoid overwhelming the viewer.'
+      },
+      visualization: {
+        type: 'linear-gradient',
+        config: {
+          count: 7,
+          min: -100,
+          max: 100,
+          title: 'Temperature Variation Over Time',
+          xLabel: 'Month',
+          yLabel: 'Temperature (°F)',
+          datasetLabel: 'Temperature'
+        }
+      }
+    },
+
+    {
+      id: 'custom-tooltip-example',
+      title: 'Interactive Tooltips: Comparing Multiple Data Sets',
+      icon: '💬',
+      content: {
+        intro: 'Interactive tooltips help you explore data by showing detailed information when hovering over data points. This chart demonstrates comparing two groups simultaneously.',
+        explanation: [
+          {
+            title: 'Using Interactive Tooltips',
+            points: [
+              'Hover over any point to see both datasets\' values at once',
+              'The footer shows the combined total of both groups',
+              'Mode: "index" displays all datasets at the same time point',
+              'Useful for spotting relationships between groups'
+            ]
+          },
+          {
+            title: 'When to Use Multi-Dataset Comparisons',
+            points: [
+              'Comparing control vs experimental groups',
+              'Analyzing pre-test and post-test scores',
+              'Evaluating multiple intervention strategies',
+              'Tracking different demographic groups over time'
+            ]
+          }
+        ],
+        keyPoint: 'Hover over the chart to see the interactive tooltip in action! The combined total helps you quickly assess overall performance across both groups.'
+      },
+      visualization: {
+        type: 'custom-tooltip',
+        config: {
+          count: 7,
+          min: 50,
+          max: 100,
+          title: 'Pre-Test vs Post-Test Scores',
+          xLabel: 'Assessment Period',
+          yLabel: 'Score (%)',
+          dataset1Label: 'Pre-Test',
+          dataset2Label: 'Post-Test'
+        }
+      }
+    },
+
+    {
+      id: 'interpolation-modes-example',
+      title: 'Line Interpolation: How We Connect the Dots',
+      icon: '📈',
+      content: {
+        intro: 'The way we connect data points in a line chart affects how viewers interpret trends. Different interpolation methods can emphasize or minimize changes in data.',
+        explanation: [
+          {
+            title: 'Understanding Interpolation Methods',
+            points: [
+              'Linear: Straight lines between points (default) - shows exact changes',
+              'Cubic: Smooth curves that may overshoot between points',
+              'Cubic Monotone: Smooth curves that never overshoot - best for most cases',
+              'The same data looks different depending on the interpolation method!'
+            ]
+          },
+          {
+            title: 'Choosing the Right Method',
+            points: [
+              'Use Linear for precise, step-by-step data (test scores, counts)',
+              'Use Cubic Monotone for growth data (reading levels over time)',
+              'Avoid regular Cubic as it can create misleading peaks and valleys',
+              'Consider how smoothing affects the story your data tells'
+            ]
+          },
+          {
+            title: 'Critical Thinking About Visualization',
+            points: [
+              'The same data can look more or less dramatic based on interpolation',
+              'Smooth lines suggest continuous change; linear suggests discrete jumps',
+              'Missing data points (gaps) can be handled or shown explicitly',
+              'Always document your visualization choices in research reports'
+            ]
+          }
+        ],
+        keyPoint: 'Notice how the SAME data points look different with each method! This shows why it\'s important to choose appropriate visualization methods and be aware of how they can influence interpretation.'
+      },
+      visualization: {
+        type: 'interpolation-modes',
+        config: {
+          title: 'Same Data, Three Interpolation Methods',
+          xLabel: 'Assessment Period',
+          yLabel: 'Reading Level Score',
+          datapoints: [0, 20, 20, 60, 60, 120, NaN, 180, 120, 125, 105, 110, 170]
+        }
+      }
+    },
+
+    {
+      id: 'multiple-datasets-example',
+      title: 'Comparing Multiple Groups Over Time',
+      icon: '📊',
+      content: {
+        intro: 'When comparing multiple groups simultaneously, area charts with filled regions help viewers quickly identify performance patterns and gaps between groups.',
+        explanation: [
+          {
+            title: 'Reading Multi-Group Comparisons',
+            points: [
+              'Each colored band represents a different group or cohort',
+              'Wider gaps between lines show greater performance differences',
+              'Parallel lines suggest groups are improving at similar rates',
+              'Converging lines indicate achievement gaps are closing'
+            ]
+          },
+          {
+            title: 'Uses in Educational Assessment',
+            points: [
+              'Comparing different intervention groups over time',
+              'Tracking multiple grade levels on the same assessment',
+              'Monitoring subgroup performance for equity analysis',
+              'Evaluating Response to Intervention (RTI) tier effectiveness'
+            ]
+          },
+          {
+            title: 'Interpreting Patterns',
+            points: [
+              'Look for which groups start higher/lower (baseline differences)',
+              'Identify groups with steeper slopes (faster growth)',
+              'Notice if gaps widen or narrow over time',
+              'Hover over any point to see all groups\' values and the average'
+            ]
+          }
+        ],
+        keyPoint: 'Multiple datasets allow for rich comparisons, but too many lines can become cluttered. Typically limit to 4-6 groups for readability. The filled areas help distinguish overlapping lines.'
+      },
+      visualization: {
+        type: 'multiple-datasets',
+        config: {
+          count: 8,
+          min: 60,
+          max: 100,
+          title: 'Reading Progress: Four Intervention Groups',
+          xLabel: 'Month of School Year',
+          yLabel: 'Reading Level Score'
+        }
+      }
+    },
+
+    {
+      id: 'scatter-plot-example',
+      title: 'Scatter Plots: Exploring Two-Variable Relationships',
+      icon: '⚫',
+      content: {
+        intro: 'Scatter plots show the relationship between two continuous variables, with each point representing an individual observation. They help identify patterns, clusters, and outliers.',
+        explanation: [
+          {
+            title: 'Reading Scatter Plots',
+            points: [
+              'Each point represents one individual or case',
+              'X-axis and Y-axis show two different variables',
+              'Clustering of points suggests groups or patterns',
+              'Outliers appear far from the main cluster'
+            ]
+          },
+          {
+            title: 'Uses in Assessment',
+            points: [
+              'Comparing two test scores for the same students',
+              'Examining relationship between practice time and performance',
+              'Identifying students who perform differently on different measures',
+              'Finding patterns in diagnostic assessment data'
+            ]
+          }
+        ],
+        keyPoint: 'Scatter plots are excellent for exploring relationships before calculating correlation coefficients. Visual inspection can reveal non-linear relationships that correlation might miss.'
+      },
+      visualization: {
+        type: 'scatter-plot',
+        config: {
+          count: 25,
+          xMin: 0,
+          xMax: 100,
+          yMin: 0,
+          yMax: 100,
+          title: 'Reading Score vs Math Score',
+          xLabel: 'Reading Score',
+          yLabel: 'Math Score',
+          dataset1Label: 'School A',
+          dataset2Label: 'School B'
+        }
+      }
+    },
+
+    {
+      id: 'polar-area-example',
+      title: 'Polar Area Charts: Visualizing Skill Profiles',
+      icon: '🎯',
+      content: {
+        intro: 'Polar area charts display multivariate data in a circular format, making them ideal for showing skill profiles, assessment domains, or comparing performance across multiple categories.',
+        explanation: [
+          {
+            title: 'Understanding Polar Area Charts',
+            points: [
+              'Each slice represents a different skill or domain',
+              'The distance from center shows the score magnitude',
+              'Larger/longer slices indicate stronger performance',
+              'The shape reveals the overall profile pattern'
+            ]
+          },
+          {
+            title: 'Uses in Educational Assessment',
+            points: [
+              'Displaying student skill profiles across domains',
+              'Showing strengths and areas for growth visually',
+              'Comparing performance across curriculum standards',
+              'Creating visual reports for parent conferences'
+            ]
+          },
+          {
+            title: 'Interpreting the Pattern',
+            points: [
+              'Balanced profiles show similar lengths across slices',
+              'Spiky patterns indicate uneven skill development',
+              'Small slices highlight areas needing intervention',
+              'Quick visual comparison of multiple skill areas'
+            ]
+          }
+        ],
+        keyPoint: 'Polar area charts make complex multivariate data intuitive and visually appealing. They\'re excellent for Individual Education Plan (IEP) reports and progress monitoring.'
+      },
+      visualization: {
+        type: 'polar-area',
+        config: {
+          title: 'Student Skill Profile: Academic Domains',
+          labels: ['Reading', 'Writing', 'Math', 'Science', 'Social Studies'],
+          min: 0,
+          max: 100,
+          datasetLabel: 'Performance Score'
+        }
+      }
+    },
+
+    {
+      id: 'polar-area-centered-example',
+      title: 'Centered Labels: Enhanced Skill Profile Visualization',
+      icon: '🎪',
+      content: {
+        intro: 'This enhanced polar area chart uses centered point labels for improved readability, making it ideal for formal reports and presentations where clarity is essential.',
+        explanation: [
+          {
+            title: 'Centered Labels vs Standard Labels',
+            points: [
+              'Centered labels are positioned at the edge of each slice',
+              'Easier to read, especially with many categories',
+              'Better for printed reports and presentations',
+              'Reduces visual clutter around the chart'
+            ]
+          },
+          {
+            title: 'Best Uses for This Format',
+            points: [
+              'IEP (Individualized Education Program) progress reports',
+              'Multi-domain assessment summaries',
+              'Portfolio presentations showing balanced growth',
+              'Parent-teacher conference visual aids'
+            ]
+          },
+          {
+            title: 'Interpreting Balanced vs Unbalanced Profiles',
+            points: [
+              'Even polygon shape = well-rounded student',
+              'Irregular shape = specific strengths and weaknesses',
+              'Use this pattern to guide intervention planning',
+              'Compare multiple students by overlaying profiles'
+            ]
+          }
+        ],
+        keyPoint: 'The centered label format makes this chart more professional and easier to read in formal assessment reports. It\'s particularly effective when presenting to parents or administrators.'
+      },
+      visualization: {
+        type: 'polar-area-centered',
+        config: {
+          title: 'Student Assessment Profile: All Domains',
+          labels: ['Reading', 'Writing', 'Mathematics', 'Science', 'Social Studies', 'Arts'],
+          min: 0,
+          max: 100,
+          datasetLabel: 'Percentile Rank'
+        }
+      }
+    },
+
+    {
+      id: 'axis-min-max-example',
+      title: 'Axis Manipulation: How Scale Affects Perception',
+      icon: '⚠️',
+      content: {
+        intro: 'One of the most common ways to mislead with data visualization is by manipulating axis scales. This chart demonstrates how setting min/max values can dramatically change how data appears.',
+        explanation: [
+          {
+            title: '⚠️ Critical Concept: Truncated Axes',
+            points: [
+              'This chart has Y-axis set to 10-50, but data ranges from -10 to 100',
+              'Values outside this range are CLIPPED and not visible',
+              'The same data can look completely different with different axis ranges',
+              'Hover over points to see warnings about clipped data'
+            ]
+          },
+          {
+            title: 'Why This Matters in Assessment',
+            points: [
+              'Charts can exaggerate or minimize differences between groups',
+              'Truncated axes can make small changes look dramatic',
+              'Always check the axis scale before interpreting a chart',
+              'Question whether the full range of data is being shown'
+            ]
+          },
+          {
+            title: 'Best Practices for Honest Visualization',
+            points: [
+              'Start Y-axis at zero for bar charts showing quantities',
+              'Use full data range unless there\'s a clear reason not to',
+              'If truncating axes, clearly indicate with breaks or labels',
+              'Document your visualization choices in research reports'
+            ]
+          },
+          {
+            title: 'Questions to Ask When Viewing Charts',
+            points: [
+              'Does the Y-axis start at zero? If not, why?',
+              'Is the full range of data visible?',
+              'Would this look different with a different scale?',
+              'Is the visualization choice serving the data or an agenda?'
+            ]
+          }
+        ],
+        keyPoint: '🚨 CRITICAL THINKING SKILL: Always examine axis scales! The same data can tell completely different stories depending on how axes are set. This is one of the most common ways statistics can mislead.'
+      },
+      visualization: {
+        type: 'axis-min-max',
+        config: {
+          title: 'Same Data, Manipulated Scale (Y-axis: 10-50)',
+          xLabel: 'Assessment Period',
+          yLabel: 'Test Score',
+          yMin: 10,
+          yMax: 50,
+          dataset1Label: 'School A',
+          dataset2Label: 'School B',
+          dataset1Data: [10, 30, 50, 20, 25, 44, -10],
+          dataset2Data: [100, 33, 22, 19, 11, 49, 30],
+          showSubtitle: true
+        }
+      }
+    },
+
+    // ========================================
+    // ORIGINAL SECTIONS CONTINUE
+    // ========================================
     
     {
       id: 'reliability',
