@@ -31,21 +31,21 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     
-    <!-- 3. Study guide data (plain JS) -->
+   <!-- 3. Study guide data -->
     <script src="src/data.js"></script>
     
-    <!-- 4. Chart Registry (NEW) -->
+    <!-- 4. Chart Registry -->
     <script src="src/charts/index.js"></script>
     
-    <!-- 5. Individual Chart Modules (NEW - Modular approach!) -->
+    <!-- 5. Chart utilities - MOVED UP FOR SAFETY -->
+    <script src="src/chartUtils.js"></script>
+    
+    <!-- 6. Individual Chart Modules - NOW LOADED AFTER UTILITIES -->
     <script src="src/charts/normalDistribution.js"></script>
     <script src="src/charts/skewedDistribution.js"></script>
     <script src="src/charts/correlation.js"></script>
     <script src="src/charts/standardizedScores.js"></script>
-    <!-- Add your additional 6+ charts here as you create them -->
-    
-    <!-- 6. Chart utilities (slimmed down - just helpers) -->
-    <script src="src/chartUtils.js"></script>
+    <!-- Add your other 6+ charts here -->
     
     <!-- 7. Babel Standalone for JSX components -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -55,22 +55,3 @@
     <script type="text/babel" src="src/App.jsx"></script>
 </body>
 </html>
-```
-
----
-
-## File Structure Summary
-```
-project/
-├── index.html                    ← UPDATED
-├── src/
-│   ├── data.js                   ← unchanged
-│   ├── App.jsx                   ← unchanged
-│   ├── ChartVisualizer.jsx       ← unchanged
-│   ├── chartUtils.js             ← SLIMMED DOWN (utilities only)
-│   └── charts/                   ← NEW FOLDER
-│       ├── index.js              ← NEW (registry)
-│       ├── normalDistribution.js ← NEW
-│       ├── skewedDistribution.js ← NEW
-│       ├── correlation.js        ← NEW
-│       └── standardizedScores.js ← NEW
