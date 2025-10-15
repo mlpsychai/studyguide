@@ -1,4 +1,4 @@
-const { useState } = React;
+const { useState, useMemo } = React;
 const { ChartVisualizer, CorrelationGrid } = window;
 
 function App() {
@@ -12,6 +12,27 @@ function App() {
   const data = window.studyGuideData;
   const sections = data.sections;
   const quizQuestions = data.quizQuestions;
+
+  // Memoize the active section to prevent unnecessary recalculations
+  const currentSection = useMemo(() => {
+    return sections.find(s => s.id === activeSection);
+  }, [activeSection, sections]);
+
+  // Memoize section content to prevent unnecessary re-renders
+  const sectionContent = useMemo(() => {
+    if (!currentSection) return null;
+    return currentSection.content;
+  }, [currentSection]);
+
+  // Memoize visualization config to prevent chart re-renders
+  const visualizationConfig = useMemo(() => {
+    if (!currentSection?.visualization) return null;
+    return {
+      type: currentSection.visualization.type,
+      config: currentSection.visualization.config,
+      sectionId: currentSection.id
+    };
+  }, [currentSection]);
 
   const handleAnswerSelect = (questionIdx, optionIdx) => {
     setUserAnswers({ ...userAnswers, [questionIdx]: optionIdx });
@@ -30,25 +51,24 @@ function App() {
   };
 
   const renderContent = () => {
-    const section = sections.find(s => s.id === activeSection);
-    if (!section) return <div>Content not found</div>;
-    const content = section.content;
-    if (!content) return <div>Content not found</div>;
+    if (!currentSection || !sectionContent) {
+      return <div>Content not found</div>;
+    }
 
     return (
       <div className="space-y-6">
-        <h2 className="text-3xl font-bold text-gray-800">{section.title}</h2>
+        <h2 className="text-3xl font-bold text-gray-800">{currentSection.title}</h2>
         
-        {content.intro && (
+        {sectionContent.intro && (
           <p className="text-lg text-gray-700 bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-            {content.intro}
+            {sectionContent.intro}
           </p>
         )}
 
         {/* Measurement Scales */}
-        {content.scales && (
+        {sectionContent.scales && (
           <div className="space-y-4">
-            {content.scales.map((scale, idx) => (
+            {sectionContent.scales.map((scale, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow border-l-4 border-indigo-500">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">
                   {scale.number}. {scale.name}
@@ -61,9 +81,9 @@ function App() {
         )}
 
         {/* Central Tendency Measures */}
-        {content.measures && (
+        {sectionContent.measures && (
           <div className="space-y-4">
-            {content.measures.map((measure, idx) => (
+            {sectionContent.measures.map((measure, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{measure.name}</h3>
                 <p className="text-gray-700 mb-2"><strong>What it is:</strong> {measure.whatItIs}</p>
@@ -75,9 +95,9 @@ function App() {
         )}
 
         {/* Variability Subsections */}
-        {content.subsections && (
+        {sectionContent.subsections && (
           <div className="space-y-4">
-            {content.subsections.map((subsection, idx) => (
+            {sectionContent.subsections.map((subsection, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{subsection.title}</h3>
                 <p className="text-gray-700 mb-3">{subsection.content}</p>
@@ -99,9 +119,9 @@ function App() {
         )}
 
         {/* Distribution Types */}
-        {content.types && activeSection === 'distributions' && (
+        {sectionContent.types && activeSection === 'distributions' && (
           <div className="space-y-4">
-            {content.types.map((type, idx) => (
+            {sectionContent.types.map((type, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{type.name}</h3>
                 <p className="text-gray-700 mb-2"><strong>Tail:</strong> {type.tailDirection}</p>
@@ -114,10 +134,10 @@ function App() {
         )}
 
         {/* Correlation Ranges */}
-        {content.ranges && (
+        {sectionContent.ranges && (
           <div className="space-y-3">
             <h3 className="text-lg font-bold text-gray-800">Correlation Strength Guide</h3>
-            {content.ranges.map((range, idx) => (
+            {sectionContent.ranges.map((range, idx) => (
               <div key={idx} className="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
                 <div className="flex justify-between items-start mb-2">
                   <span className="font-bold text-indigo-700">{range.strength}</span>
@@ -130,27 +150,27 @@ function App() {
         )}
 
         {/* Scatterplot Visualization */}
-        {content.visualization && activeSection === 'correlation' && (
+        {sectionContent.visualization && activeSection === 'correlation' && (
           <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 mt-4">
-            <h3 className="text-lg font-bold text-blue-800 mb-2">{content.visualization.name}</h3>
-            <p className="text-gray-700 mb-2">{content.visualization.description}</p>
-            <p className="text-gray-600"><strong>Interpretation:</strong> {content.visualization.interpretation}</p>
+            <h3 className="text-lg font-bold text-blue-800 mb-2">{sectionContent.visualization.name}</h3>
+            <p className="text-gray-700 mb-2">{sectionContent.visualization.description}</p>
+            <p className="text-gray-600"><strong>Interpretation:</strong> {sectionContent.visualization.interpretation}</p>
           </div>
         )}
 
         {/* Statistical Significance */}
-        {content.significance && activeSection === 'correlation' && (
+        {sectionContent.significance && activeSection === 'correlation' && (
           <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500 mt-4">
             <h3 className="text-lg font-bold text-purple-800 mb-2">Statistical Significance</h3>
-            <p className="text-gray-700"><strong>Level:</strong> {content.significance.level}</p>
-            <p className="text-gray-600 mt-2">{content.significance.meaning}</p>
+            <p className="text-gray-700"><strong>Level:</strong> {sectionContent.significance.level}</p>
+            <p className="text-gray-600 mt-2">{sectionContent.significance.meaning}</p>
           </div>
         )}
 
         {/* Standardized Scores */}
-        {content.types && activeSection === 'standardized-scores' && (
+        {sectionContent.types && activeSection === 'standardized-scores' && (
           <div className="space-y-4">
-            {content.types.map((type, idx) => (
+            {sectionContent.types.map((type, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow border-l-4 border-indigo-500">
                 <h3 className="text-xl font-bold text-indigo-700 mb-3">{type.name}</h3>
                 <p className="text-gray-700"><strong>Mean:</strong> {type.mean}</p>
@@ -162,11 +182,11 @@ function App() {
         )}
 
         {/* Ordinal Scores */}
-        {content.ordinalScores && (
+        {sectionContent.ordinalScores && (
           <>
             <h3 className="text-lg font-bold text-gray-800 mt-6 mb-3">Ordinal Scores (Different Scale!)</h3>
             <div className="space-y-4">
-              {content.ordinalScores.map((type, idx) => (
+              {sectionContent.ordinalScores.map((type, idx) => (
                 <div key={idx} className="bg-yellow-50 p-6 rounded-lg shadow border-l-4 border-yellow-500">
                   <h4 className="text-xl font-bold text-yellow-800 mb-3">{type.name}</h4>
                   <p className="text-gray-700"><strong>Mean:</strong> {type.mean}</p>
@@ -180,9 +200,9 @@ function App() {
         )}
 
         {/* Reliability */}
-        {content.types && activeSection === 'reliability' && (
+        {sectionContent.types && activeSection === 'reliability' && (
           <div className="space-y-4">
-            {content.types.map((type, idx) => (
+            {sectionContent.types.map((type, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{type.name}</h3>
                 <p className="text-gray-700 mb-3">{type.description}</p>
@@ -206,9 +226,9 @@ function App() {
         )}
 
         {/* Reliability Concepts */}
-        {content.concepts && activeSection === 'reliability' && (
+        {sectionContent.concepts && activeSection === 'reliability' && (
           <div className="space-y-4 mt-4">
-            {content.concepts.map((concept, idx) => (
+            {sectionContent.concepts.map((concept, idx) => (
               <div key={idx} className="bg-yellow-50 p-6 rounded-lg shadow border-l-4 border-yellow-500">
                 <h3 className="text-xl font-bold text-yellow-800 mb-2">{concept.name}</h3>
                 <p className="text-gray-700 mb-2">{concept.description}</p>
@@ -220,17 +240,17 @@ function App() {
         )}
 
         {/* Validity Evidence Sources */}
-        {content.evidenceSources && activeSection === 'validity' && (
+        {sectionContent.evidenceSources && activeSection === 'validity' && (
           <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
             <h3 className="text-lg font-bold text-blue-800 mb-2">Five Sources of Validity Evidence</h3>
-            <p className="text-gray-700">{content.evidenceSources}</p>
+            <p className="text-gray-700">{sectionContent.evidenceSources}</p>
           </div>
         )}
 
         {/* Validity */}
-        {content.types && activeSection === 'validity' && (
+        {sectionContent.types && activeSection === 'validity' && (
           <div className="space-y-4">
-            {content.types.map((type, idx) => (
+            {sectionContent.types.map((type, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{type.name}</h3>
                 <p className="text-gray-700 mb-3">{type.description}</p>
@@ -245,15 +265,16 @@ function App() {
                     </ul>
                   </div>
                 )}
+                {type.note && <p className="text-gray-600 mt-2 italic">{type.note}</p>}
               </div>
             ))}
           </div>
         )}
 
         {/* Test Types */}
-        {content.types && activeSection === 'test-types' && (
+        {sectionContent.types && activeSection === 'test-types' && (
           <div className="space-y-4">
-            {content.types.map((type, idx) => (
+            {sectionContent.types.map((type, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow border-l-4 border-indigo-500">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{type.name}</h3>
                 <p className="text-gray-700 mb-2">{type.description}</p>
@@ -279,9 +300,9 @@ function App() {
         )}
 
         {/* Language Assessment */}
-        {content.types && activeSection === 'language' && (
+        {sectionContent.types && activeSection === 'language' && (
           <div className="space-y-4">
-            {content.types.map((type, idx) => (
+            {sectionContent.types.map((type, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{type.name}</h3>
                 <p className="text-gray-700 mb-3">{type.description}</p>
@@ -301,9 +322,9 @@ function App() {
         )}
 
         {/* Scoring */}
-        {content.concepts && activeSection === 'scoring' && (
+        {sectionContent.concepts && activeSection === 'scoring' && (
           <div className="space-y-4">
-            {content.concepts.map((concept, idx) => (
+            {sectionContent.concepts.map((concept, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{concept.name}</h3>
                 <p className="text-gray-700 mb-2">{concept.description}</p>
@@ -328,9 +349,9 @@ function App() {
         )}
 
         {/* Norming */}
-        {content.concepts && activeSection === 'norming' && (
+        {sectionContent.concepts && activeSection === 'norming' && (
           <div className="space-y-4">
-            {content.concepts.map((concept, idx) => (
+            {sectionContent.concepts.map((concept, idx) => (
               <div key={idx} className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-xl font-bold text-indigo-700 mb-2">{concept.name}</h3>
                 <p className="text-gray-700 mb-2">{concept.description}</p>
@@ -345,17 +366,18 @@ function App() {
                     </ul>
                   </div>
                 )}
+                {concept.note && <p className="text-gray-600 mt-2 italic">{concept.note}</p>}
               </div>
             ))}
           </div>
         )}
 
         {/* KTEA Activity Topics */}
-        {content.activity && (
+        {sectionContent.activity && (
           <div className="bg-white p-6 rounded-lg shadow mb-4">
-            <h3 className="text-xl font-bold text-indigo-700 mb-3">From {content.activity.source}</h3>
+            <h3 className="text-xl font-bold text-indigo-700 mb-3">From {sectionContent.activity.source}</h3>
             <ul className="list-disc list-inside space-y-1">
-              {content.activity.topics.map((topic, idx) => (
+              {sectionContent.activity.topics.map((topic, idx) => (
                 <li key={idx} className="text-gray-700">{topic}</li>
               ))}
             </ul>
@@ -363,25 +385,25 @@ function App() {
         )}
 
         {/* Key Point */}
-        {content.keyPoint && (
+        {sectionContent.keyPoint && (
           <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500 mt-6">
-            <p className="text-gray-800"><strong>🔑 Key Point:</strong> {content.keyPoint}</p>
+            <p className="text-gray-800"><strong>🔑 Key Point:</strong> {sectionContent.keyPoint}</p>
           </div>
         )}
             
-        {/* Visualizations */}
-        {section.visualization && (
+        {/* Visualizations - Now using memoized config */}
+        {visualizationConfig && (
           <>
-            {section.visualization.type === 'correlation' && Array.isArray(section.visualization.config) ? (
+            {visualizationConfig.type === 'correlation' && Array.isArray(visualizationConfig.config) ? (
               <CorrelationGrid 
-                correlations={section.visualization.config}
-                sectionId={section.id}
+                correlations={visualizationConfig.config}
+                sectionId={visualizationConfig.sectionId}
               />
             ) : (
               <ChartVisualizer 
-                type={section.visualization.type}
-                config={section.visualization.config}
-                sectionId={section.id}
+                type={visualizationConfig.type}
+                config={visualizationConfig.config}
+                sectionId={visualizationConfig.sectionId}
               />
             )}
           </>
