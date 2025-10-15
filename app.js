@@ -1,32 +1,56 @@
 // Simple Vanilla JS App - No React needed
 (function() {
+  console.log('🚀 App.js IIFE starting...');
+  
   let currentSection = 'scales';
   let studyData = null;
   
   window.setSection = function(sectionId) {
+    console.log('📍 setSection called:', sectionId);
     currentSection = sectionId;
     renderSidebar();
     renderContent();
   };
   
   // Check immediately - no DOMContentLoaded wait
+  console.log('🔍 Checking for studyGuideData...', {
+    exists: !!window.studyGuideData,
+    sections: window.studyGuideData?.sections?.length
+  });
+  
   if (window.studyGuideData && window.studyGuideData.sections.length > 0) {
+    console.log('✅ Data ready immediately');
     studyData = window.studyGuideData;
     init();
   } else {
+    console.log('⏳ Waiting for studyGuideDataReady event...');
     window.addEventListener('studyGuideDataReady', function() {
+      console.log('📬 studyGuideDataReady event received');
       studyData = window.studyGuideData;
       init();
     });
   }
   
   function init() {
-    console.log('Initializing app with', studyData.sections.length, 'sections');
+    console.log('🎯 init() called with', studyData?.sections?.length, 'sections');
+    if (!studyData) {
+      console.error('❌ No studyData in init()');
+      return;
+    }
     renderApp();
   }
   
   function renderApp() {
-    document.getElementById('root').innerHTML = `
+    console.log('🎨 renderApp() called');
+    const root = document.getElementById('root');
+    console.log('🔍 Root element:', root);
+    
+    if (!root) {
+      console.error('❌ Root element not found!');
+      return;
+    }
+    
+    root.innerHTML = `
       <div class="min-h-screen bg-gray-50">
         <header class="bg-white shadow-md sticky top-0 z-50">
           <div class="max-w-7xl mx-auto px-4 py-4">
@@ -49,15 +73,23 @@
       </div>
     `;
     
+    console.log('✅ HTML injected into root');
     renderSidebar();
     renderContent();
   }
   
   function renderSidebar() {
+    console.log('📋 renderSidebar() called');
     const sidebar = document.getElementById('sidebar');
-    if (!sidebar || !studyData) return;
+    console.log('🔍 Sidebar element:', sidebar);
+    
+    if (!sidebar || !studyData) {
+      console.error('❌ Sidebar missing or no data:', { sidebar: !!sidebar, studyData: !!studyData });
+      return;
+    }
     
     const sections = studyData.sections.filter(s => !s.isExtraChart);
+    console.log('📊 Filtered sections:', sections.length);
     
     sidebar.innerHTML = sections.map(section => `
       <li>
@@ -73,13 +105,21 @@
         </button>
       </li>
     `).join('');
+    
+    console.log('✅ Sidebar rendered');
   }
   
   function renderContent() {
+    console.log('📄 renderContent() called for section:', currentSection);
     const content = document.getElementById('content');
-    if (!content || !studyData) return;
+    
+    if (!content || !studyData) {
+      console.error('❌ Content missing or no data:', { content: !!content, studyData: !!studyData });
+      return;
+    }
     
     const section = studyData.sections.find(s => s.id === currentSection);
+    console.log('🔍 Found section:', section?.title);
     
     if (!section) {
       content.innerHTML = '<p>Select a topic from the sidebar</p>';
@@ -117,9 +157,11 @@
     
     html += '<div id="chart-container"></div>';
     content.innerHTML = html;
+    console.log('✅ Content rendered');
     
     // Render chart if exists
     if (section.visualization && window.chartUtils) {
+      console.log('📈 Chart visualization found, rendering...');
       setTimeout(function() {
         const container = document.getElementById('chart-container');
         if (!container) return;
@@ -147,4 +189,6 @@
       }, 100);
     }
   }
+  
+  console.log('✅ App.js IIFE complete');
 })();
