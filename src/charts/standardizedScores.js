@@ -28,10 +28,9 @@
     const chart = new Chart(canvas, {
       type: 'line',
       data: {
-        labels: data.map(d => d.x.toFixed(1)),
         datasets: [{
           label: 'Standard Normal Distribution',
-          data: data.map(d => d.y),
+          data: data,  // ✅ FIXED: Pass full {x, y} objects
           borderColor: chartConfig.colors.primary,
           backgroundColor: 'rgba(255, 215, 0, 0.2)',
           fill: true,
@@ -66,16 +65,27 @@
         },
         scales: {
           y: {
+            beginAtZero: true,  // ✅ Added for consistency
             ticks: { 
               color: chartConfig.colors.white,
               font: chartConfig.fonts.body
             },
-            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+            title: {
+              display: true,
+              text: 'Probability Density',
+              color: chartConfig.colors.white,
+              font: chartConfig.fonts.label
+            }
           },
           x: {
+            type: 'linear',  // ✅ This allows Chart.js to handle x values properly
             ticks: { 
               color: chartConfig.colors.white,
-              font: chartConfig.fonts.body
+              font: chartConfig.fonts.body,
+              maxRotation: 0,
+              autoSkip: true,
+              maxTicksLimit: 15
             },
             grid: { color: 'rgba(255, 255, 255, 0.1)' },
             title: {
