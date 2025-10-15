@@ -53,34 +53,4 @@ window.studyGuideData = Object.freeze({
   quizQuestions: Array.isArray(quizQuestions) ? quizQuestions : []
 });
 
-// Signal ready (some pages import this directly without waiting)
-window.dispatchEvent(new Event('studyGuideDataReady'));
-
-console.log(
-  '✅ Study guide data loaded with',
-  allSections.length, 'sections and',
-  (quizQuestions?.length ?? 0), 'questions'
-);
-
-// Summary table
-console.table(
-  allSections.map(s => ({
-    id: s.id,
-    title: s.title,
-    extra: !!s.isExtraChart
-  }))
-);
-
-// --- Debug: check chart type registration ----------------------------------
-setTimeout(() => {
-  const registered = Object.keys(window.chartRegistry || {});
-  const withViz = allSections.filter(s => s.visualization && s.visualization.type);
-  const mismatches = withViz.filter(s => !registered.includes(s.visualization.type));
-  if (mismatches.length) {
-    console.warn('[studyGuideData] Unregistered chart types detected:');
-    console.table(
-      mismatches.map(s => ({
-        id: s.id,
-        title: s.title,
-        type: s.visualization.type,
-        registeredTypesSample: registered.slice(0, 8).join(', ')
+// Signal ready
