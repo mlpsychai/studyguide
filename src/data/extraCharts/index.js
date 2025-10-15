@@ -8,8 +8,8 @@
  * - extraCharts: Individual chart sections (to be added)
  */
 
-import { mainSections } from './mainSections.js';
-import { quizQuestions } from './quizQuestions.js';
+import { mainSections } from '../mainSections.js';
+import { quizQuestions } from '../quizQuestions.js';
 
 // TODO: Import extra chart sections as they are created
 // import { bubbleChart } from './extraCharts/bubbleChart.js';
