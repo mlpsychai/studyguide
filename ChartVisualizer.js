@@ -151,10 +151,6 @@ if (typeof window !== 'undefined') {
   if (window.onChartVisualizerReady) {
     window.onChartVisualizerReady();
   }
-
-   // Export at the end
-  window.ChartVisualizer = ChartVisualizer;
-  window.CorrelationGrid = CorrelationGrid;
 })();
   console.log('✅ Chart visualizer components loaded and exported to window');
 
