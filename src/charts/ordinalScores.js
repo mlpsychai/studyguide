@@ -79,7 +79,6 @@
       getZScore: percentileToZScore,
       stanine: true // Special handling for stanine bands
     }
-  };
 
   function renderOrdinalScores(canvasId, config = {}) {
     const canvas = document.getElementById(canvasId);
