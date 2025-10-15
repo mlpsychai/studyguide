@@ -1,75 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistics & Assessment Study Guide</title>
+// Simple Vanilla JS App - No React needed
+(function() {
+  let currentSection = 'scales';
+  let studyData = window.studyGuideData || { sections: [], quizQuestions: [] };
+  
+  // Wait for data
+  if (!studyData.sections.length) {
+    window.addEventListener('studyGuideDataReady', () => {
+      studyData = window.studyGuideData;
+      init();
+    });
+  } else {
+    init();
+  }
+  
+  function init() {
+    console.log('Initializing app with', studyData.sections.length, 'sections');
+    renderApp();
+  }
+  
+  function renderApp() {
+    document.getElementById('root').innerHTML = `
+      <div class="min-h-screen bg-gray-50">
+        <header class="bg-white shadow-md sticky top-0 z-50">
+          <div class="max-w-7xl mx-auto px-4 py-4">
+            <h1 class="text-2xl font-bold text-gray-800">
+              📚 Statistics & Assessment Study Guide
+            </h1>
+          </div>
+        </header>
+        <div class="flex max-w-7xl mx-auto">
+          <aside class="w-64 bg-white shadow-lg">
+            <nav class="p-4">
+              <h2 class="text-lg font-bold mb-4">Topics</h2>
+              <ul class="space-y-2" id="sidebar"></ul>
+            </nav>
+          </aside>
+          <main class="flex-1 p-6">
+            <div id="content"></div>
+          </main>
+        </div>
+      </div>
+    `;
     
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    renderSidebar();
+    renderContent();
+  }
+  
+  function renderSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.innerHTML = studyData.sections
+      .filter(s => !s.isExtraChart)
+      .map(section => `
+        <li>
+          <button onclick="window.setSection('${section.id}')" 
+                  class="w-full text-left px-4 py-2 rounded-lg transition ${
+                    currentSection === section.id 
+                      ? 'bg-indigo-600 text-white' 
+                      : 'hover:bg-gray-100 text-gray-700'
+                  }">
+            <span class="mr-2">${section.icon || '📖'}</span>
+            ${section.title}
+          </button>
+        </li>
+      `).join('');
+  }
+  
+  function renderContent() {
+    const content = document.getElementById('content');
+    const section = studyData.sections.find(s => s.id === currentSection);
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    if (!section) {
+      content.innerHTML = '<p>Select a topic</p>';
+      return;
+    }
     
-    <style>
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+    content.innerHTML = `
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">
+          <span class="text-4xl mr-3">${section.icon || '📖'}</span>
+          ${section.title}
+        </h2>
+      </div>
+      ${section.content?.intro ? `
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+          <p class="text-lg text-gray-700">${section.content.intro}</p>
+        </div>
+      ` : ''}
+      ${section.content?.keyPoint ? `
+        <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+          <p class="text-gray-800">
+            <strong>🔑 Key Point:</strong> ${section.content.keyPoint}
+          </p>
+        </div>
+      ` : ''}
+      <div id="chart-container"></div>
+    `;
+    
+    // Render chart if exists
+    if (section.visualization) {
+      setTimeout(() => {
+        const container = document.getElementById('chart-container');
+        container.innerHTML = `
+          <div class="my-6 bg-gray-900 p-6 rounded-lg">
+            <div style="height: 400px; position: relative;">
+              <canvas id="chart-${section.id}"></canvas>
+            </div>
+          </div>
+        `;
+        
+        if (window.chartUtils) {
+          if (section.visualization.type === 'correlation' && Array.isArray(section.visualization.config)) {
+            window.chartUtils.renderCorrelationGrid('chart-container', section.visualization.config);
+          } else {
+            window.chartUtils.renderChart(`chart-${section.id}`, 
+              section.visualization.type, 
+              section.visualization.config);
+          }
         }
-    </style>
-</head>
-<body>
-    <div id="root"></div>
-    
-    <!-- React -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
-    
-    <!-- Initialize globals -->
-    <script>
-        window.chartRegistry = {};
-        window.registerChart = function(type, renderFunction) {
-            window.chartRegistry[type] = renderFunction;
-            console.log('✅ Registered chart:', type);
-        };
-    </script>
-    
-    <!-- Load chart modules -->
-    <script src="src/charts/index.js"></script>
-    <script src="src/chartUtils.js"></script>
-    <script src="src/charts/normalDistribution.js"></script>
-    <script src="src/charts/skewedDistribution.js"></script>
-    <script src="src/charts/correlation.js"></script>
-    <script src="src/charts/standardizedScores.js"></script>
-    <script src="src/charts/centralTendency.js"></script>
-    <script src="src/charts/ordinalScores.js"></script>
-    <script src="src/charts/bubbleChart.js"></script>
-    <script src="src/charts/testRetest.js"></script>
-    <script src="src/charts/internalConsistency.js"></script>
-    <script src="src/charts/alternateForms.js"></script>
-    <script src="src/charts/interRater.js"></script>
-    
-    <!-- Load components as plain JavaScript (no JSX) -->
-    <script src="ChartVisualizer.js"></script>
-    <script src="dataLoader.js"></script>
-    <script src="app-vanilla.js"></script>
-    
-    <!-- Load ES6 modules after App.js -->
-    <script type="module">
-        import('./src/data/index.js').then(() => {
-            console.log('Full data loaded from ES6 modules');
-            // Re-trigger App with full data
-            window.dispatchEvent(new Event('studyGuideDataReady'));
-        }).catch(err => {
-            console.warn('Using simplified data from dataLoader.js', err);
-        });
-    </script>
-</body>
-</html>
+      }, 10);
+    }
+  }
+  
+  // Global function to change section
+  window.setSection = function(sectionId) {
+    currentSection = sectionId;
+    renderSidebar();
+    renderContent();
+  };
+})();
