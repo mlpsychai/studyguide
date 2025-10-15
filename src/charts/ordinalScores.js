@@ -24,8 +24,6 @@
 
   // Helper function to convert percentile to z-score (approximation)
   function percentileToZScore(percentile) {
-    // Approximate inverse normal CDF
-    // Using simplified approximation for visualization
     if (percentile === 50) return 0;
     if (percentile === 1) return -2.33;
     if (percentile === 5) return -1.645;
@@ -36,7 +34,6 @@
     if (percentile === 95) return 1.645;
     if (percentile === 99) return 2.33;
     
-    // Linear interpolation for others
     if (percentile < 50) {
       return -2.5 + (percentile / 50) * 2.5;
     } else {
@@ -44,7 +41,6 @@
     }
   }
 
-  // Ordinal scale definitions
   const scales = [
     {
       name: 'Percentiles',
@@ -77,8 +73,9 @@
       values: [4, 11, 23, 40, 60, 77, 89, 96],
       labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
       getZScore: percentileToZScore,
-      stanine: true // Special handling for stanine bands
+      stanine: true
     }
+  ];
 
   function renderOrdinalScores(canvasId, config = {}) {
     const canvas = document.getElementById(canvasId);
@@ -88,11 +85,8 @@
     }
 
     const data = window.chartUtils.generateBellCurveData(0, 1, -3, 3, 100);
-
-    // Create annotations for each scale
     const annotations = {};
     
-    // Warning box about unequal intervals
     annotations['warning'] = {
       type: 'box',
       xMin: -3.5,
@@ -113,7 +107,6 @@
     };
 
     scales.forEach((scale, scaleIdx) => {
-      // Horizontal line for this scale
       annotations[`line_${scaleIdx}`] = {
         type: 'line',
         yMin: scale.yPosition,
@@ -125,7 +118,6 @@
         borderDash: [5, 3]
       };
 
-      // Label for the scale name
       annotations[`label_${scaleIdx}`] = {
         type: 'label',
         xValue: -3.3,
@@ -138,11 +130,9 @@
         borderRadius: 3
       };
 
-      // Tick marks and labels for each value
       scale.values.forEach((value, valueIdx) => {
         const zScore = scale.getZScore(value);
         
-        // Vertical tick mark
         annotations[`tick_${scaleIdx}_${valueIdx}`] = {
           type: 'line',
           xMin: zScore,
@@ -153,7 +143,6 @@
           borderWidth: 2
         };
 
-        // Value label
         const label = scale.labels ? scale.labels[valueIdx] : value.toString();
         annotations[`tickLabel_${scaleIdx}_${valueIdx}`] = {
           type: 'label',
@@ -168,7 +157,6 @@
         };
       });
 
-      // For stanines, add band boundaries
       if (scale.stanine) {
         const stanineRanges = [
           { start: -3, end: percentileToZScore(4), stanine: 1 },
@@ -183,7 +171,6 @@
         ];
 
         stanineRanges.forEach((range, idx) => {
-          // Show stanine number in the middle of its band
           const midPoint = (range.start + range.end) / 2;
           annotations[`stanine_num_${idx}`] = {
             type: 'label',
@@ -247,7 +234,6 @@
               color: chartConfig.colors.white,
               font: chartConfig.fonts.body,
               callback: function(value) {
-                // Only show positive values for the probability density
                 return value >= 0 ? value.toFixed(2) : '';
               }
             },
@@ -268,7 +254,6 @@
               font: chartConfig.fonts.body,
               stepSize: 1,
               callback: function(value) {
-                // Show main z-score ticks
                 if (value >= -3 && value <= 3) {
                   return value;
                 }
@@ -290,6 +275,5 @@
     return chart;
   }
 
-  // Self-register
   window.registerChart('ordinal-scores', renderOrdinalScores);
 })();
