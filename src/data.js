@@ -64,7 +64,14 @@ window.studyGuideData = {
           }
         ],
         keyPoint: 'In a perfect normal distribution (bell curve), the mean, median, and mode are all the same number!'
-      }
+      },
+      visualization: {
+     type: 'central-tendency',
+     config: {
+       data: [2, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 7, 7, 8, 9, 10],
+       title: 'Example: Test Scores from 18 Students'
+     }
+   }
     },
     
     {
