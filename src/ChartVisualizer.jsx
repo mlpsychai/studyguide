@@ -8,40 +8,66 @@ function ChartVisualizerComponent({ type, config, sectionId }) {
   // Memoize the config to ensure stable reference
   const memoizedConfig = useMemo(() => {
     // Deep clone to ensure we have a stable object
-    return JSON.parse(JSON.stringify(config));
+    try {
+      return JSON.parse(JSON.stringify(config || {}));
+    } catch (e) {
+      console.error('Config parsing error:', e);
+      return {};
+    }
   }, [JSON.stringify(config)]);
 
   useEffect(() => {
-    if (!canvasRef.current || !window.chartUtils) {
-      console.error('Canvas or chartUtils not available');
-      return;
+    // Wait for chartUtils to be available
+    if (!window.chartUtils) {
+      console.warn('chartUtils not yet available, waiting...');
+      const checkInterval = setInterval(() => {
+        if (window.chartUtils) {
+          clearInterval(checkInterval);
+          // Re-trigger effect by updating state
+          if (canvasRef.current) {
+            renderChart();
+          }
+        }
+      }, 100);
+      return () => clearInterval(checkInterval);
     }
 
-    // Destroy existing chart
-    if (chartRef.current) {
-      chartRef.current.destroy();
-    }
+    const renderChart = () => {
+      if (!canvasRef.current || !window.chartUtils) {
+        console.error('Canvas or chartUtils not available');
+        return;
+      }
 
-    // Render new chart
-    const canvasId = `chart-${sectionId}`;
-    canvasRef.current.id = canvasId;
-    
-    chartRef.current = window.chartUtils.renderChart(canvasId, type, memoizedConfig);
+      // Destroy existing chart
+      if (chartRef.current && chartRef.current.destroy) {
+        chartRef.current.destroy();
+      }
+
+      // Render new chart
+      const canvasId = `chart-${sectionId}`;
+      canvasRef.current.id = canvasId;
+      
+      try {
+        chartRef.current = window.chartUtils.renderChart(canvasId, type, memoizedConfig);
+      } catch (e) {
+        console.error('Error rendering chart:', e);
+      }
+    };
+
+    renderChart();
 
     // Cleanup
     return () => {
-      if (chartRef.current) {
+      if (chartRef.current && chartRef.current.destroy) {
         chartRef.current.destroy();
       }
     };
   }, [type, memoizedConfig, sectionId]);
 
-  return (
-    <div className="my-6 bg-gray-900 p-6 rounded-lg">
-      <div style={{ height: '400px', position: 'relative' }}>
-        <canvas ref={canvasRef}></canvas>
-      </div>
-    </div>
+  return React.createElement('div', { className: 'my-6 bg-gray-900 p-6 rounded-lg' },
+    React.createElement('div', { style: { height: '400px', position: 'relative' } },
+      React.createElement('canvas', { ref: canvasRef })
+    )
   );
 }
 
@@ -62,16 +88,30 @@ function CorrelationGridComponent({ correlations, sectionId }) {
 
   // Memoize the correlations array to prevent unnecessary re-renders
   const memoizedCorrelations = useMemo(() => {
-    return JSON.parse(JSON.stringify(correlations));
+    try {
+      return JSON.parse(JSON.stringify(correlations || []));
+    } catch (e) {
+      console.error('Correlations parsing error:', e);
+      return [];
+    }
   }, [JSON.stringify(correlations)]);
 
   useEffect(() => {
-    if (!containerRef.current || !window.chartUtils) return;
+    if (!containerRef.current || !window.chartUtils) {
+      if (!window.chartUtils) {
+        console.warn('chartUtils not yet available for CorrelationGrid');
+      }
+      return;
+    }
 
     const containerId = `correlation-grid-${sectionId}`;
     containerRef.current.id = containerId;
     
-    window.chartUtils.renderCorrelationGrid(containerId, memoizedCorrelations);
+    try {
+      window.chartUtils.renderCorrelationGrid(containerId, memoizedCorrelations);
+    } catch (e) {
+      console.error('Error rendering correlation grid:', e);
+    }
 
     return () => {
       if (containerRef.current) {
@@ -80,10 +120,8 @@ function CorrelationGridComponent({ correlations, sectionId }) {
     };
   }, [memoizedCorrelations, sectionId]);
 
-  return (
-    <div className="my-6 bg-gray-900 p-6 rounded-lg">
-      <div ref={containerRef}></div>
-    </div>
+  return React.createElement('div', { className: 'my-6 bg-gray-900 p-6 rounded-lg' },
+    React.createElement('div', { ref: containerRef })
   );
 }
 
@@ -95,8 +133,23 @@ const CorrelationGrid = memo(CorrelationGridComponent, (prevProps, nextProps) =>
   );
 });
 
-// Export to window
-window.ChartVisualizer = ChartVisualizer;
-window.CorrelationGrid = CorrelationGrid;
-
-console.log('✅ Optimized chart visualizer components loaded');
+// Export to window with safety checks
+if (typeof window !== 'undefined') {
+  // Ensure we're not overwriting if already defined
+  if (!window.ChartVisualizer) {
+    window.ChartVisualizer = ChartVisualizer;
+  }
+  if (!window.CorrelationGrid) {
+    window.CorrelationGrid = CorrelationGrid;
+  }
+  
+  // Signal that components are ready
+  window.chartVisualizerReady = true;
+  
+  // Call any waiting callbacks
+  if (window.onChartVisualizerReady) {
+    window.onChartVisualizerReady();
+  }
+  
+  console.log('✅ Chart visualizer components loaded and exported to window');
+}
