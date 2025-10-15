@@ -59,13 +59,17 @@
     <!-- Load components as plain JavaScript (no JSX) -->
     <script src="ChartVisualizer.js"></script>
     <script src="dataLoader.js"></script>
-    <script type="module">
-      import('./src/data/index.js').then(() => {
-        console.log('Full data loaded');
-      }).catch(err => {
-        console.warn('Using simplified data');
-      });
-    </script>
     <script src="App.js"></script>
+    
+    <!-- Load ES6 modules after App.js -->
+    <script type="module">
+        import('./src/data/index.js').then(() => {
+            console.log('Full data loaded from ES6 modules');
+            // Re-trigger App with full data
+            window.dispatchEvent(new Event('studyGuideDataReady'));
+        }).catch(err => {
+            console.warn('Using simplified data from dataLoader.js', err);
+        });
+    </script>
 </body>
 </html>
