@@ -61,12 +61,23 @@ function generateTrendLine(data) {
 // CORRELATION GRID RENDERER
 // ========================================
 
+// ✅ FIXED: Store chart references globally to prevent memory leaks
+window.correlationCharts = window.correlationCharts || [];
+
 function renderCorrelationGrid(containerId, correlations) {
   const container = document.getElementById(containerId);
   if (!container) {
     console.error(`Container not found: ${containerId}`);
     return;
   }
+
+  // ✅ FIXED: Destroy old charts before creating new ones
+  window.correlationCharts.forEach(chart => {
+    if (chart && typeof chart.destroy === 'function') {
+      chart.destroy();
+    }
+  });
+  window.correlationCharts = [];
 
   container.innerHTML = '';
   
@@ -84,7 +95,9 @@ function renderCorrelationGrid(containerId, correlations) {
     grid.appendChild(chartDiv);
     
     setTimeout(() => {
-      renderChart(canvas.id, 'correlation', corr);
+      const chart = renderChart(canvas.id, 'correlation', corr);
+      // ✅ FIXED: Store reference for cleanup
+      window.correlationCharts.push(chart);
     }, 10);
   });
   
