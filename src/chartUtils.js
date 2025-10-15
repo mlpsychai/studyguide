@@ -28,7 +28,7 @@ const chartConfig = {
 
 function generateBellCurveData(mean, sd, min, max, points) {
   const data = [];
-  const step = (max - min) / points;
+  const step = (max - min) / points -1;
   
   for (let x = min; x <= max; x += step) {
     const normalized = (x - mean) / sd;
