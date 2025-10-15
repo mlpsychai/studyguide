@@ -10,18 +10,16 @@
     renderContent();
   };
   
-  // Wait for DOM
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check if data is ready
-    if (window.studyGuideData && window.studyGuideData.sections.length > 0) {
-      studyData = window.studyGuideData;
-      init();
-    } else {
-      // Wait for data to load
-      window.addEventListener('studyGuideDataReady', function() {
-        studyData = window.studyGuideData;
-        init();
-      });
+  // Check immediately - no DOMContentLoaded wait
+if (window.studyGuideData && window.studyGuideData.sections.length > 0) {
+  studyData = window.studyGuideData;
+  init();
+} else {
+  window.addEventListener('studyGuideDataReady', function() {
+    studyData = window.studyGuideData;
+    init();
+  });
+}
       
       // Fallback: check periodically
       setTimeout(function() {
