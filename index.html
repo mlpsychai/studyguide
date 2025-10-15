@@ -81,4 +81,27 @@
     }, 3000);
   </script>
 
-  <!-- Chart utilities and chart
+  <!-- Chart utilities and chart definitions (order matters) -->
+  <script src="./src/chartUtils.js" defer></script>
+  <script src="./src/charts/index.js" defer></script>
+  <script src="./src/charts/normalDistribution.js" defer></script>
+  <script src="./src/charts/skewedDistribution.js" defer></script>
+  <script src="./src/charts/correlation.js" defer></script>
+  <script src="./src/charts/standardizedScores.js" defer></script>
+  <script src="./src/charts/centralTendency.js" defer></script>
+  <script src="./src/charts/ordinalScores.js" defer></script>
+  <script src="./src/charts/bubbleChart.js" defer></script>
+  <script src="./src/charts/testRetest.js" defer></script>
+  <script src="./src/charts/internalConsistency.js" defer></script>
+  <script src="./src/charts/alternateForms.js" defer></script>
+
+  <!-- 🔶 Data bridge FIRST (module) so studyGuideData exists before app.js -->
+  <script type="module" src="./src/data/index.js"></script>
+
+  <!-- 🟦 App SECOND (classic). Starts after data is ready -->
+  <script src="./app.js" defer></script>
+
+  <!-- Tiny debugger (activates with ?debug=1) -->
+  <script src="./src/debugger.js" defer></script>
+</body>
+</html>
