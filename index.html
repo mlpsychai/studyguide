@@ -1,69 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistics & Assessment Study Guide</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <style>
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Statistics & Assessment Study Guide</title>
+
+  <!-- Favicon -->
+  <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
 </head>
 <body>
-    <div id="root"></div>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
-    
-    <!-- Initialize globals -->
-    <script>
-        window.chartRegistry = {};
-        window.registerChart = function(type, renderFunction) {
-            window.chartRegistry[type] = renderFunction;
-            console.log('✅ Registered chart:', type);
-        };
-    </script>
-    
-    <!-- Load chart modules -->
-    <script src="src/charts/index.js"></script>
-    <script src="src/chartUtils.js"></script>
-    <script src="src/charts/normalDistribution.js"></script>
-    <script src="src/charts/skewedDistribution.js"></script>
-    <script src="src/charts/correlation.js"></script>
-    <script src="src/charts/standardizedScores.js"></script>
-    <script src="src/charts/centralTendency.js"></script>
-    <script src="src/charts/ordinalScores.js"></script>
-    <script src="src/charts/bubbleChart.js"></script>
-    <script src="src/charts/testRetest.js"></script>
-    <script src="src/charts/internalConsistency.js"></script>
-    <script src="src/charts/alternateForms.js"></script>
-    <script src="src/charts/interRater.js"></script>
-    
-    <!-- Load data -->
-    <script src="dataLoader.js"></script>
-    
-    <!-- Load ES6 modules for full data -->
-    <script type="module">
-        import('./src/data/index.js').then(() => {
-            console.log('Full data loaded from ES6 modules');
-            // Re-trigger app with full data
-            window.dispatchEvent(new Event('studyGuideDataReady'));
-        }).catch(err => {
-            console.warn('Using simplified data from dataLoader.js', err);
-        });
-    </script>
+  <div id="root"></div>
+
+  <!-- Chart.js (UMD) + Annotation plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
+
+  <!-- Initialize globals used by chart modules -->
+  <script>
+    window.chartRegistry = {};
+    window.registerChart = function (type, renderFunction) {
+      window.chartRegistry[type] = renderFunction;
+      console.log('✅ Registered chart:', type);
+    };
+  </script>
+
+  <!-- Chart utilities and chart definitions (classic scripts; load order preserved with defer) -->
+  <script src="src/charts/index.js" defer></script>
+  <script src="src/chartUtils.js" defer></script>
+  <script src="src/charts/normalDistribution.js" defer></script>
+  <script src="src/charts/skewedDistribution.js" defer></script>
+  <script src="src/charts/correlation.js" defer></script>
+  <script src="src/charts/standardizedScores.js" defer></script>
+  <script src="src/charts/centralTendency.js" defer></script>
+  <script src="src/charts/ordinalScores.js" defer></script>
+  <script src="src/charts/bubbleChart.js" defer></script>
+  <script src="src/charts/testRetest.js" defer></script>
+  <script src="src/charts/internalConsistency.js" defer></script>
+  <script src="src/charts/alternateForms.js" defer></script>
+
+  <!-- Load ES module data (NEW) -->
+  <script type="module">
+    // Import your new data barrel; modules are deferred by default.
+    import './src/data/index.js';
+
+    // Signal to the app that data modules are ready.
+    window.dispatchEvent(new Event('studyGuideDataReady'));
+    console.log('Full data loaded from ES modules');
+  </script>
+
+  <!-- App entrypoint (module) -->
+  <script type="module" src="src/app.js"></script>
 </body>
 </html>
