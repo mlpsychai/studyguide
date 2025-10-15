@@ -151,6 +151,8 @@ if (typeof window !== 'undefined') {
   if (window.onChartVisualizerReady) {
     window.onChartVisualizerReady();
   }
-})();
-  console.log('✅ Chart visualizer components loaded and exported to window');
+}
 
+console.log('✅ Chart visualizer components loaded and exported to window');
+
+})();
