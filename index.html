@@ -31,22 +31,32 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     
-   <!-- 3. Study guide data -->
+    <!-- 3. Study guide data -->
     <script src="src/data.js"></script>
     
     <!-- 4. Chart Registry -->
     <script src="src/charts/index.js"></script>
     
-    <!-- 5. Chart utilities - MOVED UP FOR SAFETY -->
+    <!-- 5. Chart utilities - MUST LOAD BEFORE CHART MODULES -->
     <script src="src/chartUtils.js"></script>
     
-    <!-- 6. Individual Chart Modules - NOW LOADED AFTER UTILITIES -->
+    <!-- 6. Individual Chart Modules -->
+    <!-- Original 4 charts -->
     <script src="src/charts/normalDistribution.js"></script>
     <script src="src/charts/skewedDistribution.js"></script>
     <script src="src/charts/correlation.js"></script>
     <script src="src/charts/standardizedScores.js"></script>
-    <script src="src/charts/bubbleChart.js"></script> 
-    <!-- Add your other 6+ charts here -->
+    
+    <!-- NEW CHARTS - Added today! -->
+    <script src="src/charts/bubbleChart.js"></script>
+    <script src="src/charts/linearGradient.js"></script>
+    <script src="src/charts/customTooltip.js"></script>
+    <script src="src/charts/interpolationModes.js"></script>
+    <script src="src/charts/multipleDatasets.js"></script>
+    <script src="src/charts/scatterPlot.js"></script>
+    <script src="src/charts/polarArea.js"></script>
+    <script src="src/charts/polarAreaCentered.js"></script>
+    <script src="src/charts/axisMinMax.js"></script>
     
     <!-- 7. Babel Standalone for JSX components -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -56,3 +66,28 @@
     <script type="text/babel" src="src/App.jsx"></script>
 </body>
 </html>
+```
+
+---
+
+**Save this file and test it!** 
+
+When you open your browser console (F12), you should see:
+```
+✅ Study guide data loaded with X sections and 45 questions
+✅ Chart registry initialized
+✅ Chart utilities loaded
+✅ Registered chart: normal-distribution
+✅ Registered chart: skewed
+✅ Registered chart: correlation
+✅ Registered chart: standardized
+✅ Registered chart: bubble
+✅ Registered chart: linear-gradient
+✅ Registered chart: custom-tooltip
+✅ Registered chart: interpolation-modes
+✅ Registered chart: multiple-datasets
+✅ Registered chart: scatter-plot
+✅ Registered chart: polar-area
+✅ Registered chart: polar-area-centered
+✅ Registered chart: axis-min-max
+✅ Optimized chart visualizer components loaded
