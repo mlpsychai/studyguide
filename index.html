@@ -34,14 +34,43 @@
     <!-- 3. Study guide data (plain JS) -->
     <script src="src/data.js"></script>
     
-    <!-- 4. Chart utilities (plain JS - NO BABEL) -->
+    <!-- 4. Chart Registry (NEW) -->
+    <script src="src/charts/index.js"></script>
+    
+    <!-- 5. Individual Chart Modules (NEW - Modular approach!) -->
+    <script src="src/charts/normalDistribution.js"></script>
+    <script src="src/charts/skewedDistribution.js"></script>
+    <script src="src/charts/correlation.js"></script>
+    <script src="src/charts/standardizedScores.js"></script>
+    <!-- Add your additional 6+ charts here as you create them -->
+    
+    <!-- 6. Chart utilities (slimmed down - just helpers) -->
     <script src="src/chartUtils.js"></script>
     
-    <!-- 5. Babel Standalone for JSX components -->
+    <!-- 7. Babel Standalone for JSX components -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- 6. React components (JSX) -->
+    <!-- 8. React components (JSX) -->
     <script type="text/babel" src="src/ChartVisualizer.jsx"></script>
     <script type="text/babel" src="src/App.jsx"></script>
 </body>
 </html>
+```
+
+---
+
+## File Structure Summary
+```
+project/
+├── index.html                    ← UPDATED
+├── src/
+│   ├── data.js                   ← unchanged
+│   ├── App.jsx                   ← unchanged
+│   ├── ChartVisualizer.jsx       ← unchanged
+│   ├── chartUtils.js             ← SLIMMED DOWN (utilities only)
+│   └── charts/                   ← NEW FOLDER
+│       ├── index.js              ← NEW (registry)
+│       ├── normalDistribution.js ← NEW
+│       ├── skewedDistribution.js ← NEW
+│       ├── correlation.js        ← NEW
+│       └── standardizedScores.js ← NEW
