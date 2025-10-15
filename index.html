@@ -34,16 +34,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     
-    <!-- 3. Study guide data (NEW MODULAR STRUCTURE) -->
-    <script type="module" src="src/data/index.js"></script>
-    
-    <!-- 4. Chart Registry -->
+    <!-- 3. Chart Registry -->
     <script src="src/charts/index.js"></script>
     
-    <!-- 5. Chart utilities - MUST LOAD BEFORE CHART MODULES -->
+    <!-- 4. Chart utilities - MUST LOAD BEFORE CHART MODULES -->
     <script src="src/chartUtils.js"></script>
     
-    <!-- 6. Individual Chart Modules -->
+    <!-- 5. Individual Chart Modules -->
     <!-- Core educational charts -->
     <script src="src/charts/normalDistribution.js"></script>
     <script src="src/charts/skewedDistribution.js"></script>
@@ -51,7 +48,7 @@
     <script src="src/charts/standardizedScores.js"></script>
     <script src="src/charts/centralTendency.js"></script>
     
-    <!-- NEW: Ordinal scores visualization -->
+    <!-- Ordinal scores visualization -->
     <script src="src/charts/ordinalScores.js"></script>
     
     <!-- Extra demonstration charts -->
@@ -65,10 +62,25 @@
     <script src="src/charts/polarAreaCentered.js"></script>
     <script src="src/charts/axisMinMax.js"></script>
     
+    <!-- Reliability charts -->
+    <script src="src/charts/testRetest.js"></script>
+    <script src="src/charts/internalConsistency.js"></script>
+    <script src="src/charts/alternateForms.js"></script>
+    <script src="src/charts/interRater.js"></script>
+    
+    <!-- Validity charts -->
+    <script src="src/charts/contentValidity.js"></script>
+    <script src="src/charts/concurrentValidity.js"></script>
+    <script src="src/charts/predictiveValidity.js"></script>
+    <script src="src/charts/constructValidity.js"></script>
+    
+    <!-- 6. Study guide data (loads after charts) -->
+    <script type="module" src="src/data/index.js"></script>
+    
     <!-- 7. Babel Standalone for JSX components -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- 8. React components (JSX) -->
+    <!-- 8. React components (JSX) - load after data -->
     <script type="text/babel" src="src/ChartVisualizer.jsx"></script>
     <script type="text/babel" src="src/App.jsx"></script>
 </body>
