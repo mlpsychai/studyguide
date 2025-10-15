@@ -1,7 +1,8 @@
-const { useState, useMemo } = React;
+const { useState, useMemo, useEffect } = React;
 const { ChartVisualizer, CorrelationGrid } = window;
 
 function App() {
+  const [dataReady, setDataReady] = useState(false);
   const [activeSection, setActiveSection] = useState('scales');
   const [quizMode, setQuizMode] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -9,6 +10,29 @@ function App() {
   const [showResults, setShowResults] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [extraChartsOpen, setExtraChartsOpen] = useState(false);
+
+  // Wait for data to load
+  useEffect(() => {
+    if (window.studyGuideData) {
+      setDataReady(true);
+    } else {
+      const handler = () => setDataReady(true);
+      window.addEventListener('studyGuideDataReady', handler);
+      return () => window.removeEventListener('studyGuideDataReady', handler);
+    }
+  }, []);
+
+  // Show loading state
+  if (!dataReady) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-4xl mb-4">📚</div>
+          <div className="text-xl text-gray-600">Loading study guide...</div>
+        </div>
+      </div>
+    );
+  }
 
   const data = window.studyGuideData;
   const sections = data.sections;
