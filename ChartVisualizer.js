@@ -157,5 +157,4 @@ if (typeof window !== 'undefined') {
   window.CorrelationGrid = CorrelationGrid;
 })();
   console.log('✅ Chart visualizer components loaded and exported to window');
-}
 
