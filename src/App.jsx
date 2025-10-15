@@ -8,10 +8,20 @@ function App() {
   const [userAnswers, setUserAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [extraChartsOpen, setExtraChartsOpen] = useState(false);
 
   const data = window.studyGuideData;
   const sections = data.sections;
   const quizQuestions = data.quizQuestions;
+
+  // Separate main sections from extra chart sections
+  const mainSections = useMemo(() => {
+    return sections.filter(s => !s.isExtraChart);
+  }, [sections]);
+
+  const extraChartSections = useMemo(() => {
+    return sections.filter(s => s.isExtraChart);
+  }, [sections]);
 
   // Memoize the active section to prevent unnecessary recalculations
   const currentSection = useMemo(() => {
@@ -118,7 +128,7 @@ function App() {
           </div>
         )}
 
-        {/* Explanation with Points - NEW BLOCK FOR BUBBLE CHART */}
+        {/* Explanation with Points - FOR EXTRA CHARTS */}
         {sectionContent.explanation && (
           <div className="space-y-4">
             {sectionContent.explanation.map((item, idx) => (
@@ -596,7 +606,8 @@ function App() {
           } lg:translate-x-0 fixed lg:sticky top-16 h-[calc(100vh-4rem)] w-64 bg-white shadow-lg transition-transform duration-300 z-20 overflow-y-auto`}
         >
           <nav className="p-4 space-y-2">
-            {sections.map((section) => (
+            {/* Main sections */}
+            {mainSections.map((section) => (
               <button
                 key={section.id}
                 onClick={() => {
@@ -614,6 +625,46 @@ function App() {
                 <span className="text-sm">{section.title}</span>
               </button>
             ))}
+
+            {/* Extra Charts collapsible section */}
+            <div className="pt-2 border-t border-gray-200 mt-4">
+              <button
+                onClick={() => setExtraChartsOpen(!extraChartsOpen)}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700 transition"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">📊</span>
+                  <span className="text-sm font-semibold">Extra Charts</span>
+                </div>
+                <span className={`text-sm transition-transform ${extraChartsOpen ? 'rotate-90' : ''}`}>
+                  ›
+                </span>
+              </button>
+              
+              {/* Collapsible extra chart items */}
+              {extraChartsOpen && (
+                <div className="ml-4 mt-1 space-y-1 max-h-64 overflow-y-auto border-l-2 border-gray-200">
+                  {extraChartSections.map((section) => (
+                    <button
+                      key={section.id}
+                      onClick={() => {
+                        setActiveSection(section.id);
+                        setQuizMode(false);
+                        setSidebarOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg transition text-xs ${
+                        activeSection === section.id && !quizMode
+                          ? 'bg-indigo-100 text-indigo-700 font-semibold'
+                          : 'hover:bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      <span className="text-base">{section.icon}</span>
+                      <span>{section.title}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
         </aside>
 
