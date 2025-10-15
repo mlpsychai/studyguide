@@ -1,55 +1,69 @@
 // Simple Vanilla JS App - No React needed
-(function() {
+(function () {
   console.log('🚀 App.js IIFE starting...');
-  
+
   let currentSection = 'scales';
   let studyData = null;
-  
-  window.setSection = function(sectionId) {
+  let showExtras = false; // NEW: toggle for extra chart sections
+
+  window.setSection = function (sectionId) {
     console.log('📍 setSection called:', sectionId);
     currentSection = sectionId;
     renderSidebar();
     renderContent();
   };
-  
+
+  // NEW: toggle control exposed globally
+  window.toggleExtras = function () {
+    showExtras = !showExtras;
+    renderSidebar();
+  };
+
   // Check immediately - no DOMContentLoaded wait
   console.log('🔍 Checking for studyGuideData...', {
     exists: !!window.studyGuideData,
     sections: window.studyGuideData?.sections?.length
   });
-  
+
   if (window.studyGuideData && window.studyGuideData.sections.length > 0) {
     console.log('✅ Data ready immediately');
     studyData = window.studyGuideData;
     init();
   } else {
     console.log('⏳ Waiting for studyGuideDataReady event...');
-    window.addEventListener('studyGuideDataReady', function() {
+    window.addEventListener('studyGuideDataReady', function () {
       console.log('📬 studyGuideDataReady event received');
       studyData = window.studyGuideData;
       init();
     });
   }
-  
+
   function init() {
     console.log('🎯 init() called with', studyData?.sections?.length, 'sections');
     if (!studyData) {
       console.error('❌ No studyData in init()');
       return;
     }
+
+    // If default section doesn't exist (e.g., 'scales'), pick the first main section.
+    if (!studyData.sections.find(s => s.id === currentSection && !s.isExtraChart)) {
+      const firstMain = studyData.sections.find(s => !s.isExtraChart);
+      if (firstMain) currentSection = firstMain.id;
+    }
+
     renderApp();
   }
-  
+
   function renderApp() {
     console.log('🎨 renderApp() called');
     const root = document.getElementById('root');
     console.log('🔍 Root element:', root);
-    
+
     if (!root) {
       console.error('❌ Root element not found!');
       return;
     }
-    
+
     root.innerHTML = `
       <div class="min-h-screen bg-gray-50">
         <header class="bg-white shadow-md sticky top-0 z-50">
@@ -60,9 +74,18 @@
           </div>
         </header>
         <div class="flex max-w-7xl mx-auto">
-          <aside class="w-64 bg-white shadow-lg">
+          <aside class="w-72 bg-white shadow-lg">
             <nav class="p-4">
-              <h2 class="text-lg font-bold mb-4">Topics</h2>
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold">Topics</h2>
+                <button
+                  onclick="window.toggleExtras()"
+                  class="text-xs px-2 py-1 rounded border hover:bg-gray-50"
+                  title="Show/Hide extra chart sections"
+                >
+                  ${showExtras ? 'Hide' : 'Show'} Extra Charts
+                </button>
+              </div>
               <ul class="space-y-2" id="sidebar"></ul>
             </nav>
           </aside>
@@ -72,32 +95,34 @@
         </div>
       </div>
     `;
-    
+
     console.log('✅ HTML injected into root');
     renderSidebar();
     renderContent();
   }
-  
+
   function renderSidebar() {
     console.log('📋 renderSidebar() called');
     const sidebar = document.getElementById('sidebar');
     console.log('🔍 Sidebar element:', sidebar);
-    
+
     if (!sidebar || !studyData) {
       console.error('❌ Sidebar missing or no data:', { sidebar: !!sidebar, studyData: !!studyData });
       return;
     }
-    
-    const sections = studyData.sections.filter(s => !s.isExtraChart);
-    console.log('📊 Filtered sections:', sections.length);
-    
-    sidebar.innerHTML = sections.map(section => `
+
+    const mainSections = studyData.sections.filter(s => !s.isExtraChart);
+    const extraSections = studyData.sections.filter(s => s.isExtraChart);
+
+    console.log('📊 Main sections:', mainSections.length, ' | Extra sections:', extraSections.length);
+
+    const renderList = (sections) => sections.map(section => `
       <li>
         <button 
           onclick="window.setSection('${section.id}')" 
           class="w-full text-left px-4 py-2 rounded-lg transition ${
-            currentSection === section.id 
-              ? 'bg-indigo-600 text-white' 
+            currentSection === section.id
+              ? 'bg-indigo-600 text-white'
               : 'hover:bg-gray-100 text-gray-700'
           }">
           <span class="mr-2">${section.icon || '📖'}</span>
@@ -105,27 +130,40 @@
         </button>
       </li>
     `).join('');
-    
+
+    sidebar.innerHTML = `
+      <div class="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Core Topics</div>
+      ${renderList(mainSections)}
+      ${
+        showExtras
+          ? `
+        <div class="mt-6 mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Extra Charts</div>
+        ${renderList(extraSections)}
+      `
+          : ''
+      }
+    `;
+
     console.log('✅ Sidebar rendered');
   }
-  
+
   function renderContent() {
     console.log('📄 renderContent() called for section:', currentSection);
     const content = document.getElementById('content');
-    
+
     if (!content || !studyData) {
       console.error('❌ Content missing or no data:', { content: !!content, studyData: !!studyData });
       return;
     }
-    
+
     const section = studyData.sections.find(s => s.id === currentSection);
     console.log('🔍 Found section:', section?.title);
-    
+
     if (!section) {
       content.innerHTML = '<p>Select a topic from the sidebar</p>';
       return;
     }
-    
+
     let html = `
       <div class="mb-6">
         <h2 class="text-3xl font-bold text-gray-800">
@@ -134,7 +172,7 @@
         </h2>
       </div>
     `;
-    
+
     if (section.content) {
       if (section.content.intro) {
         html += `
@@ -143,7 +181,7 @@
           </div>
         `;
       }
-      
+
       if (section.content.keyPoint) {
         html += `
           <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
@@ -154,18 +192,18 @@
         `;
       }
     }
-    
+
     html += '<div id="chart-container"></div>';
     content.innerHTML = html;
     console.log('✅ Content rendered');
-    
+
     // Render chart if exists
     if (section.visualization && window.chartUtils) {
       console.log('📈 Chart visualization found, rendering...');
-      setTimeout(function() {
+      setTimeout(function () {
         const container = document.getElementById('chart-container');
         if (!container) return;
-        
+
         container.innerHTML = `
           <div class="my-6 bg-gray-900 p-6 rounded-lg">
             <div style="height: 400px; position: relative;">
@@ -173,15 +211,15 @@
             </div>
           </div>
         `;
-        
-        setTimeout(function() {
+
+        setTimeout(function () {
           const viz = section.visualization;
           if (viz.type === 'correlation' && Array.isArray(viz.config)) {
             window.chartUtils.renderCorrelationGrid('chart-container', viz.config);
           } else {
             window.chartUtils.renderChart(
-              'chart-' + section.id, 
-              viz.type, 
+              'chart-' + section.id,
+              viz.type,
               viz.config
             );
           }
@@ -189,6 +227,6 @@
       }, 100);
     }
   }
-  
+
   console.log('✅ App.js IIFE complete');
 })();
