@@ -1,32 +1,57 @@
 /**
- * DATA LOADER
- * Combines all data sources and exports to window.studyGuideData
- * 
- * This file imports:
- * - mainSections: Core 13 educational sections
- * - quizQuestions: All 45 quiz questions
- * - extraCharts: Individual chart sections (to be added)
+ * EXTRA CHARTS INDEX
+ * Exports all extra chart sections for import by main index
  */
 
-import { mainSections } from './mainSections.js';
-import { quizQuestions } from './quizQuestions.js';
+// Existing extra charts
+import { bubbleChart } from './bubbleChart.js';
+import { linearGradient } from './linearGradient.js';
+import { customTooltip } from './customTooltip.js';
+import { interpolationModes } from './interpolationModes.js';
+import { multipleDatasets } from './multipleDatasets.js';
+import { scatterPlot } from './scatterPlot.js';
+import { polarArea } from './polarArea.js';
+import { polarAreaCentered } from './polarAreaCentered.js';
+import { axisMinMax } from './axisMinMax.js';
+import { ordinalScores } from './ordinalScores.js';
 
-// TODO: Import extra chart sections as they are created
-// import { bubbleChart } from './extraCharts/bubbleChart.js';
-// import { linearGradient } from './extraCharts/linearGradient.js';
-// ... etc
+// Reliability charts (4)
+import { testRetest } from './testRetest.js';
+import { internalConsistency } from './internalConsistency.js';
+import { alternateForms } from './alternateForms.js';
+import { interRater } from './interRater.js';
 
-// Combine all sections
-const allSections = [
-  ...mainSections,
-  // TODO: Add extra chart sections here
-  // ...extraChartSections
+// Validity charts (4)
+import { contentValidity } from './contentValidity.js';
+import { concurrentValidity } from './concurrentValidity.js';
+import { predictiveValidity } from './predictiveValidity.js';
+import { constructValidity } from './constructValidity.js';
+
+// Export all extra chart sections
+export const extraChartSections = [
+  // Existing demonstration charts
+  bubbleChart,
+  linearGradient,
+  customTooltip,
+  interpolationModes,
+  multipleDatasets,
+  scatterPlot,
+  polarArea,
+  polarAreaCentered,
+  axisMinMax,
+  ordinalScores,
+  
+  // Reliability charts
+  testRetest,
+  internalConsistency,
+  alternateForms,
+  interRater,
+  
+  // Validity charts
+  contentValidity,
+  concurrentValidity,
+  predictiveValidity,
+  constructValidity
 ];
 
-// Export to window for compatibility with existing code
-window.studyGuideData = {
-  sections: allSections,
-  quizQuestions: quizQuestions
-};
-
-console.log('✅ Study guide data loaded with', allSections.length, 'sections and', quizQuestions.length, 'questions');
+console.log('✅ Extra charts module loaded with', extraChartSections.length, 'chart sections');
