@@ -10,6 +10,9 @@
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 
   <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js + plugin -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
 
@@ -20,11 +23,44 @@
         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      background-color: #f9fafb;
+    }
+    #root {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
     }
   </style>
+
+  <!-- ✅ Eruda mobile console (only loads if ?debug=1) -->
+  <script>
+    if (location.search.includes('debug=1')) {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/eruda';
+      s.onload = () => {
+        eruda.init();
+        console.log('%c🧩 Eruda mobile console loaded!', 'color: limegreen; font-weight: bold;');
+      };
+      document.head.appendChild(s);
+    }
+  </script>
+
+  <!-- Early white-screen diagnostics -->
+  <script>
+    console.log('%c🔍 Early boot check: index.html loaded', 'color: dodgerblue; font-weight:bold;');
+    window.addEventListener('error', e => {
+      console.error('❌ JS Error:', e.message, '\n', e.filename, e.lineno + ':' + e.colno);
+    });
+    window.addEventListener('unhandledrejection', e => {
+      console.error('💥 Unhandled promise rejection:', e.reason);
+    });
+  </script>
 </head>
+
 <body>
-  <div id="root"></div>
+  <div id="root">Loading study guide...</div>
 
   <!-- Initialize globals used by chart modules -->
   <script>
@@ -33,9 +69,19 @@
       window.chartRegistry[type] = renderFunction;
       console.log('✅ Registered chart:', type);
     };
+
+    // Detect white-screen hang (if app doesn't render in 3s)
+    setTimeout(() => {
+      const root = document.getElementById('root');
+      if (root && root.innerText.includes('Loading')) {
+        console.warn('⚠️ Still showing loading message after 3s. App may not have initialized yet.');
+        root.style.color = 'red';
+        root.innerText = '⚠️ App failed to render. Check console for errors.';
+      }
+    }, 3000);
   </script>
 
-  <!-- Chart utilities and chart definitions (keep order; use ./ for explicit relative paths) -->
+  <!-- Chart utilities and chart definitions -->
   <script src="./src/chartUtils.js" defer></script>
   <script src="./src/charts/index.js" defer></script>
   <script src="./src/charts/normalDistribution.js" defer></script>
