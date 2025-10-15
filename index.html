@@ -74,7 +74,10 @@
     <script src="src/charts/predictiveValidity.js"></script>
     <script src="src/charts/constructValidity.js"></script>
     
-    <!-- 6. Study guide data (loads after charts) -->
+    <!-- 6. Data files (individual modules first, then combiner) -->
+    <script type="module" src="src/data/mainSections.js"></script>
+    <script type="module" src="src/data/quizQuestions.js"></script>
+    <script type="module" src="src/data/extraCharts/index.js"></script>
     <script type="module" src="src/data/index.js"></script>
     
     <!-- 7. Babel Standalone for JSX components -->
