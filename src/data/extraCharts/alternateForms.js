@@ -1,144 +1,33 @@
 /**
- * ALTERNATE FORMS RELIABILITY CHART
- * Shows consistency between two parallel test forms
+ * ALTERNATE FORMS RELIABILITY SECTION
  */
-(function() {
-  const chartConfig = {
-    colors: {
-      formA: '#3b82f6',
-      formB: '#8b5cf6',
-      trend: '#f59e0b',
-      white: '#ffffff',
-    },
-    fonts: {
-      title: { size: 18, weight: 'bold' },
-      subtitle: { size: 12, weight: 'normal' },
-      label: { size: 13, weight: 'bold' },
-      body: { size: 11, weight: 'normal' },
-    }
-  };
 
-  function generateAlternateFormsData(correlation, n = 25) {
-    const data = [];
-    for (let i = 0; i < n; i++) {
-      const formA = 70 + Math.random() * 30;
-      const noise = (Math.random() - 0.5) * 15 * (1 - Math.abs(correlation));
-      const formB = formA * correlation + noise + (100 * (1 - correlation) * Math.random());
-      data.push({
-        x: Math.max(70, Math.min(100, formA)),
-        y: Math.max(70, Math.min(100, formB))
-      });
-    }
-    return data;
-  }
-
-  function renderAlternateForms(canvasId, config = {}) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) {
-      console.error(`Canvas not found: ${canvasId}`);
-      return null;
-    }
-
-    const correlation = config.correlation || 0.88;
-    const scatterData = generateAlternateFormsData(correlation, config.count || 25);
-    const trendData = window.chartUtils.generateTrendLine(scatterData);
-
-    const chart = new Chart(canvas, {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: 'Student Scores',
-            data: scatterData,
-            backgroundColor: chartConfig.colors.formA + '80',
-            borderColor: chartConfig.colors.formA,
-            pointRadius: 6,
-            pointHoverRadius: 8,
-            pointBorderWidth: 2,
-            pointBorderColor: chartConfig.colors.white
-          },
-          {
-            label: 'Trend Line',
-            data: trendData,
-            type: 'line',
-            borderColor: chartConfig.colors.trend,
-            backgroundColor: 'transparent',
-            borderWidth: 3,
-            pointRadius: 0,
-            borderDash: [5, 5]
-          }
+export const alternateForms = {
+  id: 'alternate-forms-example',
+  title: 'Alternate Forms',
+  icon: '📋',
+  isExtraChart: true,
+  content: {
+    intro: 'Alternate forms reliability assesses whether two different versions of a test yield similar scores.',
+    explanation: [
+      {
+        title: 'Understanding Alternate Forms',
+        points: [
+          'Two parallel test forms with equivalent content and difficulty',
+          'Administered close together to minimize true change',
+          'Avoids practice effects from taking identical test twice',
+          'Correlation typically 0.80-0.90 for well-designed forms'
         ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          title: {
-            display: true,
-            text: config.title || 'Alternate Forms Reliability',
-            color: chartConfig.colors.white,
-            font: chartConfig.fonts.title
-          },
-          subtitle: {
-            display: true,
-            text: `Correlation: r = ${correlation.toFixed(2)} (${correlation >= 0.85 ? 'Excellent' : 'Good'} equivalence between forms)`,
-            color: chartConfig.colors.white,
-            font: chartConfig.fonts.subtitle,
-            padding: { bottom: 10 }
-          },
-          tooltip: {
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
-            titleColor: chartConfig.colors.white,
-            bodyColor: chartConfig.colors.white,
-            padding: 12,
-            borderColor: chartConfig.colors.white,
-            borderWidth: 1,
-            callbacks: {
-              label: function(context) {
-                return `Form A: ${context.parsed.x.toFixed(1)}, Form B: ${context.parsed.y.toFixed(1)}`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            type: 'linear',
-            title: {
-              display: true,
-              text: 'Test Form A Score',
-              color: chartConfig.colors.white,
-              font: chartConfig.fonts.label
-            },
-            ticks: {
-              color: chartConfig.colors.white,
-              font: chartConfig.fonts.body
-            },
-            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-            min: 65,
-            max: 105
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Test Form B Score',
-              color: chartConfig.colors.white,
-              font: chartConfig.fonts.label
-            },
-            ticks: {
-              color: chartConfig.colors.white,
-              font: chartConfig.fonts.body
-            },
-            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-            min: 65,
-            max: 105
-          }
-        }
       }
-    });
-
-    return chart;
+    ],
+    keyPoint: 'Alternate forms answer: "Are my two test versions measuring the same thing equally well?"'
+  },
+  visualization: {
+    type: 'alternate-forms',
+    config: {
+      correlation: 0.88,
+      count: 25,
+      title: 'Math Test: Form A vs Form B'
+    }
   }
-
-  window.registerChart('alternate-forms', renderAlternateForms);
-})();
+};
