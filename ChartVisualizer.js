@@ -1,4 +1,5 @@
-const { useEffect, useRef, useMemo, memo } = React;
+(function() {
+  const { useEffect, useRef, useMemo, memo } = React;
 
 // Main ChartVisualizer Component
 function ChartVisualizerComponent({ type, config, sectionId }) {
@@ -150,7 +151,11 @@ if (typeof window !== 'undefined') {
   if (window.onChartVisualizerReady) {
     window.onChartVisualizerReady();
   }
-  
+
+   // Export at the end
+  window.ChartVisualizer = ChartVisualizer;
+  window.CorrelationGrid = CorrelationGrid;
+})();
   console.log('✅ Chart visualizer components loaded and exported to window');
 }
 
