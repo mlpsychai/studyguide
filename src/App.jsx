@@ -118,6 +118,22 @@ function App() {
           </div>
         )}
 
+        {/* Explanation with Points - NEW BLOCK FOR BUBBLE CHART */}
+        {sectionContent.explanation && (
+          <div className="space-y-4">
+            {sectionContent.explanation.map((item, idx) => (
+              <div key={idx} className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-xl font-bold text-indigo-700 mb-3">{item.title}</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  {item.points.map((point, pidx) => (
+                    <li key={pidx} className="text-gray-700">{point}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Distribution Types */}
         {sectionContent.types && activeSection === 'distributions' && (
           <div className="space-y-4">
