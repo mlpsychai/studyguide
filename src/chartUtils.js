@@ -154,84 +154,84 @@ function renderNormalDistribution(canvasId, config = {}) {
 
   const data = generateBellCurveData(mean, sd, mean - 3*sd, mean + 3*sd, 100);
 
-  // Generate all sigma lines using the helper function
-  const sigmaLines = [-3, -2, -1, 0, 1, 2, 3].reduce((acc, mult, idx) => {
-    acc[`line${idx + 1}`] = createSigmaLine(mult, mean, sd);
-    return acc;
-  }, {});
+// Generate all sigma lines using the helper function
+const sigmaLines = [-3, -2, -1, 0, 1, 2, 3].reduce((acc, mult, idx) => {
+  acc[`line${idx + 1}`] = createSigmaLine(mult, mean, sd);
+  return acc;
+}, {});
 
-  const chart = new Chart(canvas, {
-    type: 'line',
-    data: {
-      labels: data.map(d => Math.round(d.x)),
-      datasets: [{
-        label: 'Normal Distribution',
-        data: data.map(d => d.y),
-        borderColor: chartConfig.colors.primary,
-        backgroundColor: 'rgba(255, 215, 0, 0.2)',
-        fill: true,
-        borderWidth: 3,
-        tension: 0.4,
-        pointRadius: 0
-      }]
+const chart = new Chart(canvas, {
+  type: 'line',
+  data: {
+    datasets: [{
+      label: 'Normal Distribution',
+      data: data,  // ✅ Use the full x-y objects
+      borderColor: chartConfig.colors.primary,
+      backgroundColor: 'rgba(255, 215, 0, 0.2)',
+      fill: true,
+      borderWidth: 3,
+      tension: 0.4,
+      pointRadius: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: `Normal Distribution (μ=${mean}, σ=${sd})`,
+        color: chartConfig.colors.white,
+        font: { size: 18, weight: 'bold' }
+      },
+      subtitle: {
+        display: config.showPercentages,
+        text: '68% within ±1σ | 95% within ±2σ | 99.7% within ±3σ',
+        color: chartConfig.colors.white,
+        font: { size: 14 }
+      },
+      annotation: {
+        annotations: sigmaLines
+      }
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { 
+          color: chartConfig.colors.white,
+          font: { size: 11 }
+        },
+        grid: { color: 'rgba(255, 255, 255, 0.1)' },
         title: {
           display: true,
-          text: `Normal Distribution (μ=${mean}, σ=${sd})`,
+          text: 'Probability Density',
           color: chartConfig.colors.white,
-          font: { size: 18, weight: 'bold' }
-        },
-        subtitle: {
-          display: config.showPercentages,
-          text: '68% within ±1σ | 95% within ±2σ | 99.7% within ±3σ',
-          color: chartConfig.colors.white,
-          font: { size: 14 }
-        },
-        annotation: {
-          annotations: sigmaLines
+          font: { size: 13, weight: 'bold' }
         }
       },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: { 
-            color: chartConfig.colors.white,
-            font: { size: 11 }
-          },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' },
-          title: {
-            display: true,
-            text: 'Probability Density',
-            color: chartConfig.colors.white,
-            font: { size: 13, weight: 'bold' }
-          }
+      x: {
+        type: 'linear',  // ✅ ADDED: Makes x-axis use numeric values instead of categorical
+        ticks: { 
+          color: chartConfig.colors.white,
+          font: { size: 11 },
+          maxRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: 15
         },
-        x: {
-          ticks: { 
-            color: chartConfig.colors.white,
-            font: { size: 11 },
-            maxRotation: 0,
-            autoSkip: true,
-            maxTicksLimit: 15
-          },
-          grid: { color: 'rgba(255, 255, 255, 0.1)' },
-          title: {
-            display: true,
-            text: 'Score',
-            color: chartConfig.colors.white,
-            font: { size: 13, weight: 'bold' }
-          }
+        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+        title: {
+          display: true,
+          text: 'Score',
+          color: chartConfig.colors.white,
+          font: { size: 13, weight: 'bold' }
         }
       }
     }
-  });
+  }
+});
 
-  return chart;
+return chart;
 }
 
 function renderSkewedDistribution(canvasId, config = {}) {
