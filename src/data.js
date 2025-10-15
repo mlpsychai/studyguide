@@ -229,6 +229,52 @@ window.studyGuideData = {
     // EXTRA CHART SECTIONS - NOW MARKED
     // ========================================
 
+    // ADD THIS TO THE sections array in data.js
+// Place it in the "Extra Charts" section (with isExtraChart: true)
+
+  {
+    id: 'ordinal-scores-visual',
+    title: 'Ordinal Scores Visual',
+    icon: '📊',
+    isExtraChart: true,
+    content: {
+      intro: '⚠️ CRITICAL CONCEPT: Ordinal scores have UNEQUAL intervals, unlike the interval scales shown in the standardized scores chart.',
+      explanation: [
+        {
+          title: 'Understanding Ordinal Scales',
+          points: [
+            'Percentile Ranks: Show rank order (1st-99th percentile)',
+            'Quartiles: Divide distribution into 4 equal groups (Q1, Q2, Q3, Q4)',
+            'Deciles: Divide distribution into 10 equal groups (D1-D10)',
+            'Stanines: Band of 9 score ranges (1-9, with 5 as the mean)'
+          ]
+        },
+        {
+          title: '⚠️ Why Unequal Intervals Matter',
+          points: [
+            'The difference between 50th and 51st percentile is NOT the same as between 98th and 99th',
+            'Percentile differences near the extremes represent larger raw score differences',
+            'You CANNOT add, subtract, or average ordinal scores meaningfully',
+            'Use these for ranking and comparison, NOT for mathematical operations'
+          ]
+        },
+        {
+          title: 'Reading This Chart',
+          points: [
+            'Notice how ordinal values cluster near the center and spread at extremes',
+            'Stanines show actual bands/ranges (not just points)',
+            'Compare this to the standardized scores chart - see the difference in spacing!'
+          ]
+        }
+      ],
+      keyPoint: '🚨 Never perform mathematical operations on ordinal scores! They are for ranking only, not for calculations like averaging.'
+    },
+    visualization: {
+      type: 'ordinal-scores',
+      config: {}
+    }
+  },
+    
     {
       id: 'bubble-example',
       title: 'Bubble Chart',
