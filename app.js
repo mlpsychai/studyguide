@@ -1,25 +1,43 @@
 // Simple Vanilla JS App - No React needed
 (function () {
+  'use strict';
   console.log('🚀 App.js IIFE starting...');
 
+  // --- state -----------------------------------------------------------------
   let currentSection = 'scales';
   let studyData = null;
-  let showExtras = false; // NEW: toggle for extra chart sections
+  let showExtras = false;
 
+  // --- navigation helpers ----------------------------------------------------
+  function setHash(id) {
+    if (id && location.hash !== '#' + id) {
+      history.replaceState(null, '', '#' + id);
+    }
+  }
+  function getHash() {
+    return (location.hash || '').replace(/^#/, '') || null;
+  }
+
+  // Expose for buttons
   window.setSection = function (sectionId) {
     console.log('📍 setSection called:', sectionId);
     currentSection = sectionId;
+    setHash(sectionId);
     renderSidebar();
     renderContent();
+    // keep UI tidy on navigation
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // NEW: toggle control exposed globally
   window.toggleExtras = function () {
     showExtras = !showExtras;
     renderSidebar();
+    // update button label without re-rendering whole app
+    const btn = document.getElementById('toggle-extras-btn');
+    if (btn) btn.textContent = showExtras ? 'Hide Extra Charts' : 'Show Extra Charts';
   };
 
-  // Check immediately - no DOMContentLoaded wait
+  // --- bootstrap -------------------------------------------------------------
   console.log('🔍 Checking for studyGuideData...', {
     exists: !!window.studyGuideData,
     sections: window.studyGuideData?.sections?.length
@@ -38,6 +56,18 @@
     });
   }
 
+  // Allow deep-linking via #section-id
+  window.addEventListener('hashchange', () => {
+    const hash = getHash();
+    if (!hash || !studyData) return;
+    const exists = studyData.sections.some(s => s.id === hash);
+    if (exists) {
+      currentSection = hash;
+      renderSidebar();
+      renderContent();
+    }
+  });
+
   function init() {
     console.log('🎯 init() called with', studyData?.sections?.length, 'sections');
     if (!studyData) {
@@ -45,15 +75,23 @@
       return;
     }
 
-    // If default section doesn't exist (e.g., 'scales'), pick the first main section.
-    if (!studyData.sections.find(s => s.id === currentSection && !s.isExtraChart)) {
-      const firstMain = studyData.sections.find(s => !s.isExtraChart);
-      if (firstMain) currentSection = firstMain.id;
+    // prefer hash if present
+    const hash = getHash();
+    if (hash && studyData.sections.some(s => s.id === hash)) {
+      currentSection = hash;
+    } else {
+      // ensure currentSection points to a main section if possible
+      if (!studyData.sections.find(s => s.id === currentSection && !s.isExtraChart)) {
+        const firstMain = studyData.sections.find(s => !s.isExtraChart) || studyData.sections[0];
+        if (firstMain) currentSection = firstMain.id;
+      }
     }
 
     renderApp();
+    setHash(currentSection);
   }
 
+  // --- renderers -------------------------------------------------------------
   function renderApp() {
     console.log('🎨 renderApp() called');
     const root = document.getElementById('root');
@@ -73,22 +111,25 @@
             </h1>
           </div>
         </header>
+
         <div class="flex max-w-7xl mx-auto">
+          <!-- Sidebar -->
           <aside class="w-72 bg-white shadow-lg">
-            <nav class="p-4">
+            <nav class="p-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
               <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-bold">Topics</h2>
                 <button
+                  id="toggle-extras-btn"
                   onclick="window.toggleExtras()"
                   class="text-xs px-2 py-1 rounded border hover:bg-gray-50"
                   title="Show/Hide extra chart sections"
-                >
-                  ${showExtras ? 'Hide' : 'Show'} Extra Charts
-                </button>
+                >${showExtras ? 'Hide' : 'Show'} Extra Charts</button>
               </div>
               <ul class="space-y-2" id="sidebar"></ul>
             </nav>
           </aside>
+
+          <!-- Main content -->
           <main class="flex-1 p-6">
             <div id="content"></div>
           </main>
@@ -116,7 +157,10 @@
 
     console.log('📊 Main sections:', mainSections.length, ' | Extra sections:', extraSections.length);
 
-    const renderList = (sections) => sections.map(section => `
+    const renderList = (sections) =>
+      sections
+        .map(
+          (section) => `
       <li>
         <button 
           onclick="window.setSection('${section.id}')" 
@@ -128,8 +172,9 @@
           <span class="mr-2">${section.icon || '📖'}</span>
           ${section.title}
         </button>
-      </li>
-    `).join('');
+      </li>`
+        )
+        .join('');
 
     sidebar.innerHTML = `
       <div class="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Core Topics</div>
@@ -156,7 +201,7 @@
       return;
     }
 
-    const section = studyData.sections.find(s => s.id === currentSection);
+    const section = studyData.sections.find((s) => s.id === currentSection);
     console.log('🔍 Found section:', section?.title);
 
     if (!section) {
@@ -217,11 +262,7 @@
           if (viz.type === 'correlation' && Array.isArray(viz.config)) {
             window.chartUtils.renderCorrelationGrid('chart-container', viz.config);
           } else {
-            window.chartUtils.renderChart(
-              'chart-' + section.id,
-              viz.type,
-              viz.config
-            );
+            window.chartUtils.renderChart('chart-' + section.id, viz.type, viz.config);
           }
         }, 100);
       }, 100);
