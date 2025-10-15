@@ -32,7 +32,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
     
-    <!-- Chart setup and utilities -->
+    <!-- Initialize globals -->
     <script>
         window.chartRegistry = {};
         window.registerChart = function(type, renderFunction) {
@@ -56,9 +56,9 @@
     <script src="src/charts/alternateForms.js"></script>
     <script src="src/charts/interRater.js"></script>
     
-    <!-- Load fixed components and data -->
-    <script src="/mnt/user-data/outputs/ChartVisualizer.jsx" type="text/javascript"></script>
-    <script src="/mnt/user-data/outputs/dataLoader.js"></script>
-    <script src="/mnt/user-data/outputs/App.jsx" type="text/javascript"></script>
+    <!-- Load components as plain JavaScript (no JSX) -->
+    <script src="ChartVisualizer.js"></script>
+    <script src="dataLoader.js"></script>
+    <script src="App.js"></script>
 </body>
 </html>
