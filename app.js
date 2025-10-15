@@ -3,7 +3,6 @@
   let currentSection = 'scales';
   let studyData = null;
   
-  // Define global function first
   window.setSection = function(sectionId) {
     currentSection = sectionId;
     renderSidebar();
@@ -11,25 +10,15 @@
   };
   
   // Check immediately - no DOMContentLoaded wait
-if (window.studyGuideData && window.studyGuideData.sections.length > 0) {
-  studyData = window.studyGuideData;
-  init();
-} else {
-  window.addEventListener('studyGuideDataReady', function() {
+  if (window.studyGuideData && window.studyGuideData.sections.length > 0) {
     studyData = window.studyGuideData;
     init();
-  });
-}
-      
-      // Fallback: check periodically
-      setTimeout(function() {
-        if (window.studyGuideData && !studyData) {
-          studyData = window.studyGuideData;
-          init();
-        }
-      }, 1000);
-    }
-  });
+  } else {
+    window.addEventListener('studyGuideDataReady', function() {
+      studyData = window.studyGuideData;
+      init();
+    });
+  }
   
   function init() {
     console.log('Initializing app with', studyData.sections.length, 'sections');
