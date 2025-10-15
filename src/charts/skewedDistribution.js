@@ -1,7 +1,7 @@
 /**
- * SKEWED DISTRIBUTION CHART
- * Shows left skew, normal, and right skew distributions
- * UPDATED: All curves now have the same peak height
+ * DISTRIBUTION SHAPES CHART
+ * Shows left skew, normal, right skew, and multimodal distributions
+ * UPDATED: All curves normalized to same peak height, labels corrected
  */
 (function() {
   const chartConfig = {
@@ -9,6 +9,7 @@
       info: '#3b82f6',
       warning: '#f59e0b',
       danger: '#f44336',
+      green: '#10b981',
       white: '#ffffff',
     },
     fonts: {
@@ -61,6 +62,34 @@
     leftData.forEach(d => d.y = (d.y / leftPeak) * normalPeak);
     rightData.forEach(d => d.y = (d.y / rightPeak) * normalPeak);
 
+    // Generate bimodal (multimodal) distribution
+    // Two peaks at mean ± 1.5 SD (around 77.5 and 122.5)
+    const bimodalData = [];
+    for (let i = 0; i < 100; i++) {
+      const x = (mean - 3*sd) + i * step;
+      
+      // Create two peaks using two Gaussian curves
+      const peak1Mean = mean - 1.5 * sd;  // ~77.5
+      const peak2Mean = mean + 1.5 * sd;  // ~122.5
+      const peakSD = sd / 2;  // Narrower peaks
+      
+      // First peak
+      const normalized1 = (x - peak1Mean) / peakSD;
+      const y1 = Math.exp(-0.5 * normalized1 * normalized1);
+      
+      // Second peak
+      const normalized2 = (x - peak2Mean) / peakSD;
+      const y2 = Math.exp(-0.5 * normalized2 * normalized2);
+      
+      // Combine both peaks
+      const bimodalY = y1 + y2;
+      bimodalData.push({ x, y: bimodalY });
+    }
+    
+    // Normalize bimodal distribution to match normal peak height
+    const bimodalPeak = Math.max(...bimodalData.map(d => d.y));
+    bimodalData.forEach(d => d.y = (d.y / bimodalPeak) * normalPeak);
+
     const chart = new Chart(canvas, {
       type: 'line',
       data: {
@@ -95,6 +124,16 @@
             borderWidth: 3,
             tension: 0.4,
             pointRadius: 0
+          },
+          {
+            label: 'Multimodal (Two Peaks)',
+            data: bimodalData.map(d => d.y),
+            borderColor: chartConfig.colors.green,
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            fill: true,
+            borderWidth: 3,
+            tension: 0.4,
+            pointRadius: 0
           }
         ]
       },
@@ -112,7 +151,7 @@
           },
           title: {
             display: true,
-            text: 'Skewed Distributions',
+            text: 'Distribution Shapes',
             color: chartConfig.colors.white,
             font: chartConfig.fonts.title
           }
