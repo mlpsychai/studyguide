@@ -59,6 +59,13 @@
     <!-- Load components as plain JavaScript (no JSX) -->
     <script src="ChartVisualizer.js"></script>
     <script src="dataLoader.js"></script>
+    <script type="module">
+      import('./src/data/index.js').then(() => {
+        console.log('Full data loaded');
+      }).catch(err => {
+        console.warn('Using simplified data');
+      });
+    </script>
     <script src="App.js"></script>
 </body>
 </html>
