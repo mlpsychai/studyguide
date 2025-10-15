@@ -3,7 +3,7 @@ const { ChartVisualizer, CorrelationGrid } = window;
 
 function App() {
   const [dataReady, setDataReady] = useState(false);
-  const [studyData, setStudyData] = useState(null); // STEP 1: Store data in state for stable reference
+  const [studyData, setStudyData] = useState(null);
   const [activeSection, setActiveSection] = useState('scales');
   const [quizMode, setQuizMode] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -12,7 +12,6 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [extraChartsOpen, setExtraChartsOpen] = useState(false);
 
-  // STEP 1: Load data once into state
   useEffect(() => {
     if (window.studyGuideData) {
       setStudyData(window.studyGuideData);
@@ -27,7 +26,6 @@ function App() {
     }
   }, []);
 
-  // Show loading state
   if (!dataReady || !studyData) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -39,11 +37,9 @@ function App() {
     );
   }
 
-  // STEP 1: Get stable references from state
   const sections = studyData.sections;
   const quizQuestions = studyData.quizQuestions;
 
-  // STEP 2: Defensive checks in useMemo
   const mainSections = useMemo(() => {
     if (!sections || !Array.isArray(sections)) return [];
     return sections.filter(s => !s.isExtraChart);
@@ -72,6 +68,21 @@ function App() {
       sectionId: currentSection.id
     };
   }, [currentSection]);
+
+  // DEBUG LOGGING
+  useEffect(() => {
+    console.log('🔄 RENDER CYCLE:', {
+      dataReady,
+      sectionsLength: sections?.length,
+      mainSectionsLength: mainSections?.length,
+      extraChartsLength: extraChartSections?.length,
+      currentSectionId: currentSection?.id,
+      activeSection,
+      hasSectionContent: !!sectionContent,
+      hasVisualizationConfig: !!visualizationConfig,
+      visualizationConfigType: visualizationConfig?.type
+    });
+  });
 
   const handleAnswerSelect = (questionIdx, answerIdx) => {
     setUserAnswers(prev => ({ ...prev, [questionIdx]: answerIdx }));
@@ -241,27 +252,8 @@ function App() {
     );
   };
 
-// DEBUG LOGGING - Add before return statement
-useEffect(() => {
-  console.log('🔄 RENDER CYCLE:', {
-    dataReady,
-    sectionsLength: sections?.length,
-    mainSectionsLength: mainSections?.length,
-    extraChartsLength: extraChartSections?.length,
-    currentSectionId: currentSection?.id,
-    activeSection,
-    hasSectionContent: !!sectionContent,
-    hasVisualizationConfig: !!visualizationConfig,
-    visualizationConfigType: visualizationConfig?.type
-  });
-});
-
-return (
-  <div className="min-h-screen bg-gray-50">
-  
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -288,7 +280,6 @@ return (
       </header>
 
       <div className="flex max-w-7xl mx-auto">
-        {/* Sidebar */}
         <aside
           className={`${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
@@ -318,7 +309,6 @@ return (
               ))}
             </ul>
 
-            {/* Extra Charts Section */}
             <div className="mt-6">
               <button
                 onClick={() => setExtraChartsOpen(!extraChartsOpen)}
@@ -353,7 +343,6 @@ return (
           </nav>
         </aside>
 
-        {/* Main Content */}
         <main className="flex-1 p-6">
           {quizMode ? (
             <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
@@ -361,7 +350,6 @@ return (
             </div>
           ) : (
             <div>
-              {/* Section Header */}
               {currentSection && (
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
@@ -371,17 +359,14 @@ return (
                 </div>
               )}
 
-              {/* Section Content */}
               {sectionContent && (
                 <div className="space-y-6">
-                  {/* Intro */}
                   {sectionContent.intro && (
                     <div className="bg-white p-6 rounded-lg shadow">
                       <p className="text-lg text-gray-700">{sectionContent.intro}</p>
                     </div>
                   )}
 
-                  {/* Explanation sections */}
                   {sectionContent.explanation && (
                     <div className="space-y-4">
                       {sectionContent.explanation.map((section, idx) => (
@@ -399,7 +384,6 @@ return (
                     </div>
                   )}
 
-                  {/* Ranges (for correlation) */}
                   {sectionContent.ranges && (
                     <div className="bg-white p-6 rounded-lg shadow">
                       <h3 className="text-xl font-bold text-indigo-700 mb-4">
@@ -417,7 +401,6 @@ return (
                     </div>
                   )}
 
-                  {/* Types (for reliability, standardized scores) */}
                   {sectionContent.types && (
                     <div className="space-y-4">
                       {sectionContent.types.map((type, idx) => (
@@ -472,7 +455,6 @@ return (
                     </div>
                   )}
 
-                  {/* Ordinal Scores */}
                   {sectionContent.ordinalScores && (
                     <div className="bg-yellow-50 p-6 rounded-lg shadow border-l-4 border-yellow-500">
                       <h3 className="text-xl font-bold text-yellow-800 mb-4">
@@ -499,7 +481,6 @@ return (
                     </div>
                   )}
 
-                  {/* Concepts (for reliability) */}
                   {sectionContent.concepts && (
                     <div className="space-y-4">
                       {sectionContent.concepts.map((concept, idx) => (
@@ -525,7 +506,6 @@ return (
                     </div>
                   )}
 
-                  {/* KTEA Activity Topics */}
                   {sectionContent.activity && (
                     <div className="bg-white p-6 rounded-lg shadow mb-4">
                       <h3 className="text-xl font-bold text-indigo-700 mb-3">From {sectionContent.activity.source}</h3>
@@ -537,14 +517,12 @@ return (
                     </div>
                   )}
 
-                  {/* Key Point */}
                   {sectionContent.keyPoint && (
                     <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500 mt-6">
                       <p className="text-gray-800"><strong>🔑 Key Point:</strong> {sectionContent.keyPoint}</p>
                     </div>
                   )}
                   
-                  {/* Visualizations */}
                   {visualizationConfig && (
                     <>
                       {visualizationConfig.type === 'correlation' && Array.isArray(visualizationConfig.config) ? (
@@ -567,6 +545,5 @@ return (
   );
 }
 
-// Mount the app
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
