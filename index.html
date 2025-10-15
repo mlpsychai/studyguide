@@ -19,140 +19,46 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        
-        /* Prevent FOUC */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #f9fafb;
-        }
-        .loading-content {
-            text-align: center;
-        }
     </style>
 </head>
 <body>
-    <div id="root">
-        <div class="loading">
-            <div class="loading-content">
-                <div style="font-size: 3rem;">📚</div>
-                <div style="font-size: 1.25rem; color: #4b5563; margin-top: 1rem;">Loading study guide...</div>
-            </div>
-        </div>
-    </div>
+    <div id="root"></div>
     
-    <!-- Load dependencies in strict order -->
-    
-    <!-- 1. React and React DOM (Production builds) -->
+    <!-- React -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
-    <!-- 2. Chart.js with annotation plugin -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
     
-    <!-- 3. Initialize global objects -->
+    <!-- Chart setup and utilities -->
     <script>
-        // Ensure global objects exist
-        window.chartRegistry = window.chartRegistry || {};
-        window.chartUtils = window.chartUtils || {};
-        window.studyGuideData = window.studyGuideData || null;
-        
-        // Register chart function
+        window.chartRegistry = {};
         window.registerChart = function(type, renderFunction) {
             window.chartRegistry[type] = renderFunction;
             console.log('✅ Registered chart:', type);
         };
     </script>
     
-    <!-- 4. Load chart utilities and registration first -->
+    <!-- Load chart modules -->
     <script src="src/charts/index.js"></script>
     <script src="src/chartUtils.js"></script>
+    <script src="src/charts/normalDistribution.js"></script>
+    <script src="src/charts/skewedDistribution.js"></script>
+    <script src="src/charts/correlation.js"></script>
+    <script src="src/charts/standardizedScores.js"></script>
+    <script src="src/charts/centralTendency.js"></script>
+    <script src="src/charts/ordinalScores.js"></script>
+    <script src="src/charts/bubbleChart.js"></script>
+    <script src="src/charts/testRetest.js"></script>
+    <script src="src/charts/internalConsistency.js"></script>
+    <script src="src/charts/alternateForms.js"></script>
+    <script src="src/charts/interRater.js"></script>
     
-    <!-- 5. Load individual chart modules (order doesn't matter as they self-register) -->
-    <script>
-        // Load chart modules with error handling
-        const chartModules = [
-            'src/charts/normalDistribution.js',
-            'src/charts/skewedDistribution.js',
-            'src/charts/correlation.js',
-            'src/charts/standardizedScores.js',
-            'src/charts/centralTendency.js',
-            'src/charts/ordinalScores.js',
-            'src/charts/bubbleChart.js',
-            'src/charts/linearGradient.js',
-            'src/charts/customTooltip.js',
-            'src/charts/interpolationModes.js',
-            'src/charts/multipleDatasets.js',
-            'src/charts/scatterPlot.js',
-            'src/charts/polarArea.js',
-            'src/charts/polarAreaCentered.js',
-            'src/charts/axisMinMax.js',
-            'src/charts/testRetest.js',
-            'src/charts/internalConsistency.js',
-            'src/charts/alternateForms.js',
-            'src/charts/interRater.js',
-            'src/charts/contentValidity.js',
-            'src/charts/concurrentValidity.js',
-            'src/charts/predictiveValidity.js',
-            'src/charts/constructValidity.js'
-        ];
-        
-        chartModules.forEach(src => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.onerror = () => console.warn('Failed to load:', src);
-            document.head.appendChild(script);
-        });
-    </script>
-    
-    <!-- 6. Babel Standalone for JSX transformation -->
-    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
-    
-    <!-- 7. Load React components using Babel -->
-    <script type="text/babel">
-        // Load ChartVisualizer component
-        const loadScript = (src) => {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.type = 'text/babel';
-                script.src = src;
-                script.onload = resolve;
-                script.onerror = reject;
-                document.body.appendChild(script);
-            });
-        };
-        
-        // Load components in order
-        (async () => {
-            try {
-                // Try loading the fixed versions first
-                await loadScript('/mnt/user-data/outputs/ChartVisualizer.jsx');
-                console.log('Loaded fixed ChartVisualizer');
-            } catch (e) {
-                // Fall back to original location
-                await loadScript('src/ChartVisualizer.jsx');
-            }
-            
-            // Load data modules
-            await loadScript('src/data/mainSections.js');
-            await loadScript('src/data/quizQuestions.js');
-            await loadScript('src/data/extraCharts/index.js');
-            await loadScript('src/data/index.js');
-            
-            // Finally load the app
-            try {
-                await loadScript('/mnt/user-data/outputs/App.jsx');
-                console.log('Loaded fixed App');
-            } catch (e) {
-                await loadScript('src/App.jsx');
-            }
-        })().catch(err => {
-            console.error('Error loading application:', err);
-            document.getElementById('root').innerHTML = '<div class="loading"><div class="loading-content">Error loading application. Please refresh.</div></div>';
-        });
-    </script>
+    <!-- Load fixed components and data -->
+    <script src="/mnt/user-data/outputs/ChartVisualizer.jsx" type="text/javascript"></script>
+    <script src="/mnt/user-data/outputs/dataLoader.js"></script>
+    <script src="/mnt/user-data/outputs/App.jsx" type="text/javascript"></script>
 </body>
 </html>
