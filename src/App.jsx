@@ -241,6 +241,24 @@ function App() {
     );
   };
 
+// DEBUG LOGGING - Add before return statement
+useEffect(() => {
+  console.log('🔄 RENDER CYCLE:', {
+    dataReady,
+    sectionsLength: sections?.length,
+    mainSectionsLength: mainSections?.length,
+    extraChartsLength: extraChartSections?.length,
+    currentSectionId: currentSection?.id,
+    activeSection,
+    hasSectionContent: !!sectionContent,
+    hasVisualizationConfig: !!visualizationConfig,
+    visualizationConfigType: visualizationConfig?.type
+  });
+});
+
+return (
+  <div className="min-h-screen bg-gray-50">
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
