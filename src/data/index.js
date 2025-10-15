@@ -1,27 +1,90 @@
-/**
- * DATA LOADER
- * Combines all data sources and exports to window.studyGuideData
- * 
- * This file imports:
- * - mainSections: Core 13 educational sections
- * - quizQuestions: All 45 quiz questions
- * - extraChartSections: All extra chart demonstrations
- */
-
-import { mainSections } from './mainSections.js';
-import { quizQuestions } from './quizQuestions.js';
-import { extraChartSections } from './extraCharts/index.js';
-
-// Combine all sections
-const allSections = [
-  ...mainSections,
-  ...extraChartSections
-];
-
-// Export to window for compatibility with existing code
-window.studyGuideData = {
-  sections: allSections,
-  quizQuestions: quizQuestions
-};
-
-console.log('✅ Study guide data loaded with', allSections.length, 'sections and', quizQuestions.length, 'questions');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics & Assessment Study Guide</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <!-- Load dependencies in correct order -->
+    
+    <!-- 1. React and React DOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- 2. Chart.js with annotation plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    
+    <!-- 3. Chart Registry -->
+    <script src="src/charts/index.js"></script>
+    
+    <!-- 4. Chart utilities - MUST LOAD BEFORE CHART MODULES -->
+    <script src="src/chartUtils.js"></script>
+    
+    <!-- 5. Individual Chart Modules -->
+    <!-- Core educational charts -->
+    <script src="src/charts/normalDistribution.js"></script>
+    <script src="src/charts/skewedDistribution.js"></script>
+    <script src="src/charts/correlation.js"></script>
+    <script src="src/charts/standardizedScores.js"></script>
+    <script src="src/charts/centralTendency.js"></script>
+    
+    <!-- Ordinal scores visualization -->
+    <script src="src/charts/ordinalScores.js"></script>
+    
+    <!-- Extra demonstration charts -->
+    <script src="src/charts/bubbleChart.js"></script>
+    <script src="src/charts/linearGradient.js"></script>
+    <script src="src/charts/customTooltip.js"></script>
+    <script src="src/charts/interpolationModes.js"></script>
+    <script src="src/charts/multipleDatasets.js"></script>
+    <script src="src/charts/scatterPlot.js"></script>
+    <script src="src/charts/polarArea.js"></script>
+    <script src="src/charts/polarAreaCentered.js"></script>
+    <script src="src/charts/axisMinMax.js"></script>
+    
+    <!-- Reliability charts -->
+    <script src="src/charts/testRetest.js"></script>
+    <script src="src/charts/internalConsistency.js"></script>
+    <script src="src/charts/alternateForms.js"></script>
+    <script src="src/charts/interRater.js"></script>
+    
+    <!-- Validity charts -->
+    <script src="src/charts/contentValidity.js"></script>
+    <script src="src/charts/concurrentValidity.js"></script>
+    <script src="src/charts/predictiveValidity.js"></script>
+    <script src="src/charts/constructValidity.js"></script>
+    
+    <!-- 6. Data files (individual modules first, then combiner) -->
+    <script type="module" src="src/data/mainSections.js"></script>
+    <script type="module" src="src/data/quizQuestions.js"></script>
+    <script type="module" src="src/data/extraCharts/index.js"></script>
+    <script type="module" src="src/data/index.js"></script>
+    
+    <!-- 7. Babel Standalone for JSX components -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 8. React components (JSX) - load after data -->
+    <script type="text/babel" src="src/ChartVisualizer.jsx"></script>
+    <script type="text/babel" src="src/App.jsx"></script>
+</body>
+</html>
