@@ -51,7 +51,7 @@
     return modes[0]; // Return first mode for simplicity
   }
 
-  function createAnnotationLine(value, color, label) {
+  function createAnnotationLine(value, color, label, yPosition) {
     return {
       type: 'line',
       scaleID: 'x',
@@ -63,7 +63,7 @@
         display: true,
         content: label,
         position: 'start',
-        yAdjust: -10,
+        yAdjust: yPosition,
         backgroundColor: color,
         color: '#ffffff',
         font: { size: 11, weight: 'bold' },
@@ -98,11 +98,11 @@
     const labels = Object.keys(frequency).map(Number).sort((a, b) => a - b);
     const frequencies = labels.map(label => frequency[label]);
 
-    // Create annotation lines
+    // Create annotation lines with staggered vertical positions
     const annotations = {
-      meanLine: createAnnotationLine(mean, chartConfig.colors.mean, `Mean = ${mean.toFixed(1)}`),
-      medianLine: createAnnotationLine(median, chartConfig.colors.median, `Median = ${median}`),
-      modeLine: createAnnotationLine(mode, chartConfig.colors.mode, `Mode = ${mode}`)
+      meanLine: createAnnotationLine(mean, chartConfig.colors.mean, `Mean = ${mean.toFixed(1)}`, 20),      // Move down
+      medianLine: createAnnotationLine(median, chartConfig.colors.median, `Median = ${median}`, 50),        // Move further down
+      modeLine: createAnnotationLine(mode, chartConfig.colors.mode, `Mode = ${mode}`, -10)                   // Keep at top
     };
 
     const chart = new Chart(canvas, {
