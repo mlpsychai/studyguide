@@ -1,123 +1,89 @@
-Here’s the complete src/data/index.js — drop-in ready.
+// DATA LOADER - ES6 MODULE TO WINDOW BRIDGE (ASCII-only)
 
-/**
- * DATA LOADER - ES6 MODULE TO WINDOW BRIDGE
- * Normalizes sections so all extra charts appear reliably.
- */
+// Imports (relative to /src/data/)
 import { mainSections } from './mainSections.js';
 import { quizQuestions } from './quizQuestions.js';
 import { extraChartSections } from './extraCharts/index.js';
 
-// --- Helpers ---------------------------------------------------------------
-function ensureIcon(s, fallback = '📈') {
-  return s.icon ? s : { ...s, icon: fallback };
+// Helpers
+function ensureIcon(s, fallback) {
+  return s && s.icon ? s : { ...s, icon: fallback };
 }
-
 function normalizeExtra(sec, idx) {
-  // Make sure extras are marked and have stable IDs/titles/icons
   const withFlag = { ...sec, isExtraChart: true };
-  const withId = withFlag.id ? withFlag : { ...withFlag, id: `extra-${idx}` };
-  const withTitle = withId.title
-    ? withId
-    : {
-        ...withId,
-        title: withId.id
-          .replace(/[-_]/g, ' ')
-          .replace(/\b\w/g, (c) => c.toUpperCase()),
-      };
-  return ensureIcon(withTitle, '📊');
+  const withId = withFlag.id ? withFlag : { ...withFlag, id: 'extra-' + idx };
+  const title =
+    withId.title ||
+    withId.id.replace(/[-_]/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  return ensureIcon({ ...withId, title: title }, '📊');
 }
-
 function normalizeMain(sec, idx) {
-  const withId = sec.id ? sec : { ...sec, id: `main-${idx}` };
+  const withId = sec.id ? sec : { ...sec, id: 'main-' + idx };
   return ensureIcon(withId, '📖');
 }
-
 function dedupeById(sections) {
   const seen = new Set();
-  return sections.map((s, i) => {
-    let id = s.id;
+  return sections.map(function (s, i) {
+    var id = s.id;
     if (seen.has(id)) {
-      console.warn('[studyGuideData] Duplicate section id detected:', id, '→ renaming');
-      id = `${id}-dup-${i}`;
-      return { ...s, id };
+      console.warn('[studyGuideData] Duplicate section id detected:', id, '-> renaming');
+      id = id + '-dup-' + i;
+      return { ...s, id: id };
     }
     seen.add(id);
     return s;
   });
 }
 
-// --- Build & export ---------------------------------------------------------
+// Build and export
 try {
-  const normalizedMain = (Array.isArray(mainSections) ? mainSections : []).map(normalizeMain);
-  const normalizedExtras = (Array.isArray(extraChartSections) ? extraChartSections : []).map(normalizeExtra);
+  const normalizedMain =
+    (Array.isArray(mainSections) ? mainSections : []).map(normalizeMain);
+  const normalizedExtras =
+    (Array.isArray(extraChartSections) ? extraChartSections : []).map(normalizeExtra);
 
-  // Keep main topics first, extras second
-  const allSections = dedupeById([...normalizedMain, ...normalizedExtras]);
+  const allSections = dedupeById([].concat(normalizedMain, normalizedExtras));
 
-  // Export to window
   window.studyGuideData = Object.freeze({
     sections: allSections,
-    quizQuestions: Array.isArray(quizQuestions) ? quizQuestions : [],
+    quizQuestions: Array.isArray(quizQuestions) ? quizQuestions : []
   });
 
-  // Signal ready (some pages import this directly without waiting)
+  // Signal ready
   window.dispatchEvent(new Event('studyGuideDataReady'));
 
-  console.log(
-    '✅ Study guide data loaded with',
-    allSections.length,
-    'sections and',
-    (quizQuestions?.length ?? 0),
-    'questions'
-  );
+  console.log('Study guide data loaded with',
+    allSections.length, 'sections and',
+    (quizQuestions && quizQuestions.length) || 0, 'questions');
 
-  // Summary table
-  if (console.table) {
-    console.table(
-      allSections.map((s) => ({
-        id: s.id,
-        title: s.title,
-        extra: !!s.isExtraChart,
-      }))
-    );
-  }
-
-  // --- Debug: check chart type registration --------------------------------
-  setTimeout(() => {
-    const registered = Object.keys(window.chartRegistry || {});
-    const withViz = allSections.filter((s) => s.visualization && s.visualization.type);
-    const mismatches = withViz.filter((s) => !registered.includes(s.visualization.type));
-    if (mismatches.length) {
+  // Optional: warn about unregistered chart types
+  setTimeout(function () {
+    var reg = window.chartRegistry || {};
+    var registered = Object.keys(reg);
+    var withViz = allSections.filter(function (s) { return s.visualization && s.visualization.type; });
+    var mismatches = withViz.filter(function (s) { return registered.indexOf(s.visualization.type) === -1; });
+    if (mismatches.length && console.table) {
       console.warn('[studyGuideData] Unregistered chart types detected:');
-      if (console.table) {
-        console.table(
-          mismatches.map((s) => ({
-            id: s.id,
-            title: s.title,
-            type: s.visualization.type,
-            registeredTypesSample: registered.slice(0, 8).join(', '),
-          }))
-        );
-      } else {
-        console.warn(mismatches);
-      }
+      console.table(mismatches.map(function (s) {
+        return {
+          id: s.id,
+          title: s.title,
+          type: s.visualization.type,
+          registeredTypesSample: registered.slice(0, 8).join(', ')
+        };
+      }));
     }
   }, 0);
 } catch (e) {
-  // Hard guard so the app can still boot and show an error
-  console.error('❌ Failed to build studyGuideData:', e);
+  console.error('Failed to build studyGuideData:', e);
   window.studyGuideData = {
-    sections: [
-      {
-        id: 'scales',
-        title: 'Scales of Measurement',
-        icon: '📏',
-        content: { intro: 'Fallback data: module error occurred. Check console for details.' },
-      },
-    ],
-    quizQuestions: [],
+    sections: [{
+      id: 'scales',
+      title: 'Scales of Measurement',
+      icon: '📏',
+      content: { intro: 'Fallback data: module error occurred. Check console for details.' }
+    }],
+    quizQuestions: []
   };
   window.dispatchEvent(new Event('studyGuideDataReady'));
 }
-
