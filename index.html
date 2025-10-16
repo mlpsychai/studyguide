@@ -34,22 +34,9 @@
     }
   </style>
 
-  <!-- ✅ Eruda mobile console (only loads if ?debug=1) -->
+  <!-- Early diagnostics (no overlays) -->
   <script>
-    if (location.search.includes('debug=1')) {
-      const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/eruda';
-      s.onload = () => {
-        eruda.init();
-        console.log('%c🧩 Eruda mobile console loaded!', 'color: limegreen; font-weight: bold;');
-      };
-      document.head.appendChild(s);
-    }
-  </script>
-
-  <!-- Early white-screen diagnostics -->
-  <script>
-    console.log('%c🔍 Early boot check: index.html loaded', 'color: dodgerblue; font-weight:bold;');
+    console.log('%c🔍 index.html loaded', 'color:dodgerblue;font-weight:bold;');
     window.addEventListener('error', e => {
       console.error('❌ JS Error:', e.message, '\n', e.filename, e.lineno + ':' + e.colno);
     });
@@ -70,18 +57,18 @@
       console.log('✅ Registered chart:', type);
     };
 
-    // Detect white-screen hang (if app doesn't render in 3s)
+    // Fallback UI if app never renders
     setTimeout(() => {
       const root = document.getElementById('root');
       if (root && root.innerText.includes('Loading')) {
-        console.warn('⚠️ Still showing loading message after 3s. App may not have initialized yet.');
+        console.warn('⚠️ App did not initialize within 3s.');
         root.style.color = 'red';
         root.innerText = '⚠️ App failed to render. Check console for errors.';
       }
     }, 3000);
   </script>
 
-  <!-- Chart utilities and chart definitions (order matters) -->
+  <!-- Chart utilities and chart definitions -->
   <script src="./src/chartUtils.js" defer></script>
   <script src="./src/charts/index.js" defer></script>
   <script src="./src/charts/normalDistribution.js" defer></script>
@@ -95,13 +82,10 @@
   <script src="./src/charts/internalConsistency.js" defer></script>
   <script src="./src/charts/alternateForms.js" defer></script>
 
-  <!-- 🔶 Data bridge FIRST (module) so studyGuideData exists before app.js -->
-  <script type="module" src="./src/data/index.js"></script>
-
-  <!-- 🟦 App SECOND (classic). Starts after data is ready -->
+  <!-- App (classic). Loads before data so the event listener is ready -->
   <script src="./app.js" defer></script>
 
-  <!-- Tiny debugger (activates with ?debug=1) -->
-  <script src="./src/debugger.js" defer></script>
+  <!-- Data bridge (module). Builds window.studyGuideData and dispatches event -->
+  <script type="module" src="./src/data/index.js"></script>
 </body>
 </html>
