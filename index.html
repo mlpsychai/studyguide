@@ -32,9 +32,24 @@
       justify-content: center;
       color: #555;
     }
+    /* Floating debug button (only added when ?debug=1) */
+    .dbg-btn {
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      z-index: 99999;
+      padding: 8px 12px;
+      background: #111827;
+      color: #fff;
+      font-size: 12px;
+      border-radius: 10px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.2);
+      opacity: .85;
+    }
+    .dbg-btn:active { transform: translateY(1px); }
   </style>
 
-  <!-- Early diagnostics (no overlays) -->
+  <!-- Minimal diagnostics (no overlays by default) -->
   <script>
     console.log('%c🔍 index.html loaded', 'color:dodgerblue;font-weight:bold;');
     window.addEventListener('error', e => {
@@ -49,7 +64,7 @@
 <body>
   <div id="root">Loading study guide...</div>
 
-  <!-- Initialize globals used by chart modules -->
+  <!-- Globals used by chart modules -->
   <script>
     window.chartRegistry = {};
     window.registerChart = function (type, renderFunction) {
@@ -57,7 +72,7 @@
       console.log('✅ Registered chart:', type);
     };
 
-    // Fallback UI if app never renders
+    // Fallback if app doesn't boot
     setTimeout(() => {
       const root = document.getElementById('root');
       if (root && root.innerText.includes('Loading')) {
@@ -85,7 +100,51 @@
   <!-- App (classic). Loads before data so the event listener is ready -->
   <script src="./app.js" defer></script>
 
-  <!-- Data bridge (module). Builds window.studyGuideData and dispatches event -->
+  <!-- Data bridge (ES module) -->
   <script type="module" src="./src/data/index.js"></script>
+
+  <!-- 🧪 Tablet-friendly debug console: hidden by default; toggle with button -->
+  <script>
+    (function(){
+      if (!location.search.includes('debug=1')) return;
+
+      // add a floating toggle button
+      const btn = document.createElement('button');
+      btn.className = 'dbg-btn';
+      btn.textContent = 'Console';
+      btn.title = 'Toggle debug console';
+      document.body.appendChild(btn);
+
+      // load eruda, keep hidden initially
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/eruda';
+      s.onload = () => {
+        eruda.init();
+        eruda.hide(); // start hidden
+        console.log('%c🧩 Eruda ready (hidden)', 'color:limegreen;font-weight:bold;');
+
+        let shown = false;
+        const applyPadding = (on) => {
+          document.body.style.paddingBottom = on ? '220px' : '';
+          document.documentElement.style.scrollPaddingBottom = on ? '220px' : '';
+        };
+
+        btn.onclick = () => {
+          shown = !shown;
+          if (shown) {
+            eruda.show();
+            // keep it docked at the bottom
+            const root = document.querySelector('#eruda');
+            if (root) root.style.transform = 'translateY(0)';
+            applyPadding(true);
+          } else {
+            eruda.hide();
+            applyPadding(false);
+          }
+        };
+      };
+      document.head.appendChild(s);
+    })();
+  </script>
 </body>
 </html>
