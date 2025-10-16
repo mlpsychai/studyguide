@@ -188,7 +188,7 @@
     console.log('✅ Sidebar rendered');
   }
 
-  // ⬇️ NEW: richer renderer that shows arrays/objects in section.content
+  // ⬇️ RICH CONTENT RENDERER
   function renderContent() {
     console.log('📄 renderContent() called for section:', currentSection);
     const contentEl = document.getElementById('content');
@@ -215,26 +215,60 @@
 
     const namedList = (items) => `
       <div class="space-y-3">
-        ${items
-          .map(
-            (o) => `
-          <div class="bg-white p-4 rounded-lg shadow">
-            ${o.title || o.name ? `<h4 class="font-semibold text-gray-800 mb-1">${o.title ?? o.name}</h4>` : ''}
-            ${o.whatItIs || o.description || o.content ? `<p class="text-gray-700">${o.whatItIs ?? o.description ?? o.content}</p>` : ''}
-            ${o.howToCalculate ? `<p class="mt-1 text-gray-700"><span class="font-medium">How:</span> ${o.howToCalculate}</p>` : ''}
-            ${o.whenToUse ? `<p class="mt-1 text-gray-700"><span class="font-medium">When:</span> ${o.whenToUse}</p>` : ''}
-            ${o.purpose ? `<p class="mt-1 text-gray-700"><span class="font-medium">Purpose:</span> ${o.purpose}</p>` : ''}
-            ${o.formula ? `<p class="font-mono text-sm mt-1">${o.formula}</p>` : ''}
-            ${o.relationship ? `<p class="mt-1 text-gray-700">${o.relationship}</p>` : ''}
-            ${o.skills?.length ? `<div class="mt-2"><h5 class="font-medium">Skills</h5>${asList(o.skills)}</div>` : ''}
-            ${o.types?.length ? `<div class="mt-2"><h5 class="font-medium">Types</h5>${asList(o.types)}</div>` : ''}
-            ${o.factors?.length ? `<div class="mt-2"><h5 class="font-medium">Factors</h5>${asList(o.factors)}</div>` : ''}
-            ${o.points?.length ? `<div class="mt-2">${asList(o.points)}</div>` : ''}
-            ${o.examples ? `<p class="mt-1 text-gray-700"><span class="font-medium">Examples:</span> ${Array.isArray(o.examples) ? o.examples.join(', ') : o.examples}</p>` : ''}
-            ${o.note ? `<p class="mt-1 italic text-gray-600">${o.note}</p>` : ''}
-          </div>`
-          )
-          .join('')}
+        ${items.map(o => {
+          const header = o.title ?? o.name ?? '';
+          const para   = o.whatItIs ?? o.description ?? o.content ?? '';
+          const kv = [];
+
+          // common extra fields
+          if (o.value)          kv.push(['Value', o.value]);
+          if (o.strength)       kv.push(['Strength', o.strength]);
+          if (o.meaning)        kv.push(['Meaning', o.meaning]);
+          if (o.tailDirection)  kv.push(['Tail Direction', o.tailDirection]);
+          if (o.whereScoresAre) kv.push(['Where Scores Are', o.whereScoresAre]);
+          if (o.meanVsMedian)   kv.push(['Mean vs Median', o.meanVsMedian]);
+          if (o.theoreticalBasis) kv.push(['Theoretical Basis', o.theoreticalBasis]);
+
+          // generic fallback: render remaining primitive fields
+          const ignore = new Set([
+            'title','name','whatItIs','description','content',
+            'howToCalculate','whenToUse','purpose','formula','relationship',
+            'skills','types','factors','points','examples','note',
+            'value','strength','meaning','tailDirection','whereScoresAre','meanVsMedian','theoreticalBasis'
+          ]);
+          Object.entries(o).forEach(([k,v])=>{
+            if (!ignore.has(k) && (typeof v==='string' || typeof v==='number' || typeof v==='boolean')) {
+              kv.push([k.replace(/([A-Z])/g,' $1'), String(v)]);
+            }
+          });
+
+          const kvHtml = kv.length ? `
+            <dl class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm">
+              ${kv.map(([k,v])=>`
+                <div class="flex">
+                  <dt class="font-medium text-gray-700 w-36 shrink-0">${k}</dt>
+                  <dd class="text-gray-700">${v}</dd>
+                </div>`).join('')}
+            </dl>` : '';
+
+          return `
+            <div class="bg-white p-4 rounded-lg shadow">
+              ${header ? `<h4 class="font-semibold text-gray-800 mb-1">${header}</h4>` : ''}
+              ${para ? `<p class="text-gray-700">${para}</p>` : ''}
+              ${o.howToCalculate ? `<p class="mt-1 text-gray-700"><span class="font-medium">How:</span> ${o.howToCalculate}</p>` : ''}
+              ${o.whenToUse ? `<p class="mt-1 text-gray-700"><span class="font-medium">When:</span> ${o.whenToUse}</p>` : ''}
+              ${o.purpose ? `<p class="mt-1 text-gray-700"><span class="font-medium">Purpose:</span> ${o.purpose}</p>` : ''}
+              ${o.formula ? `<p class="font-mono text-sm mt-1">${o.formula}</p>` : ''}
+              ${o.relationship ? `<p class="mt-1 text-gray-700">${o.relationship}</p>` : ''}
+              ${o.skills?.length ? `<div class="mt-2"><h5 class="font-medium">Skills</h5>${asList(o.skills)}</div>` : ''}
+              ${o.types?.length ? `<div class="mt-2"><h5 class="font-medium">Types</h5>${asList(o.types)}</div>` : ''}
+              ${o.factors?.length ? `<div class="mt-2"><h5 class="font-medium">Factors</h5>${asList(o.factors)}</div>` : ''}
+              ${o.points?.length ? `<div class="mt-2">${asList(o.points)}</div>` : ''}
+              ${o.examples ? `<p class="mt-1 text-gray-700"><span class="font-medium">Examples:</span> ${Array.isArray(o.examples) ? o.examples.join(', ') : o.examples}</p>` : ''}
+              ${o.note ? `<p class="mt-1 italic text-gray-600">${o.note}</p>` : ''}
+              ${kvHtml}
+            </div>`;
+        }).join('')}
       </div>`;
 
     // header
@@ -256,15 +290,24 @@
     }
 
     // common arrays
-    if (c.measures?.length) html += `<h3 class="text-xl font-semibold mb-2">Measures</h3>` + namedList(c.measures);
-    if (c.types?.length) html += `<h3 class="text-xl font-semibold mb-2 mt-6">Types</h3>` + namedList(c.types);
-    if (c.ranges?.length) html += `<h3 class="text-xl font-semibold mb-2 mt-6">Ranges</h3>` + namedList(c.ranges);
-    if (c.subsections?.length) html += `<h3 class="text-xl font-semibold mb-2 mt-6">Details</h3>` + namedList(c.subsections);
-    if (c.concepts?.length) html += `<h3 class="text-xl font-semibold mb-2 mt-6">Concepts</h3>` + namedList(c.concepts);
-    if (c.ordinalScores?.length) html += `<h3 class="text-xl font-semibold mb-2 mt-6">Ordinal Scores</h3>` + namedList(c.ordinalScores);
-    if (c.scales?.length) html += `<h3 class="text-xl font-semibold mb-2 mt-6">Scales</h3>` + namedList(c.scales);
+    if (c.measures?.length)       html += `<h3 class="text-xl font-semibold mb-2">Measures</h3>`            + namedList(c.measures);
+    if (c.types?.length)          html += `<h3 class="text-xl font-semibold mb-2 mt-6">Types</h3>`           + namedList(c.types);
+    if (c.ranges?.length)         html += `<h3 class="text-xl font-semibold mb-2 mt-6">Ranges</h3>`          + namedList(c.ranges);
+    if (c.subsections?.length)    html += `<h3 class="text-xl font-semibold mb-2 mt-6">Details</h3>`         + namedList(c.subsections);
+    if (c.concepts?.length)       html += `<h3 class="text-xl font-semibold mb-2 mt-6">Concepts</h3>`        + namedList(c.concepts);
+    if (c.ordinalScores?.length)  html += `<h3 class="text-xl font-semibold mb-2 mt-6">Ordinal Scores</h3>`  + namedList(c.ordinalScores);
+    if (c.scales?.length)         html += `<h3 class="text-xl font-semibold mb-2 mt-6">Scales</h3>`          + namedList(c.scales);
 
-    // nested objects
+    // nested/extra fields
+    if (c.evidenceSources) {
+      const list = Array.isArray(c.evidenceSources)
+        ? asList(c.evidenceSources)
+        : `<p class="text-gray-700">${c.evidenceSources}</p>`;
+      html += `<h3 class="text-xl font-semibold mb-2 mt-6">Sources of Validity Evidence</h3>` + card(list);
+    }
+    if (c.activity?.source) {
+      html += card(`<p class="text-gray-700"><span class="font-medium">Source:</span> ${c.activity.source}</p>`);
+    }
     if (c.activity?.topics?.length) {
       html += `<h3 class="text-xl font-semibold mb-2 mt-6">Activity Topics</h3>` + card(asList(c.activity.topics));
     }
