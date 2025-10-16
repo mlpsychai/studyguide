@@ -120,5 +120,4 @@ try {
   };
   window.dispatchEvent(new Event('studyGuideDataReady'));
 }
-```0
 
