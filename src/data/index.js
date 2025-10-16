@@ -1,3 +1,5 @@
+Here’s the complete src/data/index.js — drop-in ready.
+
 /**
  * DATA LOADER - ES6 MODULE TO WINDOW BRIDGE
  * Normalizes sections so all extra charts appear reliably.
@@ -17,7 +19,12 @@ function normalizeExtra(sec, idx) {
   const withId = withFlag.id ? withFlag : { ...withFlag, id: `extra-${idx}` };
   const withTitle = withId.title
     ? withId
-    : { ...withId, title: withId.id.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) };
+    : {
+        ...withId,
+        title: withId.id
+          .replace(/[-_]/g, ' ')
+          .replace(/\b\w/g, (c) => c.toUpperCase()),
+      };
   return ensureIcon(withTitle, '📊');
 }
 
@@ -40,17 +47,78 @@ function dedupeById(sections) {
   });
 }
 
-// --- Build sections --------------------------------------------------------
-const normalizedMain = (Array.isArray(mainSections) ? mainSections : []).map(normalizeMain);
-const normalizedExtras = (Array.isArray(extraChartSections) ? extraChartSections : []).map(normalizeExtra);
+// --- Build & export ---------------------------------------------------------
+try {
+  const normalizedMain = (Array.isArray(mainSections) ? mainSections : []).map(normalizeMain);
+  const normalizedExtras = (Array.isArray(extraChartSections) ? extraChartSections : []).map(normalizeExtra);
 
-// Keep main topics first, extras second
-const allSections = dedupeById([...normalizedMain, ...normalizedExtras]);
+  // Keep main topics first, extras second
+  const allSections = dedupeById([...normalizedMain, ...normalizedExtras]);
 
-// --- Export to window ------------------------------------------------------
-window.studyGuideData = Object.freeze({
-  sections: allSections,
-  quizQuestions: Array.isArray(quizQuestions) ? quizQuestions : []
-});
+  // Export to window
+  window.studyGuideData = Object.freeze({
+    sections: allSections,
+    quizQuestions: Array.isArray(quizQuestions) ? quizQuestions : [],
+  });
 
-// Signal ready
+  // Signal ready (some pages import this directly without waiting)
+  window.dispatchEvent(new Event('studyGuideDataReady'));
+
+  console.log(
+    '✅ Study guide data loaded with',
+    allSections.length,
+    'sections and',
+    (quizQuestions?.length ?? 0),
+    'questions'
+  );
+
+  // Summary table
+  if (console.table) {
+    console.table(
+      allSections.map((s) => ({
+        id: s.id,
+        title: s.title,
+        extra: !!s.isExtraChart,
+      }))
+    );
+  }
+
+  // --- Debug: check chart type registration --------------------------------
+  setTimeout(() => {
+    const registered = Object.keys(window.chartRegistry || {});
+    const withViz = allSections.filter((s) => s.visualization && s.visualization.type);
+    const mismatches = withViz.filter((s) => !registered.includes(s.visualization.type));
+    if (mismatches.length) {
+      console.warn('[studyGuideData] Unregistered chart types detected:');
+      if (console.table) {
+        console.table(
+          mismatches.map((s) => ({
+            id: s.id,
+            title: s.title,
+            type: s.visualization.type,
+            registeredTypesSample: registered.slice(0, 8).join(', '),
+          }))
+        );
+      } else {
+        console.warn(mismatches);
+      }
+    }
+  }, 0);
+} catch (e) {
+  // Hard guard so the app can still boot and show an error
+  console.error('❌ Failed to build studyGuideData:', e);
+  window.studyGuideData = {
+    sections: [
+      {
+        id: 'scales',
+        title: 'Scales of Measurement',
+        icon: '📏',
+        content: { intro: 'Fallback data: module error occurred. Check console for details.' },
+      },
+    ],
+    quizQuestions: [],
+  };
+  window.dispatchEvent(new Event('studyGuideDataReady'));
+}
+```0
+
