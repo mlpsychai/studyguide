@@ -317,5 +317,4 @@
 
   console.log('✅ App.js IIFE complete');
 })();
-```0
 
