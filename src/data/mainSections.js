@@ -161,7 +161,7 @@ export const mainSections = [
       keyPoint: 'In skewed distributions, the mean is "pulled" toward the tail!'
     },
     visualization: {
-      type: 'skewed-visualization',
+      type: 'skewed',
       config: {}
     }
   },
